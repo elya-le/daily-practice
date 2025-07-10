@@ -1,0 +1,115 @@
+name: Update README Stats
+
+on:
+  push:
+    branches: [ main ]
+    paths: 
+      - 'leetcode/**'
+      - 'new-tech-stack/**'
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Calculate LeetCode Stats
+      id: leetcode-stats
+      run: |
+        TOTAL=$(find leetcode -name "day-*.py" -o -name "day-*.js" | wc -l)
+        
+        EASY=0
+        MEDIUM=0
+        HARD=0
+        
+        if [ -d "leetcode" ]; then
+          EASY=$(find leetcode -name "*.py" -o -name "*.js" | xargs grep -l "Difficulty: Easy" 2>/dev/null | wc -l)
+          MEDIUM=$(find leetcode -name "*.py" -o -name "*.js" | xargs grep -l "Difficulty: Medium" 2>/dev/null | wc -l)
+          HARD=$(find leetcode -name "*.py" -o -name "*.js" | xargs grep -l "Difficulty: Hard" 2>/dev/null | wc -l)
+        fi
+        
+        echo "total=$TOTAL" >> $GITHUB_OUTPUT
+        echo "easy=$EASY" >> $GITHUB_OUTPUT
+        echo "medium=$MEDIUM" >> $GITHUB_OUTPUT
+        echo "hard=$HARD" >> $GITHUB_OUTPUT
+
+    - name: Calculate Streak
+      id: streak
+      run: |
+        STREAK=0
+        CURRENT_DATE=$(date +%Y-%m-%d)
+        
+        COMMITS=$(git log --since="365 days ago" --pretty=format:"%ai %s" | grep -i "day [0-9]" | head -30)
+        
+        if [ ! -z "$COMMITS" ]; then
+          STREAK=$(echo "$COMMITS" | wc -l)
+          if [ $STREAK -gt 365 ]; then
+            STREAK=365
+          fi
+        fi
+        
+        echo "streak=$STREAK" >> $GITHUB_OUTPUT
+
+    - name: Calculate Tech Stack Progress
+      id: tech-progress
+      run: |
+        RAILS_PROGRESS=0
+        SVELTE_PROGRESS=0
+        SCSS_PROGRESS=0
+        
+        if [ -d "new-tech-stack/ruby-on-rails" ]; then
+          RAILS_FILES=$(find new-tech-stack/ruby-on-rails -type f | wc -l)
+          RAILS_PROGRESS=$((RAILS_FILES * 5))
+          if [ $RAILS_PROGRESS -gt 100 ]; then RAILS_PROGRESS=100; fi
+        fi
+        
+        if [ -d "new-tech-stack/svelte" ]; then
+          SVELTE_FILES=$(find new-tech-stack/svelte -type f | wc -l)
+          SVELTE_PROGRESS=$((SVELTE_FILES * 5))
+          if [ $SVELTE_PROGRESS -gt 100 ]; then SVELTE_PROGRESS=100; fi
+        fi
+        
+        if [ -d "new-tech-stack/scss" ]; then
+          SCSS_FILES=$(find new-tech-stack/scss -type f | wc -l)
+          SCSS_PROGRESS=$((SCSS_FILES * 5 + 30))
+          if [ $SCSS_PROGRESS -gt 100 ]; then SCSS_PROGRESS=100; fi
+        fi
+        
+        echo "rails=$RAILS_PROGRESS" >> $GITHUB_OUTPUT
+        echo "svelte=$SVELTE_PROGRESS" >> $GITHUB_OUTPUT
+        echo "scss=$SCSS_PROGRESS" >> $GITHUB_OUTPUT
+
+    - name: Update README
+      run: |
+        CURRENT_DATE=$(date '+%B %d, %Y')
+        
+        sed -i "s/\*\*Current Streak\*\*: [0-9]* days/**Current Streak**: ${{ steps.streak.outputs.streak }} days/" README.md
+        sed -i "s/\*\*Problems Solved\*\*: [0-9]* total/**Problems Solved**: ${{ steps.leetcode-stats.outputs.total }} total/" README.md
+        sed -i "s/Easy: [0-9]*/Easy: ${{ steps.leetcode-stats.outputs.easy }}/" README.md
+        sed -i "s/Medium: [0-9]*/Medium: ${{ steps.leetcode-stats.outputs.medium }}/" README.md
+        sed -i "s/Hard: [0-9]*/Hard: ${{ steps.leetcode-stats.outputs.hard }}/" README.md
+        
+        sed -i "s/| \*\*Ruby on Rails\*\* | [0-9]*% |/| **Ruby on Rails** | ${{ steps.tech-progress.outputs.rails }}% |/" README.md
+        sed -i "s/| \*\*Svelte\*\* | [0-9]*% |/| **Svelte** | ${{ steps.tech-progress.outputs.svelte }}% |/" README.md
+        sed -i "s/| \*\*SCSS\*\* | [0-9]*% |/| **SCSS** | ${{ steps.tech-progress.outputs.scss }}% |/" README.md
+        
+        sed -i "s/\*Last updated: .*/\*Last updated: $CURRENT_DATE\*/" README.md
+
+    - name: Commit and push changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action Bot"
+        git add README.md
+        
+        if ! git diff --staged --quiet; then
+          git commit -m "Auto-update README stats: ${{ steps.leetcode-stats.outputs.total }} problems, ${{ steps.streak.outputs.streak }} day streak"
+          git push
+        fi
