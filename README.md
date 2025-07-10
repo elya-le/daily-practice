@@ -2,27 +2,22 @@
 
 Building skills, documenting consistency, and demonstrating adaptability by mastering new technologies while maintaining strong algorithmic foundations.
 
-[![GitHub last commit](https://img.shields.io/github/last-commit/elya-le/daily-practice)](https://github.com/elya-le/daily-practice)
-[![GitHub repo size](https://img.shields.io/github/repo-size/elya-le/daily-practice)](https://github.com/elya-le/daily-practice)
-[![GitHub commit activity](https://img.shields.io/github/commit-activity/w/elya-le/daily-practice)](https://github.com/elya-le/daily-practice)
-
----
-
-## Mission Statement
-
 **Demonstrating adaptability and continuous learning** by expanding from my current tech stack into new technologies. This repository showcases my ability to quickly learn new frameworks, languages, and tools while maintaining consistent problem-solving practice.
 
 *Committed to using technology as a force for positive change and community empowerment.*
 
----
-
 ## Current Progress Tracker
 
 ### Algorithm & Problem Solving (LeetCode)
-- **Current Streak**: 0 days 🔥
-- **Problems Solved**: 0 total
-- **Distribution**: Easy: 0 | Medium: 0 | Hard: 0
-- **Focus Areas**: Arrays, Strings, Hash Maps, Trees, Dynamic Programming
+**Current Streak**: 1 days 🔥 <br>
+**Problems Solved**: 3 total <br>
+**Distribution**: Easy: 2 | Medium: 0 | Hard: 0 <br>
+**Focus Areas**: Arrays, Strings, Hash Maps, Trees, Dynamic Programming
+
+[![GitHub last commit](https://img.shields.io/github/last-commit/elya-le/daily-practice)](https://github.com/elya-le/daily-practice)
+[![GitHub repo size](https://img.shields.io/github/repo-size/elya-le/daily-practice)](https://github.com/elya-le/daily-practice)
+[![GitHub commit activity](https://img.shields.io/github/commit-activity/w/elya-le/daily-practice)](https://github.com/elya-le/daily-practice)
+
 
 ### Tech Stack Expansion Journey
 | Technology | Current Level | Target Level | Status |
@@ -46,7 +41,7 @@ Building skills, documenting consistency, and demonstrating adaptability by mast
 ## My Foundation Tech Stack
 
 **Current Expertise:**
-`JavaScript` `Python` `SQL` `HTML5` `CSS3` `
+`JavaScript` `Python` `SQL` `HTML5` `CSS3` 
 
 **Frontend Development:**
 `React` `Vite` `Three.js` `Tailwind CSS`
@@ -88,6 +83,7 @@ Building skills, documenting consistency, and demonstrating adaptability by mast
 ---
 
 ## Repository Structure
+```text
 daily-practice/
 ├── leetcode/              # Algorithm & problem-solving skills
 │   ├── 2025/07-july/         # Daily solutions with detailed explanations
@@ -109,7 +105,7 @@ daily-practice/
 │   └── stack-integration/    # Projects combining old & new skills
 │
 └── resources/            # Learning materials & documentation
-
+```
 
 
 ## Learning Timeline
