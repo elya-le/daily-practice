@@ -199,3 +199,28 @@ browser staying open. scroll down to see the More button.
 - timestamp data confirms articles are properly sorted newest to oldest
 
 **next:** implement validation logic to programmatically verify the sorting is correct
+
+
+### step 7: implementing sorting validation logic
+**goal:** programmatically verify that exactly 100 articles are sorted newest to oldest
+
+**what I implemented:**
+- helper function to convert timestamps (minutes/hours/days) to comparable numbers
+- validation logic comparing each adjacent pair of articles (99 total comparisons)
+- violation tracking and detailed error reporting
+- clear success/failure output
+
+**testing results:**
+- collected exactly 100 articles from 4 pages
+- validation result: SUCCESS - All 100 articles are properly sorted newest to oldest!
+- sample verification: articles progress from 1→2→3→4→7→10→12→15→19→21 minutes ago
+- all 99 adjacent pairs passed the sorting validation
+
+**key achievement:** assignment requirement fulfilled! the script successfully validates that EXACTLY the first 100 articles on Hacker News newest are sorted from newest to oldest
+
+**learning:**
+- timestamp parsing handles different units (minutes/hours/days) correctly
+- comparison logic properly identifies newest (smaller numbers) vs oldest (larger numbers)
+- validation covers all 100 articles, not just a sample
+
+**status:** core assignment complete! script successfully validates the sorting requirement
