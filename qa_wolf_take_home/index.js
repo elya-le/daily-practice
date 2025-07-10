@@ -10,52 +10,55 @@ async function sortHackerNewsArticles() {
   // go to Hacker News
   await page.goto("https://news.ycombinator.com/newest");
 
-  console.log("page loaded - investigating URL behavior");
+  console.log("page loaded - collecting articles across multiple pages");
   
-  // wait for page to fully load
-  await page.waitForTimeout(2000);
+  let allArticles = [];
+  let currentPage = 1;
+  const targetCount = 100;
   
-  // record initial state
-  const initialUrl = page.url();
-  const initialCount = await page.locator('tr .titleline').count();
-  console.log(`initial URL: ${initialUrl}`);
-  console.log(`initial articles: ${initialCount}`);
-
-  // scroll to bottom and examine More button
-  console.log("scrolling to More button...");
-  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-  await page.waitForTimeout(1000);
-
-  const moreButton = page.locator('a').filter({ hasText: /more/i });
-  
-  if (await moreButton.count() > 0) {
-    // check where More button points
-    const moreHref = await moreButton.getAttribute('href');
-    console.log(`More button href: ${moreHref}`);
+  // collect articles from multiple pages
+  while (allArticles.length < targetCount) {
+    console.log(`\n--- page ${currentPage} ---`);
     
-    console.log("clicking More button...");
-    await moreButton.click();
+    // wait for page to load
+    await page.waitForTimeout(2000);
     
-    // wait and check new state
-    await page.waitForLoadState('networkidle');
+    // get articles from current page
+    const articles = await page.locator('tr .titleline').count();
+    console.log(`articles on page ${currentPage}: ${articles}`);
     
-    const afterUrl = page.url();
-    const afterCount = await page.locator('tr .titleline').count();
-    console.log(`URL after click: ${afterUrl}`);
-    console.log(`articles after click: ${afterCount}`);
+    // add to our total count
+    allArticles.push(...Array(articles).fill(`page-${currentPage}-article`));
+    console.log(`total articles collected: ${allArticles.length}`);
     
-    // compare URLs
-    if (initialUrl !== afterUrl) {
-      console.log("✓ URL changed - More button navigates to new page");
-    } else {
-      console.log("× URL same - More button loads content inline");
+    // check if we have enough
+    if (allArticles.length >= targetCount) {
+      console.log(`\n✓ reached target! collected ${allArticles.length} articles`);
+      // trim to exactly 100
+      allArticles = allArticles.slice(0, targetCount);
+      console.log(`trimmed to exactly ${allArticles.length} articles`);
+      break;
     }
     
-  } else {
-    console.log("no More button found");
+    // find and click More button for next page
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+    await page.waitForTimeout(1000);
+    
+    const moreButton = page.locator('a').filter({ hasText: /more/i });
+    
+    if (await moreButton.count() > 0) {
+      console.log("clicking More for next page...");
+      await moreButton.click();
+      await page.waitForLoadState('networkidle');
+      currentPage++;
+    } else {
+      console.log("no More button found - stopping collection");
+      break;
+    }
   }
-
-  console.log("browser staying open for verification. press Ctrl+C to close.");
+  
+  console.log(`\nfinal result: collected ${allArticles.length} articles from ${currentPage} pages`);
+  console.log("browser staying open - ctrl+c to exit early");
   await page.waitForTimeout(30000);
   
   await browser.close();

@@ -147,3 +147,30 @@ browser staying open. scroll down to see the More button.
 **strategy update:** need to click More multiple times and collect articles from each page, or navigate through pagination URLs directly
 
 **next:** implement strategy to collect 100 articles across multiple pages
+
+### step 5: collecting articles across multiple pages
+**goal:** implement strategy to collect exactly 100 articles by navigating through multiple pages
+
+**what I implemented:**
+- loop that continues until we have 100 articles
+- counter tracking articles from each page
+- automatic More button clicking to navigate pages
+- trimming final collection to exactly 100 articles
+
+**testing results:**
+- page 1: 30 articles (total: 30)
+- page 2: 30 articles (total: 60)
+- page 3: 30 articles (total: 90)
+- page 4: 30 articles (total: 120)
+- ✓ reached target! trimmed to exactly 100 articles
+- final result: collected 100 articles from 4 pages
+
+**success:** multi-page navigation and article collection working perfectly
+
+**learning:**
+- Hacker News consistently loads 30 articles per page
+- need exactly 4 pages to get 100+ articles
+- trimming logic ensures exactly 100 articles
+- pagination navigation is reliable
+
+**next:** extract actual article data (titles and timestamps) instead of just counting
