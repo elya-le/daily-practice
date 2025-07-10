@@ -41,7 +41,7 @@ Building skills, documenting consistency, and demonstrating adaptability by mast
 ## My Foundation Tech Stack
 
 **Current Expertise:**
-`JavaScript` `Python` `SQL` `HTML5` `CSS3` `
+`JavaScript` `Python` `SQL` `HTML5` `CSS3` 
 
 **Frontend Development:**
 `React` `Vite` `Three.js` `Tailwind CSS`
