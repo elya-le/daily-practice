@@ -72,3 +72,26 @@ browser staying open. scroll down to see the More button.
 - Playwright `.filter()` can use regex patterns for flexible matching
 
 **next:** implement clicking the 'More' button and loading additional articles
+
+### step 4: clicking the More button
+**goal:** test clicking More button to load additional articles
+
+**what I did:**
+- implemented `moreButton.click()` to click the button
+- added wait time for new content to load
+- compared article counts before and after clicking
+
+**results:**
+- initial articles found: 30
+- clicking More button... ✓
+- articles after clicking More: 30 (same count)
+- new articles loaded: 0
+
+**key discovery:** the More button DOES work - I can visually see more articles loaded on the page, but for some reason the counting code didn't detect them
+
+**learning:**
+- visual verification vs programmatic counting can give different results
+- More button successfully loads content but timing or selector issues affect counting
+- need to investigate why the count didn't increase
+
+**next:** debug the counting issue and fix the article detection
