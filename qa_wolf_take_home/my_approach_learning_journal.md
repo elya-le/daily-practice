@@ -50,3 +50,25 @@
 **next:** investigate how to load more articles (likely a "more" button)
 
 
+
+### step 3: locating the "More" button
+**goal:** find the button that loads additional articles
+
+**what I did:**
+- used case-insensitive regex `/more/i` to find More button regardless of capitalization
+- counted initial articles and More buttons
+- kept browser open to manually verify button location
+
+**results:**
+page loaded - looking for more button
+initial articles found: 30
+'More' buttons found: 1
+'More' button exists! ready to click it in next step.
+browser staying open. scroll down to see the More button.
+
+**learning:**
+- regular expressions with `/more/i` flag make text matching case-insensitive
+- defensive programming: handle different text cases
+- Playwright `.filter()` can use regex patterns for flexible matching
+
+**next:** implement clicking the 'More' button and loading additional articles
