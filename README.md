@@ -2,10 +2,6 @@
 
 Building skills, documenting consistency, and demonstrating adaptability by mastering new technologies while maintaining strong algorithmic foundations.
 
-[![GitHub last commit](https://img.shields.io/github/last-commit/elya-le/daily-practice)](https://github.com/elya-le/daily-practice)
-[![GitHub repo size](https://img.shields.io/github/repo-size/elya-le/daily-practice)](https://github.com/elya-le/daily-practice)
-[![GitHub commit activity](https://img.shields.io/github/commit-activity/w/elya-le/daily-practice)](https://github.com/elya-le/daily-practice)
-
 **Demonstrating adaptability and continuous learning** by expanding from my current tech stack into new technologies. This repository showcases my ability to quickly learn new frameworks, languages, and tools while maintaining consistent problem-solving practice.
 
 *Committed to using technology as a force for positive change and community empowerment.*
@@ -17,6 +13,11 @@ Building skills, documenting consistency, and demonstrating adaptability by mast
 **Problems Solved**: 3 total <br>
 **Distribution**: Easy: 2 | Medium: 0 | Hard: 0 <br>
 **Focus Areas**: Arrays, Strings, Hash Maps, Trees, Dynamic Programming
+
+[![GitHub last commit](https://img.shields.io/github/last-commit/elya-le/daily-practice)](https://github.com/elya-le/daily-practice)
+[![GitHub repo size](https://img.shields.io/github/repo-size/elya-le/daily-practice)](https://github.com/elya-le/daily-practice)
+[![GitHub commit activity](https://img.shields.io/github/commit-activity/w/elya-le/daily-practice)](https://github.com/elya-le/daily-practice)
+
 
 ### Tech Stack Expansion Journey
 | Technology | Current Level | Target Level | Status |
