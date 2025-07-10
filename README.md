@@ -8,8 +8,6 @@ Building skills, documenting consistency, and demonstrating adaptability by mast
 
 ---
 
-## Mission Statement
-
 **Demonstrating adaptability and continuous learning** by expanding from my current tech stack into new technologies. This repository showcases my ability to quickly learn new frameworks, languages, and tools while maintaining consistent problem-solving practice.
 
 *Committed to using technology as a force for positive change and community empowerment.*
