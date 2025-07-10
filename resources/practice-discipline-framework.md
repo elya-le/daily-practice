@@ -1,5 +1,24 @@
 # Practice Discipline Framework
 
+<!-- Daily Workflow
+
+Create file: leetcode/2025/07-july/day-XXX-problem-name.py
+Add required content:
+python"""
+Day XXX: Problem Name
+Difficulty: Easy/Medium/Hard
+"""
+# Your solution
+
+Commit: git commit -m "Day X: Problem Name (Difficulty)"
+Push: git push
+README auto-updates
+
+Manual Stats Update 
+bash
+./scripts/update-readme.sh
+-->
+
 ## STRICT TIMING: 60 minutes total per problem
 
 ### Phase 1: Problem Analysis (15 minutes)

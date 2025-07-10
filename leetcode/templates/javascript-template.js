@@ -26,7 +26,7 @@
  * @return {type} description
  */
 var solution = function(param) {
-    // Your code here
+    // code here
 };
 
 /**
