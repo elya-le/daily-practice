@@ -73,7 +73,7 @@ browser staying open. scroll down to see the More button.
 
 **next:** implement clicking the 'More' button and loading additional articles
 
-### step 4: clicking the More button
+### step 4a: clicking the More button
 **goal:** test clicking More button to load additional articles
 
 **what I did:**
@@ -95,3 +95,23 @@ browser staying open. scroll down to see the More button.
 - need to investigate why the count didn't increase
 
 **next:** debug the counting issue and fix the article detection
+
+### step 4b: debugging the counting issue
+**goal:** fix the article counting after More button click
+
+**what I tested:**
+- different CSS selectors for counting articles
+- using `waitForLoadState('networkidle')` for better timing
+- multiple counting attempts with different wait strategies
+
+**results:**
+- method 1 (tr .titleline): 30
+- method 2 (.titleline only): 30  
+- method 3 (a.titlelink): 0
+- final recount: 30
+
+**key finding:** all counting methods still show 30 articles even though I can visually see more articles loaded
+
+**hypothesis:** either the More button navigates to a completely new page (replacing content) or there's a fundamental issue with my selector strategy
+
+**next step:** investigate if More button navigates to new page vs loading content inline

@@ -19,32 +19,45 @@ async function sortHackerNewsArticles() {
   const initialCount = await page.locator('tr .titleline').count();
   console.log(`initial articles found: ${initialCount}`);
 
-  // find and click the More button
+  // scroll to bottom 
+  console.log("scrolling to More button...");
+  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+  await page.waitForTimeout(1000);
+
+  // click More button
   const moreButton = page.locator('a').filter({ hasText: /more/i });
-  const moreButtonCount = await moreButton.count();
   
-  if (moreButtonCount > 0) {
+  if (await moreButton.count() > 0) {
     console.log("clicking More button...");
     await moreButton.click();
     
-    // wait for new content to load
-    console.log("waiting for new articles to load...");
+    // wait for network to be completely idle
+    console.log("waiting for content to fully load...");
+    await page.waitForLoadState('networkidle');
+    
+    // try different counting methods
+    console.log("testing different counting methods...");
+    
+    const method1 = await page.locator('tr .titleline').count();
+    console.log(`method 1 (tr .titleline): ${method1}`);
+    
+    const method2 = await page.locator('.titleline').count();
+    console.log(`method 2 (.titleline only): ${method2}`);
+    
+    const method3 = await page.locator('a.titlelink').count();
+    console.log(`method 3 (a.titlelink): ${method3}`);
+    
+    // additional wait and recount
     await page.waitForTimeout(3000);
-    
-    // count articles after clicking
-    const afterClickCount = await page.locator('tr .titleline').count();
-    console.log(`articles after clicking More: ${afterClickCount}`);
-    
-    const newArticles = afterClickCount - initialCount;
-    console.log(`new articles loaded: ${newArticles}`);
+    const finalCount = await page.locator('tr .titleline').count();
+    console.log(`final recount: ${finalCount}`);
     
   } else {
     console.log("no More button found");
   }
 
-  // keep browser open to see results
-  console.log("browser staying open to verify results. ctrl+c to close earlier");
-  await page.waitForTimeout(20000);
+  console.log("browser staying open - manually count articles to verify - ctrl+c to close earlier");
+  await page.waitForTimeout(30000);
   
   await browser.close();
 }
