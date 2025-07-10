@@ -20,8 +20,8 @@ Building skills, documenting consistency, and demonstrating adaptability by mast
 
 ### Algorithm & Problem Solving (LeetCode)
 **Current Streak**: 1 days 🔥 <br>
-**Problems Solved**: 3 total
-**Distribution**: Easy: 2 | Medium: 0 | Hard: 0
+**Problems Solved**: 3 total <br>
+**Distribution**: Easy: 2 | Medium: 0 | Hard: 0 <br>
 **Focus Areas**: Arrays, Strings, Hash Maps, Trees, Dynamic Programming
 
 ### Tech Stack Expansion Journey
