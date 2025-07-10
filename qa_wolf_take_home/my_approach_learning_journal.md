@@ -1,25 +1,52 @@
 # My Approach - Learning Journal
 
-## Day 1: QA Wolf Take-Home Assignment
+## day 1: QA Wolf take-home assignment
 
-### Step 1: Environment Setup and Basic Navigation
-**Goal:** Get Playwright working and navigate to Hacker News
+### step 1: environment setup and basic navigation
+**goal:** get playwright working and navigate to Hacker News
 
-**What I did:**
-- Confirmed Node.js installed (v18.20.2)
-- Ran `npm i` - installed 6 packages with no vulnerabilities  
-- Ran `npx playwright install` - downloaded browsers (Chromium, Firefox, Webkit)
-- Created basic script that opens browser and navigates to Hacker News newest page
+**what I did:**
+- confirmed Node.js installed (v18.20.2)
+- ran `npm i` - installed 6 packages with no vulnerabilities  
+- ran `npx playwright install` - downloaded browsers (Chromium, Firefox, Webkit)
+- created basic script that opens browser and navigates to Hacker News newest page
 
-**Results:**
-- Browser opens successfully
-- Navigates to https://news.ycombinator.com/newest
-- Can see articles with timestamps like "0 minutes ago", "2 minutes ago"
-- Basic automation is working
+**results:**
+- browser opens successfully
+- navigates to https://news.ycombinator.com/newest
+- can see articles with timestamps like "0 minutes ago", "2 minutes ago"
+- basic automation is working
 
-**Learning:**
-- Playwright launches browsers programmatically
-- Can control browser navigation with `page.goto()`
-- Assignment requires validating 100 articles are sorted newest to oldest
+**learning:**
+- playwright launches browsers programmatically
+- can control browser navigation with `page.goto()`
+- assignment requires validating 100 articles are sorted newest to oldest
 
-**Next:** Figure out how to select and count articles on the page
+**next:** figure out how to select and count articles on the page
+
+
+
+### step 2: understanding page structure and finding articles
+**goal:** learn how to identify and count articles using CSS selectors
+
+**what I did:**
+- added code to count total table rows (`tr` elements)
+- used CSS selector `tr .titleline` to find actual articles
+- added console logging to see the numbers
+
+**results:**
+- total table rows: 98 (includes headers, spacing, navigation, etc.)
+- articles with .titleline class: 30 
+- this means only 30 articles are visible on initial page load
+
+**learning:**
+- HTML structure: Hacker News uses table rows (`<tr>`) for layout
+- CSS classes: `.titleline` is the class name for article titles
+- CSS selectors: `tr .titleline` means "table rows containing elements with titleline class"
+- problem identified: need 100 articles but only see 30
+
+**key insight:** Hacker News loads articles in batches - need to load more to reach 100
+
+**next:** investigate how to load more articles (likely a "more" button)
+
+

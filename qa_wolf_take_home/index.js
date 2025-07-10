@@ -10,13 +10,24 @@ async function sortHackerNewsArticles() {
   // go to Hacker News
   await page.goto("https://news.ycombinator.com/newest");
 
-  console.log("Successfully navigated to Hacker News newest page");
+  console.log("page loaded - analyzing article structure...");
   
-  // Keep browser open for 5 seconds so we can see it worked
-  await page.waitForTimeout(5000);
+  // reduce to 2 seconds but still wait for page to fully load
+  await page.waitForTimeout(2000);
+  
+  // count different elements to understand page structure
+  const totalRows = await page.locator('tr').count();
+  console.log(`total table rows found: ${totalRows}`);
+  
+  // find rows that contain article titles
+  const articleCount = await page.locator('tr .titleline').count();
+  console.log(`articles found: ${articleCount}`);
+  
+  // keep browser open so we can verify what we're counting
+  console.log("browser staying open for verification - ctrl+c to close");
+  await page.waitForTimeout(10000);
   
   await browser.close();
-  console.log("Browser closed - basic setup working!");
 }
 
 (async () => {
