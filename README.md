@@ -83,6 +83,7 @@ Building skills, documenting consistency, and demonstrating adaptability by mast
 ---
 
 ## Repository Structure
+```text
 daily-practice/
 ├── leetcode/              # Algorithm & problem-solving skills
 │   ├── 2025/07-july/         # Daily solutions with detailed explanations
@@ -104,7 +105,7 @@ daily-practice/
 │   └── stack-integration/    # Projects combining old & new skills
 │
 └── resources/            # Learning materials & documentation
-
+```
 
 
 ## Learning Timeline
