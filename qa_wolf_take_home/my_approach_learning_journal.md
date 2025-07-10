@@ -224,3 +224,33 @@ browser staying open. scroll down to see the More button.
 - validation covers all 100 articles, not just a sample
 
 **status:** core assignment complete! script successfully validates the sorting requirement
+
+
+### step 8: adding error handling and polish
+**goal:** make the script production-ready with comprehensive error handling
+
+**what I added:**
+- comprehensive try/catch error handling for all major operations
+- execution timing to measure performance
+- better progress logging with article counts
+- timeout handling for page navigation
+- warning messages for missing timestamps
+- graceful failure handling with proper exit codes
+- sample data display (first 5, last 5 articles)
+- separated validation logic into dedicated function
+
+**testing results:**
+- execution time: 13.2 seconds
+- pages visited: 4
+- all 100 articles properly sorted newest to oldest
+- smooth progression from 0 minutes ago to 2 hours ago
+- no errors or warnings during execution
+- clean success reporting
+
+**key improvements:**
+- script is now robust and handles edge cases
+- clear progress indication throughout execution
+- professional logging and error reporting
+- proper exit codes for success/failure scenarios
+
+**final status:** production-ready script that reliably validates Hacker News article sorting

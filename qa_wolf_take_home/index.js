@@ -2,85 +2,176 @@
 const { chromium } = require("playwright");
 
 async function sortHackerNewsArticles() {
-  // launch browser
   const browser = await chromium.launch({ headless: false });
-  const context = await browser.newContext();
-  const page = await context.newPage();
-
-  // go to Hacker News
-  await page.goto("https://news.ycombinator.com/newest");
-
-  console.log("page loaded - validating article sorting");
+  let success = false;
   
-  let allArticles = [];
-  let currentPage = 1;
-  const targetCount = 100;
-  
-  // collect articles from multiple pages
-  while (allArticles.length < targetCount) {
-    console.log(`\n--- page ${currentPage} ---`);
+  try {
+    const context = await browser.newContext();
+    const page = await context.newPage();
+
+    console.log("starting Hacker News sorting validation...");
+    console.log("navigating to https://news.ycombinator.com/newest");
     
-    // wait for page to load
-    await page.waitForTimeout(2000);
+    // navigate with timeout and error handling
+    await page.goto("https://news.ycombinator.com/newest", { 
+      waitUntil: 'networkidle',
+      timeout: 30000 
+    });
+
+    console.log("page loaded successfully");
     
-    // extract article data from current page
-    const articleElements = await page.locator('tr .titleline').all();
+    let allArticles = [];
+    let currentPage = 1;
+    const targetCount = 100;
+    const startTime = Date.now();
     
-    // extract data from each article
-    for (let i = 0; i < articleElements.length; i++) {
-      const articleRow = articleElements[i].locator('xpath=ancestor::tr');
-      const nextRow = articleRow.locator('xpath=following-sibling::tr[1]');
+    // collect articles from multiple pages
+    while (allArticles.length < targetCount) {
+      console.log(`\n--- collecting from page ${currentPage} ---`);
       
-      const timeText = await nextRow.locator('text=/\\d+\\s+(minute|hour|day)s?\\s+ago/').first().textContent();
+      // wait for content to load
+      await page.waitForTimeout(2000);
       
-      const articleData = {
-        index: allArticles.length + 1,
-        timestamp: timeText || 'no timestamp found',
-        timeValue: parseTimeToMinutes(timeText)
-      };
-      
-      allArticles.push(articleData);
+      // extract article data with error handling
+      try {
+        const articleElements = await page.locator('tr .titleline').all();
+        
+        if (articleElements.length === 0) {
+          throw new Error(`no articles found on page ${currentPage}`);
+        }
+        
+        console.log(`found ${articleElements.length} articles on page ${currentPage}`);
+        
+        // extract data from each article
+        for (let i = 0; i < articleElements.length; i++) {
+          try {
+            const articleRow = articleElements[i].locator('xpath=ancestor::tr');
+            const nextRow = articleRow.locator('xpath=following-sibling::tr[1]');
+            
+            const timeText = await nextRow.locator('text=/\\d+\\s+(minute|hour|day)s?\\s+ago/').first().textContent();
+            
+            if (!timeText) {
+              console.warn(`warning: no timestamp found for article ${allArticles.length + 1}`);
+            }
+            
+            const articleData = {
+              index: allArticles.length + 1,
+              timestamp: timeText || 'no timestamp found',
+              timeValue: parseTimeToMinutes(timeText),
+              page: currentPage
+            };
+            
+            allArticles.push(articleData);
+            
+            if (allArticles.length >= targetCount) {
+              console.log(`reached target of ${targetCount} articles!`);
+              break;
+            }
+          } catch (error) {
+            console.warn(`warning: failed to extract article ${i + 1} on page ${currentPage}: ${error.message}`);
+          }
+        }
+        
+        console.log(`total articles collected: ${allArticles.length}/${targetCount}`);
+        
+      } catch (error) {
+        console.error(`error extracting articles from page ${currentPage}: ${error.message}`);
+        break;
+      }
       
       if (allArticles.length >= targetCount) {
         break;
       }
+      
+      // navigate to next page
+      try {
+        await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+        await page.waitForTimeout(1000);
+        
+        const moreButton = page.locator('a').filter({ hasText: /more/i });
+        
+        if (await moreButton.count() > 0) {
+          console.log("navigating to next page...");
+          await moreButton.click();
+          await page.waitForLoadState('networkidle', { timeout: 15000 });
+          currentPage++;
+        } else {
+          console.log("no more button found - stopping collection");
+          break;
+        }
+      } catch (error) {
+        console.error(`error navigating to next page: ${error.message}`);
+        break;
+      }
     }
     
-    console.log(`collected ${allArticles.length} articles so far`);
-    
-    if (allArticles.length >= targetCount) {
-      break;
+    // validate we have enough articles
+    if (allArticles.length < targetCount) {
+      throw new Error(`only collected ${allArticles.length} articles, need ${targetCount}`);
     }
     
-    // navigate to next page
-    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-    await page.waitForTimeout(1000);
+    // trim to exactly 100 articles
+    allArticles = allArticles.slice(0, targetCount);
     
-    const moreButton = page.locator('a').filter({ hasText: /more/i });
+    // validate sorting
+    console.log(`\n=== SORTING VALIDATION ===`);
+    console.log(`validating ${allArticles.length} articles are sorted newest to oldest...`);
     
-    if (await moreButton.count() > 0) {
-      await moreButton.click();
-      await page.waitForLoadState('networkidle');
-      currentPage++;
+    const validationResult = validateSorting(allArticles);
+    
+    // report results
+    const executionTime = ((Date.now() - startTime) / 1000).toFixed(1);
+    
+    if (validationResult.isValid) {
+      console.log(`\nVALIDATION SUCCESSFUL!`);
+      console.log(`all ${allArticles.length} articles are properly sorted newest to oldest`);
+      console.log(`execution time: ${executionTime} seconds`);
+      console.log(`pages visited: ${currentPage}`);
+      success = true;
     } else {
-      break;
+      console.log(`\nVALIDATION FAILED!`);
+      console.log(`found ${validationResult.violations.length} sorting violations:`);
+      validationResult.violations.forEach(v => console.log(`   - ${v.issue}`));
+    }
+    
+    // show sample data
+    console.log(`\nsample articles (first 5, last 5):`);
+    for (let i = 0; i < 5; i++) {
+      console.log(`${i + 1}. ${allArticles[i].timestamp}`);
+    }
+    console.log(`...`);
+    for (let i = 95; i < 100; i++) {
+      console.log(`${i + 1}. ${allArticles[i].timestamp}`);
+    }
+    
+  } catch (error) {
+    console.error(`\nSCRIPT FAILED: ${error.message}`);
+    console.error(`this indicates an issue with the validation process`);
+  } finally {
+    await browser.close();
+    console.log(`\nbrowser closed`);
+    
+    if (success) {
+      console.log(`script completed successfully`);
+    } else {
+      console.log(`script completed with errors`);
+      process.exit(1);
     }
   }
-  
-  // validate sorting
-  console.log(`\n=== SORTING VALIDATION ===`);
-  console.log(`validating ${allArticles.length} articles are sorted newest to oldest...`);
-  
-  let isValidSort = true;
+}
+
+// helper function to validate sorting
+function validateSorting(articles) {
+  let isValid = true;
   let violations = [];
   
-  for (let i = 0; i < allArticles.length - 1; i++) {
-    const current = allArticles[i];
-    const next = allArticles[i + 1];
+  for (let i = 0; i < articles.length - 1; i++) {
+    const current = articles[i];
+    const next = articles[i + 1];
     
     // current article should be newer (smaller time value) than next
     if (current.timeValue > next.timeValue) {
-      isValidSort = false;
+      isValid = false;
       violations.push({
         position: i + 1,
         current: current.timestamp,
@@ -90,21 +181,7 @@ async function sortHackerNewsArticles() {
     }
   }
   
-  // report results
-  if (isValidSort) {
-    console.log(`SUCCESS: All ${allArticles.length} articles are properly sorted newest to oldest`);
-  } else {
-    console.log(`FAILURE: Found ${violations.length} sorting violations:`);
-    violations.forEach(v => console.log(`   - ${v.issue}`));
-  }
-  
-  // show sample data
-  console.log(`\nfirst 10 articles:`);
-  for (let i = 0; i < Math.min(10, allArticles.length); i++) {
-    console.log(`${i + 1}. ${allArticles[i].timestamp} (${allArticles[i].timeValue} minutes)`);
-  }
-  
-  await browser.close();
+  return { isValid, violations };
 }
 
 // helper function to convert timestamps to minutes for comparison
