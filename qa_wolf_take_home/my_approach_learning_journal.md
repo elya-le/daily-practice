@@ -174,3 +174,28 @@ browser staying open. scroll down to see the More button.
 - pagination navigation is reliable
 
 **next:** extract actual article data (titles and timestamps) instead of just counting
+
+
+### step 6: extracting article timestamps
+**goal:** extract actual timestamp data from articles instead of just counting
+
+**what I implemented:**
+- extraction of timestamp text from each article
+- xpath navigation to find timestamp in next table row
+- regex pattern matching for "X minutes/hours ago" text
+- display of first 10 timestamps for verification
+
+**testing results:**
+- successfully extracted timestamps from all 100 articles
+- first 10 timestamps: 0, 3, 6, 8, 11, 15, 17, 17, 17, 20 minutes ago
+- timestamp extraction working across all 4 pages
+- data shows articles are sorted newest to oldest (0 → 3 → 6 → 8...)
+
+**key observation:** the timestamps show proper sorting - they increase from newest (0 minutes) to oldest (20+ minutes)
+
+**learning:**
+- xpath `ancestor::tr` and `following-sibling::tr[1]` navigate HTML structure effectively
+- regex pattern `/\\d+\\s+(minute|hour|day)s?\\s+ago/` captures timestamp formats
+- timestamp data confirms articles are properly sorted newest to oldest
+
+**next:** implement validation logic to programmatically verify the sorting is correct

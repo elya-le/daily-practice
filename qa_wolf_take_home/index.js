@@ -10,7 +10,7 @@ async function sortHackerNewsArticles() {
   // go to Hacker News
   await page.goto("https://news.ycombinator.com/newest");
 
-  console.log("page loaded - collecting articles across multiple pages");
+  console.log("page loaded - extracting article timestamps");
   
   let allArticles = [];
   let currentPage = 1;
@@ -23,31 +23,51 @@ async function sortHackerNewsArticles() {
     // wait for page to load
     await page.waitForTimeout(2000);
     
-    // get articles from current page
-    const articles = await page.locator('tr .titleline').count();
-    console.log(`articles on page ${currentPage}: ${articles}`);
+    // extract article data from current page
+    console.log("extracting article data...");
     
-    // add to our total count
-    allArticles.push(...Array(articles).fill(`page-${currentPage}-article`));
-    console.log(`total articles collected: ${allArticles.length}`);
+    // get all article elements
+    const articleElements = await page.locator('tr .titleline').all();
+    console.log(`found ${articleElements.length} article elements on page ${currentPage}`);
+    
+    // extract data from each article
+    for (let i = 0; i < articleElements.length; i++) {
+      // find the timestamp for this article (it's in the next row)
+      const articleRow = articleElements[i].locator('xpath=ancestor::tr');
+      const nextRow = articleRow.locator('xpath=following-sibling::tr[1]');
+      
+      // look for timestamp text (contains "ago")
+      const timeText = await nextRow.locator('text=/\\d+\\s+(minute|hour|day)s?\\s+ago/').first().textContent();
+      
+      const articleData = {
+        page: currentPage,
+        index: allArticles.length + 1,
+        timestamp: timeText || 'no timestamp found'
+      };
+      
+      allArticles.push(articleData);
+      
+      if (allArticles.length >= targetCount) {
+        console.log(`reached target of ${targetCount} articles!`);
+        break;
+      }
+    }
+    
+    console.log(`collected ${allArticles.length} articles so far`);
     
     // check if we have enough
     if (allArticles.length >= targetCount) {
-      console.log(`\n✓ reached target! collected ${allArticles.length} articles`);
-      // trim to exactly 100
-      allArticles = allArticles.slice(0, targetCount);
-      console.log(`trimmed to exactly ${allArticles.length} articles`);
       break;
     }
     
-    // find and click More button for next page
+    // navigate to next page
     await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
     await page.waitForTimeout(1000);
     
     const moreButton = page.locator('a').filter({ hasText: /more/i });
     
     if (await moreButton.count() > 0) {
-      console.log("clicking More for next page...");
+      console.log("navigating to next page...");
       await moreButton.click();
       await page.waitForLoadState('networkidle');
       currentPage++;
@@ -57,8 +77,14 @@ async function sortHackerNewsArticles() {
     }
   }
   
-  console.log(`\nfinal result: collected ${allArticles.length} articles from ${currentPage} pages`);
-  console.log("browser staying open - ctrl+c to exit early");
+  // show first few articles with timestamps
+  console.log(`\nfirst 10 articles with timestamps:`);
+  for (let i = 0; i < Math.min(10, allArticles.length); i++) {
+    console.log(`${i + 1}. ${allArticles[i].timestamp}`);
+  }
+  
+  console.log(`\ntotal articles collected: ${allArticles.length}`);
+  console.log("browser staying open - ctrl+C to close early");
   await page.waitForTimeout(30000);
   
   await browser.close();
