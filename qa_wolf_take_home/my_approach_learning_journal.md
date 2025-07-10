@@ -115,3 +115,35 @@ browser staying open. scroll down to see the More button.
 **hypothesis:** either the More button navigates to a completely new page (replacing content) or there's a fundamental issue with my selector strategy
 
 **next step:** investigate if More button navigates to new page vs loading content inline
+
+
+### step 4c: investigating URL behavior - mystery solved!
+**goal:** understand why counting wasn't working after More button click
+
+**what I tested:**
+- captured URLs before and after More button click
+- examined the More button's href attribute
+- compared article counts on new page
+
+**results:**
+- initial URL: https://news.ycombinator.com/newest
+- More button href: newest?next=44526207&n=31
+- URL after click: https://news.ycombinator.com/newest?next=44526207&n=31
+- articles after click: 30
+- ✓ URL changed - More button navigates to new page
+
+**key discovery:** the More button doesn't load additional content on the same page - it navigates to a completely NEW page with the next 30 articles!
+
+**understanding the URL parameters:**
+- `next=44526207` - indicates starting point for next batch
+- `n=31` - indicates starting from article 31
+
+**learning:**
+- Hacker News uses pagination instead of infinite scroll
+- each "More" click gets a new page with next 30 articles
+- our counting was correct - each page has exactly 30 articles
+- to get 100 articles, we need to collect from multiple pages
+
+**strategy update:** need to click More multiple times and collect articles from each page, or navigate through pagination URLs directly
+
+**next:** implement strategy to collect 100 articles across multiple pages

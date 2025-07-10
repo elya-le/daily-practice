@@ -10,53 +10,52 @@ async function sortHackerNewsArticles() {
   // go to Hacker News
   await page.goto("https://news.ycombinator.com/newest");
 
-  console.log("page loaded - testing More button click");
+  console.log("page loaded - investigating URL behavior");
   
   // wait for page to fully load
   await page.waitForTimeout(2000);
   
-  // count initial articles
+  // record initial state
+  const initialUrl = page.url();
   const initialCount = await page.locator('tr .titleline').count();
-  console.log(`initial articles found: ${initialCount}`);
+  console.log(`initial URL: ${initialUrl}`);
+  console.log(`initial articles: ${initialCount}`);
 
-  // scroll to bottom 
+  // scroll to bottom and examine More button
   console.log("scrolling to More button...");
   await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
   await page.waitForTimeout(1000);
 
-  // click More button
   const moreButton = page.locator('a').filter({ hasText: /more/i });
   
   if (await moreButton.count() > 0) {
+    // check where More button points
+    const moreHref = await moreButton.getAttribute('href');
+    console.log(`More button href: ${moreHref}`);
+    
     console.log("clicking More button...");
     await moreButton.click();
     
-    // wait for network to be completely idle
-    console.log("waiting for content to fully load...");
+    // wait and check new state
     await page.waitForLoadState('networkidle');
     
-    // try different counting methods
-    console.log("testing different counting methods...");
+    const afterUrl = page.url();
+    const afterCount = await page.locator('tr .titleline').count();
+    console.log(`URL after click: ${afterUrl}`);
+    console.log(`articles after click: ${afterCount}`);
     
-    const method1 = await page.locator('tr .titleline').count();
-    console.log(`method 1 (tr .titleline): ${method1}`);
-    
-    const method2 = await page.locator('.titleline').count();
-    console.log(`method 2 (.titleline only): ${method2}`);
-    
-    const method3 = await page.locator('a.titlelink').count();
-    console.log(`method 3 (a.titlelink): ${method3}`);
-    
-    // additional wait and recount
-    await page.waitForTimeout(3000);
-    const finalCount = await page.locator('tr .titleline').count();
-    console.log(`final recount: ${finalCount}`);
+    // compare URLs
+    if (initialUrl !== afterUrl) {
+      console.log("✓ URL changed - More button navigates to new page");
+    } else {
+      console.log("× URL same - More button loads content inline");
+    }
     
   } else {
     console.log("no More button found");
   }
 
-  console.log("browser staying open - manually count articles to verify - ctrl+c to close earlier");
+  console.log("browser staying open for verification. press Ctrl+C to close.");
   await page.waitForTimeout(30000);
   
   await browser.close();
