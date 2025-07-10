@@ -6,13 +6,9 @@ Building skills, documenting consistency, and demonstrating adaptability by mast
 [![GitHub repo size](https://img.shields.io/github/repo-size/elya-le/daily-practice)](https://github.com/elya-le/daily-practice)
 [![GitHub commit activity](https://img.shields.io/github/commit-activity/w/elya-le/daily-practice)](https://github.com/elya-le/daily-practice)
 
----
-
 **Demonstrating adaptability and continuous learning** by expanding from my current tech stack into new technologies. This repository showcases my ability to quickly learn new frameworks, languages, and tools while maintaining consistent problem-solving practice.
 
 *Committed to using technology as a force for positive change and community empowerment.*
-
----
 
 ## Current Progress Tracker
 
