@@ -19,9 +19,9 @@ Building skills, documenting consistency, and demonstrating adaptability by mast
 ## Current Progress Tracker
 
 ### Algorithm & Problem Solving (LeetCode)
-- **Current Streak**: 0 days 🔥
-- **Problems Solved**: 0 total
-- **Distribution**: Easy: 0 | Medium: 0 | Hard: 0
+- **Current Streak**: 1 days 🔥
+- **Problems Solved**: 3 total
+- **Distribution**: Easy: 2 | Medium: 0 | Hard: 0
 - **Focus Areas**: Arrays, Strings, Hash Maps, Trees, Dynamic Programming
 
 ### Tech Stack Expansion Journey
