@@ -97,12 +97,12 @@ class Solution:
       def gcd(a, b):
         while b:
           a, b = b, a % b
-          return a
-        # find GCD of string lengths - this will be the length of our answer
-        gcd_length = gcd(len(str1), len(str2))
+        return a
+      # find GCD of string lengths - this will be the length of our answer
+      gcd_length = gcd(len(str1), len(str2))
 
-        # return the first gcd_length characters - this is our repeating pattern
-        return str1[:gcd_length]
+      # return the first gcd_length characters - this is our repeating pattern
+      return str1[:gcd_length]
 
 
 # 8. test with example 
