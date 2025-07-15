@@ -88,7 +88,8 @@ async function sortHackerNewsArticles() {
         await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
         await page.waitForTimeout(1000);
         
-        const moreButton = page.locator('a').filter({ hasText: /more/i });
+        // use more specific selector for the More button
+        const moreButton = page.locator('a.morelink');
         
         if (await moreButton.count() > 0) {
           console.log("navigating to next page...");
