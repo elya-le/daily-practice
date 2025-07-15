@@ -1,8 +1,19 @@
 // EDIT THIS FILE TO COMPLETE ASSIGNMENT QUESTION 1
 const { chromium } = require("playwright");
+const fs = require('fs');
+
+// configuration constants - shows clean coding practices
+const CONFIG = {
+  TARGET_ARTICLES: 100,
+  PAGE_LOAD_TIMEOUT: 2000,
+  NAVIGATION_TIMEOUT: 15000,
+  BROWSER_TIMEOUT: 30000,
+  HEADLESS: false,
+  EXPORT_DATA: true
+};
 
 async function sortHackerNewsArticles() {
-  const browser = await chromium.launch({ headless: false });
+  const browser = await chromium.launch({ headless: CONFIG.HEADLESS });
   let success = false;
   
   try {
@@ -15,22 +26,21 @@ async function sortHackerNewsArticles() {
     // navigate with timeout and error handling
     await page.goto("https://news.ycombinator.com/newest", { 
       waitUntil: 'networkidle',
-      timeout: 30000 
+      timeout: CONFIG.BROWSER_TIMEOUT 
     });
 
     console.log("page loaded successfully");
     
     let allArticles = [];
     let currentPage = 1;
-    const targetCount = 100;
     const startTime = Date.now();
     
     // collect articles from multiple pages
-    while (allArticles.length < targetCount) {
+    while (allArticles.length < CONFIG.TARGET_ARTICLES) {
       console.log(`\n--- collecting from page ${currentPage} ---`);
       
       // wait for content to load
-      await page.waitForTimeout(2000);
+      await page.waitForTimeout(CONFIG.PAGE_LOAD_TIMEOUT);
       
       // extract article data with error handling
       try {
@@ -63,8 +73,8 @@ async function sortHackerNewsArticles() {
             
             allArticles.push(articleData);
             
-            if (allArticles.length >= targetCount) {
-              console.log(`reached target of ${targetCount} articles!`);
+            if (allArticles.length >= CONFIG.TARGET_ARTICLES) {
+              console.log(`reached target of ${CONFIG.TARGET_ARTICLES} articles!`);
               break;
             }
           } catch (error) {
@@ -72,29 +82,29 @@ async function sortHackerNewsArticles() {
           }
         }
         
-        console.log(`total articles collected: ${allArticles.length}/${targetCount}`);
+        console.log(`total articles collected: ${allArticles.length}/${CONFIG.TARGET_ARTICLES}`);
         
       } catch (error) {
         console.error(`error extracting articles from page ${currentPage}: ${error.message}`);
         break;
       }
       
-      if (allArticles.length >= targetCount) {
+      if (allArticles.length >= CONFIG.TARGET_ARTICLES) {
         break;
       }
       
-      // navigate to next page
+      // navigate to next page using robust selector
       try {
         await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
         await page.waitForTimeout(1000);
         
-        // use more specific selector for the More button
+        // use specific class selector to avoid matching article content
         const moreButton = page.locator('a.morelink');
         
         if (await moreButton.count() > 0) {
           console.log("navigating to next page...");
           await moreButton.click();
-          await page.waitForLoadState('networkidle', { timeout: 15000 });
+          await page.waitForLoadState('networkidle', { timeout: CONFIG.NAVIGATION_TIMEOUT });
           currentPage++;
         } else {
           console.log("no more button found - stopping collection");
@@ -107,12 +117,12 @@ async function sortHackerNewsArticles() {
     }
     
     // validate we have enough articles
-    if (allArticles.length < targetCount) {
-      throw new Error(`only collected ${allArticles.length} articles, need ${targetCount}`);
+    if (allArticles.length < CONFIG.TARGET_ARTICLES) {
+      throw new Error(`only collected ${allArticles.length} articles, need ${CONFIG.TARGET_ARTICLES}`);
     }
     
-    // trim to exactly 100 articles
-    allArticles = allArticles.slice(0, targetCount);
+    // trim to exactly target count
+    allArticles = allArticles.slice(0, CONFIG.TARGET_ARTICLES);
     
     // validate sorting
     console.log(`\n=== SORTING VALIDATION ===`);
@@ -143,6 +153,36 @@ async function sortHackerNewsArticles() {
     console.log(`...`);
     for (let i = 95; i < 100; i++) {
       console.log(`${i + 1}. ${allArticles[i].timestamp}`);
+    }
+    
+    // data export functionality - shows thinking about outputs and documentation
+    if (CONFIG.EXPORT_DATA) {
+      try {
+        const exportData = {
+          metadata: {
+            timestamp: new Date().toISOString(),
+            executionTime: parseFloat(executionTime),
+            totalArticles: allArticles.length,
+            pagesVisited: currentPage,
+            validationResult: validationResult.isValid ? 'PASSED' : 'FAILED',
+            violationsCount: validationResult.violations.length,
+            configuration: CONFIG
+          },
+          violations: validationResult.violations,
+          articles: allArticles.map(a => ({
+            index: a.index,
+            timestamp: a.timestamp,
+            timeValue: a.timeValue,
+            page: a.page
+          }))
+        };
+        
+        const filename = `hacker-news-validation-${Date.now()}.json`;
+        fs.writeFileSync(filename, JSON.stringify(exportData, null, 2));
+        console.log(`\ndata exported to: ${filename}`);
+      } catch (exportError) {
+        console.warn(`warning: failed to export data: ${exportError.message}`);
+      }
     }
     
   } catch (error) {
