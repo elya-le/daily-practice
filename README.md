@@ -25,8 +25,7 @@ Building skills, documenting consistency, and demonstrating adaptability by mast
 - **LinkedIn**: [linkedin.com/in/elyale](https://www.linkedin.com/in/elyale/)
 - **Portfolio**: [elya.dev](https://www.elya.dev/)  
 - **Email**: [hello@elya.dev](mailto:hello@elya.dev)
-- **Creative Work**: [elya.dev](https://www.elya.dev/)
-
+- 
 ---
 
 Building consistent habits one commit at a time! Check out the contribution graph below to see daily progress across algorithms, new technologies, and practical projects.
