@@ -191,6 +191,78 @@ step1()
 
 
 // the new way (using async/await)
+// much cleaner and easier to read
+// it looks like normal synchronous code but it is still asynchronous under the hood
+
+// mark function as async
+async function doAllSteps() {
+  try {
+    const result1 = await step1(); // wait for step 1 to complete
+    const result2 = await step2(result1); // wait for step 2 to complete
+    const result3 = await step3(result2); // wait for step 3 to complete
+
+    console.log('All steps complete:', result3);
+  } catch (error) {
+    console.error('Error occurred:', error);
+  }
+}
+
+doAllSteps();
+
+// RULE 1: Use 'async' keyword before function definition to mark it as asynchronous
+
+// regular function 
+function regularFunction() {
+  return 'hello';
+}
+
+// async function
+async function asyncFunction() {
+  return 'hello';
+}
+
+// what's the difference?
+console.log(regularFunction()); // 'hello'
+console.log(asyncFunction()); // Promise {'hello'}
+
+// async functions ALWAYS return a promise
+
+// RULE 2: Use 'await' only inside async functions to wait for a Promise to resolve
+
+// wrong and will cause error
+function wrongUsage() {
+  //await orderPizza(); // SyntaxError: await is only valid in async functions
+}
+
+// right must be inside async function
+async function correctUsage() {
+  await orderPizza(); // works fine
+}
+
+// RULE 3: await pauses execution of the async function until the Promise resolves
+
+async function fetchData() {
+  console.log('Fetching data...');
+  const data = await getDataFromServer(); // pauses here until data is returned
+  console.log('Data received:', data); // runs after data is available
+
+  console.log('done');
+}
+
+function getDataFromServer() {
+  return new Promise((resolve) => { 
+    setTimeout(() => resolve('Server Data'), 3000);
+  })
+}
+
+example();
+
+// output:
+// Fetching data...
+// [3 second pause]
+// Data received: Server Data
+// done
+
 
 
 // 2. Array Methods (for data manipulation)
