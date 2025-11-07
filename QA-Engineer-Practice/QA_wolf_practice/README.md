@@ -13,3 +13,9 @@ and or exceed that level of effort and intentionality.
 Here is my documentation of my process of refreshing my JavaScript skills and studying for the technical assessment...
 even though I have not yet submitted the take home challenge or reached the point of applying for the position. 
 there is no time lost in preparing and documenting for something I want to do and a career want to grow into.
+
+My goals with this practice are to 
+Document thinking my process, not just my code
+Dont just learn Playwright - understand why each feature matters
+Don't just make it work - make it reliable
+Don't just write tests - think about what could go wrong
