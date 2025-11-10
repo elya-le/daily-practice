@@ -69,3 +69,11 @@ import fs from 'fs';
 //   .then((res) => res.json()) 
 //   .then((data) => console.log(data))
 //   .catch((err) => console.error('Error fetching data:', err));
+
+
+// load file with async/await
+const loadFile = async () => {
+  const data = await fs.promises.readFile('test.txt', 'utf8');
+  console.log(data);
+};
+loadFile();
