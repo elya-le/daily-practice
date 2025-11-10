@@ -1,6 +1,6 @@
 // 1. ASYNC/AWAIT AND PROMISES (for handling asynchronous operations in Playwright)
 /* 
-Every single line of Playwright code I write will be asynchronous.
+The Playwright code I write will be asynchronous.
 So I need to be very comfortable with async/await syntax.
 This means I need to understand Promises well enough to know when to use await.
 A Promise is an object representing the eventual completion or failure of an asynchronous operation.
@@ -264,6 +264,61 @@ example();
 // done
 
 
+//  Task: Write a function that simulates fetching user data from a server.
 
-// 2. Array Methods (for data manipulation)
-// 3. Error Handling (for reliable test scripts)
+// Create a promise that stimulates network delay of 2 seconds
+
+function fetchUserData(userId) {
+  return new Promise((resolve, reject) => {
+    setTimeout (() => {
+      if (userId > 0) {
+        resolve ({ id: userId, name: 'John Doe'})
+      } else {
+        reject ('Invalid user ID');
+      }
+    }, 2000);
+  })
+}
+
+async function getUser() {
+  try {
+    console.log('Fetching user data...');
+    const user = await fetchUserData(1); // valid user ID
+    console.log('User data received:', user);
+  } catch (error) {
+    console.error('Error fetching user data:', error);
+  }
+}
+
+getUser();
+
+// Modify this to fetch TWO users in sequence // Then modify it to fetch TWO users in parallel (hint: Promise.all)
+
+async function getTwoUsersSequentially() {
+  try {
+    console.log('Fetching first user data...');
+    const user1 = await fetchUserData(1); // valid user ID
+    console.log('First user data received:', user1);
+
+    console.log('Fetching second user data...');
+    const user2 = await fetchUserData(2); // valid user ID
+    console.log('Second user data received:', user2);
+  } catch (error) {
+    console.error('Error fetching user data:', error);
+  }
+}
+
+getTwoUsersSequentially(); 
+
+async function getTwoUsersInParallel() {
+  try {
+    console.log('Fetching both users data in parallel...');
+    const [user1, user2] = await Promise.all([
+      fetchUserData(1), // valid user ID
+      fetchUserData(2)  // valid user ID
+    ]);
+    console.log('Both users data received:', user1, user2);
+  } catch (error) {
+    console.error('Error fetching user data:', error);
+  }
+}
