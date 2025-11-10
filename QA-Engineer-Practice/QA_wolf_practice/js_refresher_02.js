@@ -71,9 +71,25 @@ import fs from 'fs';
 //   .catch((err) => console.error('Error fetching data:', err));
 
 
-// load file with async/await
-const loadFile = async () => {
-  const data = await fs.promises.readFile('test.txt', 'utf8');
-  console.log(data);
-};
-loadFile();
+// -- load file with async/await
+// const loadFile = async () => {
+//   try {  const data = await fs.promises.readFile('test2.txt', 'utf8');
+//   console.log(data);
+//   } catch (err) {
+//     console.error('Error reading file:', err);
+//   }
+// };
+// loadFile();
+
+// -- fetch pokemon with async/await without error handling
+const fetchPokemon = async (id) => {
+  try {
+    const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
+    const data = await res.json();
+    console.log(data);
+  } catch (err) {
+    console.error('Error fetching data:', err);
+  }
+}
+
+fetchPokemon(100);
