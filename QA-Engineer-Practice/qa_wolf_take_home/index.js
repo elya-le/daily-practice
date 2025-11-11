@@ -1,3 +1,12 @@
+/*
+qa objective:
+- verify the 'newest' page of hacker news is sorted from newest to oldest
+- collect timestamps for first 100 posts
+- detect any out-of-order posts
+- report progress live in a dashboard
+- log and visualize results for client presentation
+*/
+
 // --- imports ---
 const { chromium } = require("playwright"); // playwright for browser automation
 const fs = require('fs'); // filesystem module to save data if needed
@@ -13,7 +22,7 @@ const CONFIG = {
   EXPORT_DATA: true              // whether to export collected data to a file
 };
 
-// --- 2. set up Express dashboard ---
+// --- 2. set up express dashboard ---
 const app = express(); // initialize express app
 const PORT = 3000; // port to run dashboard
 
@@ -22,59 +31,81 @@ let dashboardData = {
   articlesCollected: 0,          // how many articles collected so far
   totalArticles: CONFIG.TARGET_ARTICLES, // total target articles
   currentPage: 0,                // current page number being scraped
-  validationStatus: 'Not yet started', // status of sorting validation
-  errors: []                     // array to store any errors encountered
+  validationStatus: 'In Progress', // status of sorting validation
+  errors: [],                     // array to store any errors encountered
+  violations: []                  // store sorting violations
 };
 
-// -----> this is new code: serve styled dashboard page
+// serve styled dashboard page with live updates
 app.get('/', (req, res) => {
   const progressPercent = Math.floor((dashboardData.articlesCollected / dashboardData.totalArticles) * 100);
 
-   // determine error display
-  let errorsHtml = '';
+  // check if there are any errors collected in the dashboard
+  let validationHtml = '';
   if (dashboardData.errors.length > 0) {
-    errorsHtml = `<p class="errors">errors: ${dashboardData.errors.join(', ')}</p>`;
+    // if there are errors, display them in red
+    validationHtml = `<p class="errors">Errors: ${dashboardData.errors.join(', ')}</p>`;
   } else if (dashboardData.articlesCollected === dashboardData.totalArticles) {
-    errorsHtml = `<p class="errors" style="color: green;">No Errors</p>`;
+    // if all target articles have been collected
+    if (dashboardData.validationStatus === 'Passed') {
+      // if validation passed, display 'Passed' and details in black
+      validationHtml = `<p>Validation Status: <span class="passed">Passed</span><span class="passed-details"> - The most recent 100 articles are ordered from newest to oldest.</span></p>`;
+    } else {
+      // if validation failed, extract the number of issues and display in readable format
+      validationHtml = `<p>Validation Status: Failed — ${dashboardData.validationStatus.replace('Failed with ', '')} sorting issue(s) detected</p>`;
+
+      // display each violation like terminal
+      if (dashboardData.violations && dashboardData.violations.length > 0) {
+        const violationList = dashboardData.violations.map(v => `- ${v.issue}`).join('<br>');
+        validationHtml += `<p style="margin-top:5px;">${violationList}</p>`;
+      }
+    }
+  } else {
+    // if articles are still being collected or validation not complete, display current status
+    validationHtml = `<p>Validation Status: ${dashboardData.validationStatus}</p>`;
   }
 
+  // dashboard html with complete styling
   res.send(`
     <html>
       <head>
-        <title>Hacker News Scraper Dashboard</title>
+        <title>Hacker News Sorting Validation Dashboard</title>
         <style>
           body { 
             font-family: arial, sans-serif; 
-            background: #f5f5f5; 
+            background: #0D0F24; 
             padding: 20px; 
           }
-          h1 { color: #333; }
+          h1 { 
+            color: #333; 
+            text-align: center;     
+          }
           p { font-size: 16px; margin: 5px 0; }
           .dashboard { 
             background: #fff; 
             padding: 20px; 
             border-radius: 10px;  
-      
-            width: 600px; 
+            width: 640px; 
           }
           .progress-bar-container { 
             background: #eee; 
             border-radius: 5px; 
             width: 100%; 
-            height: 20px; 
+            height: 30px; 
             margin: 10px 0; 
           }
           .progress-bar { 
-            background: #4caf50; 
+            background: #00F2C8; 
             height: 100%; 
             width: ${progressPercent}%; 
             border-radius: 5px; 
-            text-align: center; 
+            text-align: center;
+            padding-left: 2px;
             color: white; 
-            line-height: 20px; 
+            line-height: 30px; 
           }
-          .error-container {      /* -----> this is new code */
-            min-height: 30px;     /* reserve space so layout doesn't shift */
+          .error-container { 
+            min-height: 45px;     
             margin-top: 10px;
           }
           .errors { 
@@ -82,25 +113,27 @@ app.get('/', (req, res) => {
             font-weight: bold; 
             margin: 0; 
           }
-          .no-errors {            /* -----> this is new code */
-            color: green; 
-            font-weight: bold; 
-            margin: 0; 
+          .passed {
+            color: black;
+            font-weight: bold;
+          }
+          .passed-details {
+            color: #333;
+            font-weight: normal;
           }
         </style>
+        <meta http-equiv="refresh" content="2">
       </head>
       <body>
         <div class="dashboard">
-          <h1>Hacker News Scraper Dashboard</h1>
+          <h1>QA Wolf - Hacker News Sorting Validation</h1>
           <div class="progress-bar-container">
             <div class="progress-bar">${progressPercent}%</div>
           </div>
           <p>Articles Collected: ${dashboardData.articlesCollected} / ${dashboardData.totalArticles}</p>
           <p>Current Page: ${dashboardData.currentPage}</p>
-          <p>Validation Status: ${dashboardData.validationStatus}</p>
-
-          <div class="error-container"> 
-            ${errorsHtml}
+          <div class="error-container">
+            ${validationHtml}
           </div>
         </div>
       </body>
@@ -108,52 +141,63 @@ app.get('/', (req, res) => {
   `);
 });
 
-// start the dashboard server
-app.listen(PORT, () => {
-  console.log(`Dashboard running at http://localhost:${PORT}`);
+// api endpoint to get dashboard data as json
+app.get('/api/status', (req, res) => {
+  res.json(dashboardData);
 });
 
-// --- 3. helper functions ---
+// api endpoint to update dashboard data
+app.post('/api/update', express.json(), (req, res) => {
+  // update dashboard data with incoming data
+  Object.assign(dashboardData, req.body);
+  res.json({ success: true });
+});
 
-// convert timestamp string like "5 minutes ago" to total minutes
-function parseTimeToMinutes(timeString) {
-  if (!timeString) return Infinity; // if timestamp missing, return infinity
+// start the dashboard server
+app.listen(PORT, () => {
+  console.log(`dashboard running at http://localhost:${PORT}`);
+  console.log('the dashboard will auto-refresh every 2 seconds');
+});
 
-  const match = timeString.match(/(\d+)\s+(minute|hour|day)s?\s+ago/); // regex to extract number + unit
-  if (!match) return Infinity; // return infinity if format does not match
-
-  const value = parseInt(match[1]); // numeric part
-  const unit = match[2]; // unit part (minute/hour/day)
-
-  switch (unit) { // convert all units to minutes
-    case 'minute': return value;
-    case 'hour': return value * 60;
-    case 'day': return value * 60 * 24;
-    default: return Infinity;
-  }
+// helper function to parse time strings to minutes
+function parseTimeToMinutes(timeText) {
+  // convert "5 minutes ago", "2 hours ago", "1 day ago" to total minutes
+  if (!timeText) return 0;
+  
+  const match = timeText.match(/(\d+)\s+(minute|hour|day)s?\s+ago/);
+  if (!match) return 0;
+  
+  const value = parseInt(match[1]);
+  const unit = match[2];
+  
+  // convert to minutes based on unit
+  if (unit === 'minute') return value;
+  if (unit === 'hour') return value * 60;
+  if (unit === 'day') return value * 24 * 60;
+  
+  return 0;
 }
 
-// validate that articles are sorted from newest to oldest
-function validateSorting(articles) {
-  let isValid = true; // assume valid unless a violation is found
-  let violations = []; // store violations
-
-  for (let i = 0; i < articles.length - 1; i++) {
-    const current = articles[i];
-    const next = articles[i + 1];
-
-    // newer articles should have smaller time value
-    if (parseTimeToMinutes(current.timestamp) > parseTimeToMinutes(next.timestamp)) {
-      isValid = false;
+// this is new code: validation function to check if articles are sorted
+function validateSorting(allArticles) {
+  const violations = [];
+  let isValid = true;
+  
+  // check each article against the previous one
+  for (let i = 1; i < allArticles.length; i++) {
+    const currentMinutes = parseTimeToMinutes(allArticles[i].timestamp);
+    const previousMinutes = parseTimeToMinutes(allArticles[i - 1].timestamp);
+    
+    // if current article is older than previous one, it's valid (newest first)
+    // if current has more minutes than previous, it's older
+    if (currentMinutes < previousMinutes) {
       violations.push({
-        position: i + 1,
-        current: current.timestamp,
-        next: next.timestamp,
-        issue: `Article ${i + 1} (${current.timestamp}) is older than article ${i + 2} (${next.timestamp})`
+        issue: `Article #${i + 1} (${allArticles[i].timestamp}) is newer than Article #${i} (${allArticles[i - 1].timestamp})`
       });
+      isValid = false;
     }
   }
-
+  
   return { isValid, violations };
 }
 
@@ -181,9 +225,10 @@ async function sortHackerNewsArticles() {
 
     // loop until target number of articles collected
     while (allArticles.length < CONFIG.TARGET_ARTICLES) {
-      // -----> this is new code: update dashboard live data
+      // update dashboard live data
       dashboardData.articlesCollected = allArticles.length;
       dashboardData.currentPage = currentPage;
+      dashboardData.validationStatus = 'In Progress';
 
       console.log(`Collecting articles from page ${currentPage}...`);
       await page.waitForTimeout(CONFIG.PAGE_LOAD_TIMEOUT);
@@ -203,11 +248,21 @@ async function sortHackerNewsArticles() {
       for (let i = 0; i < articleElements.length; i++) {
         const articleRow = articleElements[i].locator('xpath=ancestor::tr');
         const nextRow = articleRow.locator('xpath=following-sibling::tr[1]');
-        const timeText = await nextRow.locator('text=/\\d+\\s+(minute|hour|day)s?\\s+ago/').first().textContent();
+        
+        // fixed the regex pattern
+        let timeText = 'no timestamp found';
+        try {
+          const ageElement = await nextRow.locator('.age').first();
+          if (await ageElement.count() > 0) {
+            timeText = await ageElement.textContent();
+          }
+        } catch (e) {
+          // fallback if timestamp not found
+        }
 
         allArticles.push({
           index: allArticles.length + 1, // index for ordering
-          timestamp: timeText || 'no timestamp found', // fallback if timestamp missing
+          timestamp: timeText, // store the timestamp
           page: currentPage
         });
 
@@ -235,25 +290,41 @@ async function sortHackerNewsArticles() {
     allArticles = allArticles.slice(0, CONFIG.TARGET_ARTICLES);
     dashboardData.articlesCollected = allArticles.length;
 
-    console.log("final list of articles:");
+    console.log("Final list of articles:");
     console.log(allArticles);
 
-    // -----> this is new code: validate sorting and update dashboard
-    console.log("validating sorting of collected articles...");
+    // validate sorting and store violations for dashboard
+    console.log("Validating sorting of collected articles...");
     const validationResult = validateSorting(allArticles);
 
     if (validationResult.isValid) {
-      console.log("all articles are properly sorted newest to oldest");
+      console.log("All 100 articles are properly sorted newest to oldest");
       dashboardData.validationStatus = 'Passed';
+      dashboardData.violations = []; // clear violations if any
     } else {
-      console.log(`found ${validationResult.violations.length} sorting violations:`);
+      console.log(`Found ${validationResult.violations.length} sorting violation(s):`);
       validationResult.violations.forEach(v => console.log(`- ${v.issue}`));
-      dashboardData.validationStatus = `Failed with ${validationResult.violations.length} issues`;
+      dashboardData.validationStatus = `Failed with ${validationResult.violations.length}`;
+      dashboardData.violations = validationResult.violations;
+    }
+
+    // export results to json file if configured
+    if (CONFIG.EXPORT_DATA) {
+      const exportData = {
+        timestamp: new Date().toISOString(),
+        totalArticles: allArticles.length,
+        validationPassed: validationResult.isValid,
+        violations: validationResult.violations,
+        articles: allArticles
+      };
+      
+      fs.writeFileSync('validation-results.json', JSON.stringify(exportData, null, 2));
+      console.log('Results exported to validation-results.json');
     }
 
   } catch (error) {
     console.error("Script failed:", error.message);
-    // -----> this is new code: log error to dashboard
+    // log error to dashboard
     dashboardData.errors.push(error.message);
     dashboardData.validationStatus = 'Failed due to error';
   } finally {
