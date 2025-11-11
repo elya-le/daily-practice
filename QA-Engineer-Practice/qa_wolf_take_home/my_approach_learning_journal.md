@@ -27,10 +27,8 @@ looked at what tools could build this quickly:
 
 **decision:** go with express + socket.io to build a live dashboard
 
-**next:** install these packages and start building
 
-
-### step 2: installing dashboard dependencies
+### step 2: installing dashboard packages dependencies
 
 **goal:** get the packages needed to build the web dashboard
 
@@ -43,4 +41,52 @@ looked at what tools could build this quickly:
 - when reviewers run `npm install` on my submission, these will auto-install
 - verified with `npm list express socket.io`
 
-**next:** create the folder structure for dashboard files
+### step 3: creating project structure for dashboard
+
+**goal:** organize files so dashboard code is separate from test code
+
+**what I did:**
+- created `public/` folder for dashboard frontend files (HTML, CSS, JavaScript)
+- created `test-history/` folder to store past test runs as JSON files
+
+**why this structure:**
+- keeps dashboard code separate from test automation code
+- `public/` is standard naming for web server static files
+- `test-history/` will let users see previous test runs (building a history feature)
+
+**project structure now:**
+
+```
+qa_wolf_take_home/
+├── public/              ← new: dashboard frontend
+├── test-history/        ← new: historical test data
+├── index.js             (existing test script)
+├── package.json         (dependencies)
+└── other files...
+```
+
+**learning:**
+- planning file organization before coding prevents messy refactoring later
+- separating frontend (what users see) from backend (test logic) is standard practice
+- empty folders are fine - we'll populate them in next steps
+
+### step 4: create the express server for dashboard
+
+**goal:** serve the web dashboard and enable real-time test updates
+
+**what I did:**
+- created `server.js` using express and socket.io
+- added endpoint `/api/history` to serve last 10 test runs
+- exported `io` globally so `index.js` can emit real-time events
+- ran `node server.js` to verify server starts
+
+**why this matters:**
+- separates frontend (dashboard) from test automation code
+- allows non-technical stakeholders to watch test progress live
+- mimics professional QA platforms that provide dashboards and reporting
+
+**learning:**
+- express static middleware serves frontend files
+- socket.io enables live communication between Node.js and browser
+- planning for test history now avoids rework later
+- I had used Socket.io before when building a realtime messaging and wanted to bring that skill back here — it felt like a good fit for real-time test updates
