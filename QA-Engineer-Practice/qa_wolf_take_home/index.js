@@ -12,6 +12,7 @@ const { chromium } = require("playwright"); // playwright for browser automation
 const fs = require('fs'); // filesystem module to save data if needed
 const express = require('express'); // express to create dashboard server
 const { exec } = require('child_process'); 
+const path = require('path');
 
 // --- 1. configuration constants ---
 const CONFIG = {
@@ -123,7 +124,7 @@ app.get('/', (req, res) => {
   res.send(`
     <html>
       <head>
-        <title>Hacker News Sorting Validation Dashboard</title>
+        <title>Date Validator</title>
         <style>
           body { 
             font-family: arial, sans-serif; 
@@ -196,7 +197,7 @@ app.get('/', (req, res) => {
       </head>
       <body>
         <div class="dashboard">
-          <h1>QA Wolf - Hacker News Sorting Validation</h1>
+          <h1>QA Wolf - Article Date Validator</h1>
           <div class="progress-container">
             <div class="progress-details">
               <div class="page-count">
@@ -462,3 +463,5 @@ async function sortHackerNewsArticles() {
 (async () => {
   await sortHackerNewsArticles();
 })();
+
+
