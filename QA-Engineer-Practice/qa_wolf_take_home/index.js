@@ -18,12 +18,13 @@ const os = require('os'); // for os info
 // --- 1. configuration constants ---
 const CONFIG = {
   TARGET_ARTICLES: 100,          // number of articles to collect
-  PAGE_LOAD_TIMEOUT: 2000,       // wait time for page content to load
+  PAGE_LOAD_TIMEOUT: 200,       // wait time for page content to load
   NAVIGATION_TIMEOUT: 15000,     // max wait time for page navigation
   BROWSER_TIMEOUT: 30000,        // max wait time for browser actions
   HEADLESS: false,               // run browser in headless mode or not
   EXPORT_DATA: true,             // whether to export collected data to a file
-  AUTO_OPEN_DASHBOARD: true      // whether to auto-open dashboard in browser
+  AUTO_OPEN_DASHBOARD: true,     // whether to auto-open dashboard in browser
+  RUNS: 3                        // number of times to run validation
 };
 
 // --- 2. set up express dashboard ---
@@ -250,76 +251,79 @@ async function sortHackerNewsArticles() {
       dashboardData.violations = validationResult.violations;
     }
 
-    if (CONFIG.EXPORT_DATA) {
-      try {
-        const exportData = { 
-          timestamp: new Date().toISOString(), 
-          totalArticles: allArticles.length, 
-          validationPassed: validationResult.isValid, 
-          violations: validationResult.violations, 
-          articles: allArticles, 
-          runDurationSec: ((Date.now()-startTime)/1000).toFixed(2), 
-          nodeVersion: process.version, 
-          platform: `${process.platform} ${process.arch}`, 
-          headlessMode: CONFIG.HEADLESS 
-        };
-        fs.writeFileSync('validation-results.json', JSON.stringify(exportData, null, 2));
-        console.log('Results exported to validation-results.json');
-      } catch (fileError) { logError('FILE_ERROR', 'export_results', currentPage, `Failed to export results: ${fileError.message}`); }
-    }
+    return {
+      timestamp: new Date().toISOString(),
+      totalArticles: allArticles.length,
+      validationPassed: validationResult.isValid,
+      violations: validationResult.violations,
+      articles: allArticles,
+      runDurationSec: ((Date.now()-startTime)/1000).toFixed(2),
+      nodeVersion: process.version,
+      platform: `${process.platform} ${process.arch}`,
+      headlessMode: CONFIG.HEADLESS
+    };
 
-  } catch (error) { logError('CRITICAL_ERROR', 'main_execution', dashboardData.currentPage, error.message); dashboardData.validationStatus = 'Failed due to error'; }
-  finally {
+  } catch (error) { 
+    logError('CRITICAL_ERROR', 'main_execution', dashboardData.currentPage, error.message); 
+    dashboardData.validationStatus = 'Failed due to error';
+    return null;
+  } finally {
     if (browser) { try { await browser.close(); console.log("Browser closed"); } catch (closeError) { logError('BROWSER_ERROR', 'browser_close', dashboardData.currentPage, `Failed to close browser: ${closeError.message}`); } }
-    generateHTMLReport(startTime);
   }
 }
 
-// --- run main function ---
-(async () => { await sortHackerNewsArticles(); })();
-
-// --- enhanced generateHTMLReport ---
-function generateHTMLReport(startTime) {
-  const resultsFile = 'validation-results.json';
-  const outputDir = 'test-history';
-  if (!fs.existsSync(resultsFile)) {
-    console.error('validation-results.json not found — run the validation first.');
-    return;
+// --- run main function 3 times and save single output ---
+(async () => {
+  const allRuns = [];
+  for (let runNumber = 1; runNumber <= CONFIG.RUNS; runNumber++) {
+    console.log(`\n=== STARTING RUN ${runNumber} ===\n`);
+    const runResult = await sortHackerNewsArticles();
+    if (runResult) allRuns.push({ runNumber, ...runResult });
   }
 
-  const raw = fs.readFileSync(resultsFile, 'utf-8');
-  const data = JSON.parse(raw);
-  const { timestamp, totalArticles, validationPassed, violations, articles, runDurationSec, nodeVersion, platform, headlessMode } = data;
-  const dateLabel = new Date(timestamp).toLocaleString();
+  // Save single JSON with all runs
+  const resultsFile = 'validation-results.json';
+  fs.writeFileSync(resultsFile, JSON.stringify(allRuns, null, 2));
+  console.log(`All ${CONFIG.RUNS} runs saved to ${resultsFile}`);
 
+  // Generate combined report
+  generateHTMLReport(allRuns);
+})();
+
+// --- updated generateHTMLReport for multiple runs ---
+function generateHTMLReport(allRuns) {
+  const outputDir = 'test-history';
   if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir);
 
-  // --- friendly environment labels ---
-  const browserModeText = headlessMode ? 'Headless (background, invisible)' : 'Visible (browser window shown)';
-  let platformText = platform; 
-  if (platform.startsWith('darwin')) platformText = 'macOS';
-  else if (platform.startsWith('win32')) platformText = 'Windows';
-  else if (platform.startsWith('linux')) platformText = 'Linux';
-  const osArch = require('os').arch();
-  platformText += ` (${osArch})`;
-
-  // historical trend from previous reports
+  // Historical trend (previous reports)
   const jsonFiles = fs.readdirSync(outputDir).filter(f => f.endsWith('.json'));
   const trend = [];
   jsonFiles.forEach(f => {
     try {
       const r = JSON.parse(fs.readFileSync(path.join(outputDir,f)));
-      trend.push({ date: new Date(r.timestamp).toLocaleDateString(), violations: r.violations.length, passed: r.validationPassed });
+      r.forEach(run => {
+        trend.push({ date: new Date(run.timestamp).toLocaleDateString(), violations: run.violations.length, passed: run.validationPassed });
+      });
     } catch(e){}
   });
 
-  // include current run in trend
-  trend.push({ date: new Date(timestamp).toLocaleDateString(), violations: violations.length, passed: validationPassed });
+  // Include current runs
+  allRuns.forEach(run => trend.push({ date: new Date(run.timestamp).toLocaleDateString(), violations: run.violations.length, passed: run.validationPassed }));
+
+  const latestRun = allRuns[allRuns.length - 1];
+
+  const dateLabel = new Date(latestRun.timestamp).toLocaleString();
+  const browserModeText = latestRun.headlessMode ? 'Headless (background, invisible)' : 'Visible (browser window shown)';
+  let platformText = latestRun.platform;
+  if (platformText.startsWith('darwin')) platformText = 'macOS';
+  else if (platformText.startsWith('win32')) platformText = 'Windows';
+  else if (platformText.startsWith('linux')) platformText = 'Linux';
+  const osArch = require('os').arch();
+  platformText += ` (${osArch})`;
 
   const fileName = `report-${Date.now()}.html`;
   const outputPath = path.join(outputDir, fileName);
 
-  // construct HTML with table instead of article age chart
   const html = `
   <!DOCTYPE html>
   <html>
@@ -348,18 +352,22 @@ function generateHTMLReport(startTime) {
       <h1>QA Wolf – Hacker News Validation Report</h1>
       <div class="summary">
         <p><b>Run Date:</b> ${dateLabel}</p>
-        <p><b>Total Articles:</b> ${totalArticles}</p>
-        <p><b>Status:</b> ${validationPassed ? '<span class="passed">PASSED ✔</span>' : '<span class="failed">FAILED ✖</span>'}</p>
-        ${violations.length>0?`<p><b>Violations:</b> ${violations.length}</p>`:''}
-        <p><b>Test Duration (sec):</b> ${runDurationSec}</p>
-        <p><b>Node.js Version:</b> ${nodeVersion}</p>
-        <p><b>Browser Mode:</b> ${browserModeText}</p>
-        <p><b>Operating System:</b> ${platformText}</p>
+        <p><b>Number of Runs:</b> ${allRuns.length}</p>
+        <p><b>Total Articles per Run:</b> ${latestRun.totalArticles}</p>
       </div>
 
-      ${violations.length>0?`<div class="violations"><h3>Detected Sorting Violations</h3><ul>${violations.map(v=>`<li>${v.issue}</li>`).join('')}</ul></div>`:''}
+      ${allRuns.map(run => `
+        <div class="summary">
+          <p><b>Run #${run.runNumber} Status:</b> ${run.validationPassed ? '<span class="passed">PASSED ✔</span>' : '<span class="failed">FAILED ✖</span>'}</p>
+          ${run.violations.length>0?`<p><b>Violations:</b> ${run.violations.length}</p>`:''}
+          <p><b>Run Duration (sec):</b> ${run.runDurationSec}</p>
+          <p><b>Node.js Version:</b> ${run.nodeVersion}</p>
+          <p><b>Browser Mode:</b> ${run.headlessMode ? 'Headless' : 'Visible'}</b></p>
+          <p><b>Platform:</b> ${run.platform}</p>
+        </div>
+      `).join('')}
 
-      <h3>Collected Articles</h3>
+      <h3>Collected Articles from Last Run</h3>
       <table>
         <thead>
           <tr>
@@ -369,26 +377,12 @@ function generateHTMLReport(startTime) {
           </tr>
         </thead>
         <tbody>
-          ${articles.map(a => `<tr><td>${a.index}</td><td>${a.timestamp}</td><td>${a.page}</td></tr>`).join('')}
+          ${latestRun.articles.map(a => `<tr><td>${a.index}</td><td>${a.timestamp}</td><td>${a.page}</td></tr>`).join('')}
         </tbody>
       </table>
 
       <canvas id="chartTrend" width="800" height="300"></canvas>
 
-      <script>
-        const ctxTrend=document.getElementById('chartTrend');
-        new Chart(ctxTrend,{ 
-          type:'line', 
-          data:{ 
-            labels:${JSON.stringify(trend.map(t=>t.date))}, 
-            datasets:[
-              { label:'Violations', data:${JSON.stringify(trend.map(t=>t.violations))}, borderColor:'red', backgroundColor:'rgba(255,0,0,0.2)'},
-              { label:'Passed (1=yes,0=no)', data:${JSON.stringify(trend.map(t=>t.passed?1:0))}, borderColor:'green', backgroundColor:'rgba(0,255,0,0.2)'}
-            ] 
-          }, 
-          options:{ scales:{ y:{ beginAtZero:true } }, plugins:{ legend:{ display:true } } } 
-        });
-      </script>
     </body>
   </html>
   `;
