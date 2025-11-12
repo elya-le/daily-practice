@@ -62,7 +62,7 @@ app.get('/', (req, res) => {
     // if all target articles have been collected
     if (dashboardData.validationStatus === 'Passed') {
       // if validation passed, display 'Passed' and details in black
-      validationHtml = `<p>Validation Status: <span class="passed">Passed</span><span class="passed-details"> - The most recent 100 articles are ordered from newest to oldest.</span></p>`;
+      validationHtml = `<p>Validation Status: <span class="passed">Passed ✔</span><span class="passed-details"> <br> The most recent 100 articles are ordered from newest to oldest.</span></p>`;
     } else {
       // if validation failed, extract the number of issues and display in readable format
       validationHtml = `<p>Validation Status: Failed — ${dashboardData.validationStatus.replace('Failed with ', '')} sorting issue(s) detected</p>`;
@@ -100,12 +100,28 @@ app.get('/', (req, res) => {
             border-radius: 10px;  
             width: 640px; 
           }
+          .progress-container {
+            display: flex;
+            flex-direction: column; /* stack children vertically */
+            gap: 10px; /* spacing between progress-details and bar */
+          }
+          .progress-details {
+            display: flex;                 /* arrange children horizontally */
+            justify-content: space-between; /* space them evenly */
+            align-items: center;           /* vertical alignment */
+          }
+          .progress-details .article-count,
+          .progress-details .page-count {
+            flex: 1;                    /* optional: equal width */
+          }
+          .article-count {
+            text-align: right;
+          }
           .progress-bar-container { 
             background: #eee; 
             border-radius: 5px; 
             width: 100%; 
             height: 30px; 
-            margin: 10px 0; 
           }
           .progress-bar { 
             background: #00F2C8; 
@@ -140,11 +156,20 @@ app.get('/', (req, res) => {
       <body>
         <div class="dashboard">
           <h1>QA Wolf - Hacker News Sorting Validation</h1>
-          <div class="progress-bar-container">
-            <div class="progress-bar">${progressPercent}%</div>
+          <div class="progress-container">
+            <div class="progress-details">
+              <div class="page-count">
+              Current Page: ${dashboardData.currentPage}
+              </div>
+              <div class="article-count">
+                Articles Collected: ${dashboardData.articlesCollected} / ${dashboardData.totalArticles}
+              </div>
+            </div>
+            <div class="progress-bar-container">
+              <div class="progress-bar">${progressPercent}%</div>
+            </div>
           </div>
-          <p>Articles Collected: ${dashboardData.articlesCollected} / ${dashboardData.totalArticles}</p>
-          <p>Current Page: ${dashboardData.currentPage}</p>
+
           <div class="error-container">
             ${validationHtml}
           </div>
