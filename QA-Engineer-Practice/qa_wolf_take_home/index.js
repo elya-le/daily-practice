@@ -13,6 +13,7 @@ const fs = require('fs'); // filesystem module to save data if needed
 const express = require('express'); // express to create dashboard server
 const { exec } = require('child_process'); 
 const path = require('path');
+const os = require('os'); // for os info
 
 // --- 1. configuration constants ---
 const CONFIG = {
@@ -21,8 +22,8 @@ const CONFIG = {
   NAVIGATION_TIMEOUT: 15000,     // max wait time for page navigation
   BROWSER_TIMEOUT: 30000,        // max wait time for browser actions
   HEADLESS: false,               // run browser in headless mode or not
-  EXPORT_DATA: true,              // whether to export collected data to a file
-  AUTO_OPEN_DASHBOARD: true     // whether to auto-open dashboard in browser
+  EXPORT_DATA: true,             // whether to export collected data to a file
+  AUTO_OPEN_DASHBOARD: true      // whether to auto-open dashboard in browser
 };
 
 // --- 2. set up express dashboard ---
@@ -41,22 +42,11 @@ let dashboardData = {
 
 // function to open url in default browser
 function openInBrowser(url) {
-  // determine the command based on the operating system
   const platform = process.platform;
   let command;
-  
-  if (platform === 'darwin') {
-    // macos
-    command = `open ${url}`;
-  } else if (platform === 'win32') {
-    // windows
-    command = `start ${url}`;
-  } else {
-    // linux
-    command = `xdg-open ${url}`;
-  }
-  
-  // execute the command to open browser
+  if (platform === 'darwin') command = `open ${url}`;
+  else if (platform === 'win32') command = `start ${url}`;
+  else command = `xdg-open ${url}`;
   exec(command, (error) => {
     if (error) {
       console.error(`Failed to open dashboard automatically: ${error.message}`);
@@ -77,121 +67,51 @@ function logError(type, step, page, message) {
     message
   };
   dashboardData.errors.push(errObj);
-  
-  // create error log file if it doesn't exist
-  try {
-    fs.appendFileSync('error-log.json', JSON.stringify(errObj) + '\n');
-  } catch (fileError) {
-    console.error('Failed to write to error log file:', fileError.message);
-  }
-  
-  //  also log to console for immediate visibility
+  try { fs.appendFileSync('error-log.json', JSON.stringify(errObj) + '\n'); } 
+  catch (fileError) { console.error('Failed to write to error log file:', fileError.message); }
   console.error(`[ERROR] ${type} at ${step} (page ${page}): ${message}`);
 }
 
 // serve styled dashboard page with live updates
 app.get('/', (req, res) => {
   const progressPercent = Math.floor((dashboardData.articlesCollected / dashboardData.totalArticles) * 100);
-
-  // check if there are any errors collected in the dashboard
   let validationHtml = '';
   if (dashboardData.errors.length > 0) {
-    // if there are errors, display them in red
-    // show structured error info
     const errorMessages = dashboardData.errors.map(e => `${e.type}: ${e.message}`).join('<br>');
     validationHtml = `<p class="errors">Errors:<br>${errorMessages}</p>`;
   } else if (dashboardData.articlesCollected === dashboardData.totalArticles) {
-    // if all target articles have been collected
     if (dashboardData.validationStatus === 'Passed') {
-      // if validation passed, display 'Passed' and details in black
-      validationHtml = `<p>Validation Status: <span class="passed">Passed ✔</span><span class="passed-details"> <br> The most recent 100 articles are ordered from newest to oldest.</span></p>`;
+      validationHtml = `<p>Validation Status: <span class="passed">Passed ✔</span><span class="passed-details"> <br> The most recent ${CONFIG.TARGET_ARTICLES} articles are ordered from newest to oldest.</span></p>`;
     } else {
-      // if validation failed, extract the number of issues and display in readable format
       validationHtml = `<p>Validation Status: Failed — ${dashboardData.validationStatus.replace('Failed with ', '')} sorting issue(s) detected</p>`;
-
-      // display each violation like terminal
       if (dashboardData.violations && dashboardData.violations.length > 0) {
         const violationList = dashboardData.violations.map(v => `- ${v.issue}`).join('<br>');
         validationHtml += `<p style="margin-top:5px;">${violationList}</p>`;
       }
     }
   } else {
-    // if articles are still being collected or validation not complete, display current status
     validationHtml = `<p>Validation Status: ${dashboardData.validationStatus}</p>`;
   }
 
-  // dashboard html with complete styling
   res.send(`
     <html>
       <head>
         <title>Date Validator</title>
         <style>
-          body { 
-            font-family: arial, sans-serif; 
-            background: #0D0F24; 
-            padding: 20px; 
-          }
-          h1 { 
-            color: #333; 
-            text-align: center;     
-          }
+          body { font-family: arial, sans-serif; background: #0D0F24; padding: 20px; }
+          h1 { color: #333; text-align: center; }
           p { font-size: 16px; margin: 5px 0; }
-          .dashboard { 
-            background: #fff; 
-            padding: 20px; 
-            border-radius: 10px;  
-            width: 640px; 
-          }
-          .progress-container {
-            display: flex;
-            flex-direction: column; /* stack children vertically */
-            gap: 10px; /* spacing between progress-details and bar */
-          }
-          .progress-details {
-            display: flex;                 /* arrange children horizontally */
-            justify-content: space-between; /* space them evenly */
-            align-items: center;           /* vertical alignment */
-          }
-          .progress-details .article-count,
-          .progress-details .page-count {
-            flex: 1;                    /* optional: equal width */
-          }
-          .article-count {
-            text-align: right;
-          }
-          .progress-bar-container { 
-            background: #eee; 
-            border-radius: 5px; 
-            width: 100%; 
-            height: 30px; 
-          }
-          .progress-bar { 
-            background: #00F2C8; 
-            height: 100%; 
-            width: ${progressPercent}%; 
-            border-radius: 5px; 
-            text-align: center;
-            padding-left: 2px;
-            color: white; 
-            line-height: 30px; 
-          }
-          .error-container { 
-            min-height: 45px;     
-            margin-top: 10px;
-          }
-          .errors { 
-            color: red; 
-            font-weight: bold; 
-            margin: 0; 
-          }
-          .passed {
-            color: black;
-            font-weight: bold;
-          }
-          .passed-details {
-            color: #333;
-            font-weight: normal;
-          }
+          .dashboard { background: #fff; padding: 20px; border-radius: 10px; width: 640px; }
+          .progress-container { display: flex; flex-direction: column; gap: 10px; }
+          .progress-details { display: flex; justify-content: space-between; align-items: center; }
+          .progress-details .article-count, .progress-details .page-count { flex: 1; }
+          .article-count { text-align: right; }
+          .progress-bar-container { background: #eee; border-radius: 5px; width: 100%; height: 30px; }
+          .progress-bar { background: #00F2C8; height: 100%; width: ${progressPercent}%; border-radius: 5px; text-align: center; padding-left: 2px; color: white; line-height: 30px; }
+          .error-container { min-height: 45px; margin-top: 10px; }
+          .errors { color: red; font-weight: bold; margin: 0; }
+          .passed { color: black; font-weight: bold; }
+          .passed-details { color: #333; font-weight: normal; }
         </style>
         <meta http-equiv="refresh" content="2">
       </head>
@@ -200,268 +120,279 @@ app.get('/', (req, res) => {
           <h1>QA Wolf - Article Date Validator</h1>
           <div class="progress-container">
             <div class="progress-details">
-              <div class="page-count">
-              Current Page: ${dashboardData.currentPage}
-              </div>
-              <div class="article-count">
-                Articles Collected: ${dashboardData.articlesCollected} / ${dashboardData.totalArticles}
-              </div>
+              <div class="page-count">Current Page: ${dashboardData.currentPage}</div>
+              <div class="article-count">Articles Collected: ${dashboardData.articlesCollected} / ${dashboardData.totalArticles}</div>
             </div>
             <div class="progress-bar-container">
               <div class="progress-bar">${progressPercent}%</div>
             </div>
           </div>
-
-          <div class="error-container">
-            ${validationHtml}
-          </div>
+          <div class="error-container">${validationHtml}</div>
         </div>
       </body>
     </html>
   `);
 });
 
-// api endpoint to get dashboard data as json
-app.get('/api/status', (req, res) => {
-  res.json(dashboardData);
-});
+// api endpoints
+app.get('/api/status', (req, res) => { res.json(dashboardData); });
+app.post('/api/update', express.json(), (req, res) => { Object.assign(dashboardData, req.body); res.json({ success: true }); });
 
-// api endpoint to update dashboard data
-app.post('/api/update', express.json(), (req, res) => {
-  // update dashboard data with incoming data
-  Object.assign(dashboardData, req.body);
-  res.json({ success: true });
-});
-
-// start server and auto-open dashboard
+// start server
 app.listen(PORT, () => {
   const dashboardUrl = `http://localhost:${PORT}`;
   console.log(`Dashboard running at ${dashboardUrl}`);
   console.log('The dashboard will auto-refresh every 2 seconds');
-  
-  // automatically open dashboard in browser if configured
-  if (CONFIG.AUTO_OPEN_DASHBOARD) {
-    // wait 1 second to ensure server is fully started
-    setTimeout(() => {
-      openInBrowser(dashboardUrl);
-    }, 1000);
-  }
+  if (CONFIG.AUTO_OPEN_DASHBOARD) setTimeout(() => openInBrowser(dashboardUrl), 1000);
 });
 
-// helper function to parse time strings to minutes
+// helper to parse time strings to minutes
 function parseTimeToMinutes(timeText) {
-  // convert "5 minutes ago", "2 hours ago", "1 day ago" to total minutes
   if (!timeText) return 0;
-  
   const match = timeText.match(/(\d+)\s+(minute|hour|day)s?\s+ago/);
   if (!match) return 0;
-  
   const value = parseInt(match[1]);
   const unit = match[2];
-  
-  // convert to minutes based on unit
   if (unit === 'minute') return value;
   if (unit === 'hour') return value * 60;
   if (unit === 'day') return value * 24 * 60;
-  
   return 0;
 }
 
-// this is new code: validation function to check if articles are sorted
+// --- validation function with tolerance ---
+const TIME_TOLERANCE = 2; // minutes
 function validateSorting(allArticles) {
   const violations = [];
   let isValid = true;
-  
-  // check each article against the previous one
   for (let i = 1; i < allArticles.length; i++) {
     const currentMinutes = parseTimeToMinutes(allArticles[i].timestamp);
     const previousMinutes = parseTimeToMinutes(allArticles[i - 1].timestamp);
-    
-    // if current article is older than previous one, it's valid (newest first)
-    // if current has more minutes than previous, it's older
-    if (currentMinutes < previousMinutes) {
+    if (currentMinutes + TIME_TOLERANCE < previousMinutes) {
       violations.push({
         issue: `Article #${i + 1} (${allArticles[i].timestamp}) is newer than Article #${i} (${allArticles[i - 1].timestamp})`
       });
       isValid = false;
     }
   }
-  
   return { isValid, violations };
 }
 
-// --- 4. main scraping and validation function ---
+// --- main scraping and validation function ---
 async function sortHackerNewsArticles() {
-  // initialize browser variable outside try block
+  const startTime = Date.now();
   let browser = null;
-
-  // wait for dashboard to be ready before starting scraping
   console.log("Waiting for dashboard to initialize...");
   await new Promise(resolve => setTimeout(resolve, 2000));
-  
   try {
-    browser = await chromium.launch({ headless: CONFIG.HEADLESS }); // launch browser
-    const context = await browser.newContext(); // create new browser context
-    const page = await context.newPage(); // open a new page
-
+    browser = await chromium.launch({ headless: CONFIG.HEADLESS });
+    const context = await browser.newContext();
+    const page = await context.newPage();
     console.log("Starting hacker news sorting validation...");
     console.log("Navigating to https://news.ycombinator.com/newest");
+    try { await page.goto("https://news.ycombinator.com/newest", { waitUntil: 'networkidle', timeout: CONFIG.BROWSER_TIMEOUT }); console.log("Page loaded successfully"); }
+    catch (navError) { logError('NAVIGATION_ERROR', 'initial_page_load', 0, navError.message); throw navError; }
 
-    // navigate to first page
-    // wrap navigation in try-catch with error logging
-    try {
-      await page.goto("https://news.ycombinator.com/newest", { 
-        waitUntil: 'networkidle',
-        timeout: CONFIG.BROWSER_TIMEOUT 
-      });
-      console.log("Page loaded successfully");
-    } catch (navError) {
-      //  use logError function
-      logError('NAVIGATION_ERROR', 'initial_page_load', 0, navError.message);
-      throw navError; // re-throw to stop execution
-    }
-
-    let allArticles = []; // array to hold all collected articles
-    let currentPage = 1;  // track current page
-
-    // loop until target number of articles collected
+    let allArticles = []; let currentPage = 1;
     while (allArticles.length < CONFIG.TARGET_ARTICLES) {
-      // update dashboard live data
       dashboardData.articlesCollected = allArticles.length;
       dashboardData.currentPage = currentPage;
       dashboardData.validationStatus = 'In Progress';
-
       console.log(`Collecting articles from page ${currentPage}...`);
       await page.waitForTimeout(CONFIG.PAGE_LOAD_TIMEOUT);
 
-      // select article title elements on the page
       let articleElements = [];
-      try {
-        articleElements = await page.locator('tr .titleline').all();
-      } catch (locatorError) {
-        // use logError function
-        logError('ELEMENT_ERROR', 'article_selection', currentPage, `Failed to locate articles: ${locatorError.message}`);
+      try { articleElements = await page.locator('tr .titleline').all(); } 
+      catch (locatorError) { logError('ELEMENT_ERROR', 'article_selection', currentPage, `Failed to locate articles: ${locatorError.message}`); }
+
+      if (articleElements.length === 0) { 
+        const errMsg = `No articles found on page ${currentPage}`; 
+        logError('SCRAPING_ERROR', 'article_collection', currentPage, errMsg); 
+        break; 
       }
 
-      // if no articles found, log error and stop scraping
-      if (articleElements.length === 0) {
-        const errMsg = `No articles found on page ${currentPage}`;
-        // use logError function instead of just pushing to array
-        logError('SCRAPING_ERROR', 'article_collection', currentPage, errMsg);
-        break;
-      }
-
-      // extract timestamp for each article
       for (let i = 0; i < articleElements.length; i++) {
         const articleRow = articleElements[i].locator('xpath=ancestor::tr');
         const nextRow = articleRow.locator('xpath=following-sibling::tr[1]');
-        
         let timeText = 'no timestamp found';
-        try {
-          const ageElement = await nextRow.locator('.age').first();
-          if (await ageElement.count() > 0) {
-            timeText = await ageElement.textContent();
-          }
-        } catch (e) {
-          // this is new code - use logError function for timestamp errors
-          logError('TIMESTAMP_ERROR', 'timestamp_extraction', currentPage, `Failed to extract timestamp for article ${i + 1}: ${e.message}`);
-        }
-
-        allArticles.push({
-          index: allArticles.length + 1, // index for ordering
-          timestamp: timeText, // store the timestamp
-          page: currentPage
-        });
-
+        try { const ageElement = await nextRow.locator('.age').first(); if (await ageElement.count() > 0) timeText = await ageElement.textContent(); } 
+        catch (e) { logError('TIMESTAMP_ERROR', 'timestamp_extraction', currentPage, `Failed to extract timestamp for article ${i + 1}: ${e.message}`); }
+        allArticles.push({ index: allArticles.length + 1, timestamp: timeText, page: currentPage });
         if (allArticles.length >= CONFIG.TARGET_ARTICLES) break;
       }
 
       console.log(`Total articles collected so far: ${allArticles.length}`);
 
-      // navigate to next page if needed
       if (allArticles.length < CONFIG.TARGET_ARTICLES) {
         const moreButton = page.locator('a.morelink');
         if (await moreButton.count() > 0) {
           console.log("Clicking more button to go to next page...");
-          // this is new code - wrap navigation in try-catch
-          try {
-            await moreButton.click();
-            await page.waitForLoadState('networkidle', { timeout: CONFIG.NAVIGATION_TIMEOUT });
-            currentPage++;
-          } catch (navError) {
-            // this is new code - use logError function
-            logError('PAGINATION_ERROR', 'next_page_navigation', currentPage, `Failed to navigate to next page: ${navError.message}`);
-            break; // stop trying to get more articles
-          }
-        } else {
-          console.log("No more pages available");
-          break;
-        }
+          try { await moreButton.click(); await page.waitForLoadState('networkidle', { timeout: CONFIG.NAVIGATION_TIMEOUT }); currentPage++; } 
+          catch (navError) { logError('PAGINATION_ERROR', 'next_page_navigation', currentPage, `Failed to navigate to next page: ${navError.message}`); break; }
+        } else { console.log("No more pages available"); break; }
       }
     }
 
-    // trim exactly to TARGET_ARTICLES
     allArticles = allArticles.slice(0, CONFIG.TARGET_ARTICLES);
     dashboardData.articlesCollected = allArticles.length;
+    console.log("Final list of articles:", allArticles);
 
-    console.log("Final list of articles:");
-    console.log(allArticles);
-
-    // validate sorting and store violations for dashboard
     console.log("Validating sorting of collected articles...");
     const validationResult = validateSorting(allArticles);
 
-    if (validationResult.isValid) {
-      console.log("All 100 articles are properly sorted newest to oldest");
-      dashboardData.validationStatus = 'Passed';
-      dashboardData.violations = []; // clear violations if any
-    } else {
+    if (validationResult.isValid) { 
+      console.log(`All ${CONFIG.TARGET_ARTICLES} articles are properly sorted newest to oldest`); 
+      dashboardData.validationStatus = 'Passed'; 
+      dashboardData.violations = []; 
+    } else { 
       console.log(`Found ${validationResult.violations.length} sorting violation(s):`);
       validationResult.violations.forEach(v => console.log(`- ${v.issue}`));
       dashboardData.validationStatus = `Failed with ${validationResult.violations.length}`;
       dashboardData.violations = validationResult.violations;
     }
 
-    // export results to json file if configured
     if (CONFIG.EXPORT_DATA) {
-      // this is new code - wrap file export in try-catch
       try {
-        const exportData = {
-          timestamp: new Date().toISOString(),
-          totalArticles: allArticles.length,
-          validationPassed: validationResult.isValid,
-          violations: validationResult.violations,
-          articles: allArticles
+        const exportData = { 
+          timestamp: new Date().toISOString(), 
+          totalArticles: allArticles.length, 
+          validationPassed: validationResult.isValid, 
+          violations: validationResult.violations, 
+          articles: allArticles, 
+          runDurationSec: ((Date.now()-startTime)/1000).toFixed(2), 
+          nodeVersion: process.version, 
+          platform: `${process.platform} ${process.arch}`, 
+          headlessMode: CONFIG.HEADLESS 
         };
-        
         fs.writeFileSync('validation-results.json', JSON.stringify(exportData, null, 2));
         console.log('Results exported to validation-results.json');
-      } catch (fileError) {
-        // use logError function
-        logError('FILE_ERROR', 'export_results', currentPage, `Failed to export results: ${fileError.message}`);
-      }
+      } catch (fileError) { logError('FILE_ERROR', 'export_results', currentPage, `Failed to export results: ${fileError.message}`); }
     }
 
-  } catch (error) {
-    // use logError function with more detail
-    logError('CRITICAL_ERROR', 'main_execution', dashboardData.currentPage, error.message);
-    dashboardData.validationStatus = 'Failed due to error';
-  } finally {
-    // safer browser closure
-    if (browser) {
-      try {
-        await browser.close();
-        console.log("Browser closed");
-      } catch (closeError) {
-        logError('BROWSER_ERROR', 'browser_close', dashboardData.currentPage, `Failed to close browser: ${closeError.message}`);
-      }
-    }
+  } catch (error) { logError('CRITICAL_ERROR', 'main_execution', dashboardData.currentPage, error.message); dashboardData.validationStatus = 'Failed due to error'; }
+  finally {
+    if (browser) { try { await browser.close(); console.log("Browser closed"); } catch (closeError) { logError('BROWSER_ERROR', 'browser_close', dashboardData.currentPage, `Failed to close browser: ${closeError.message}`); } }
+    generateHTMLReport(startTime);
   }
 }
 
-// --- 5. run main function ---
-(async () => {
-  await sortHackerNewsArticles();
-})();
+// --- run main function ---
+(async () => { await sortHackerNewsArticles(); })();
 
+// --- enhanced generateHTMLReport ---
+function generateHTMLReport(startTime) {
+  const resultsFile = 'validation-results.json';
+  const outputDir = 'test-history';
+  if (!fs.existsSync(resultsFile)) {
+    console.error('validation-results.json not found — run the validation first.');
+    return;
+  }
 
+  const raw = fs.readFileSync(resultsFile, 'utf-8');
+  const data = JSON.parse(raw);
+  const { timestamp, totalArticles, validationPassed, violations, articles, runDurationSec, nodeVersion, platform, headlessMode } = data;
+  const dateLabel = new Date(timestamp).toLocaleString();
+
+  if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir);
+
+  // --- friendly environment labels ---
+  const browserModeText = headlessMode ? 'Headless (background, invisible)' : 'Visible (browser window shown)';
+  let platformText = platform; 
+  if (platform.startsWith('darwin')) platformText = 'macOS';
+  else if (platform.startsWith('win32')) platformText = 'Windows';
+  else if (platform.startsWith('linux')) platformText = 'Linux';
+  const osArch = require('os').arch();
+  platformText += ` (${osArch})`;
+
+  // historical trend from previous reports
+  const jsonFiles = fs.readdirSync(outputDir).filter(f => f.endsWith('.json'));
+  const trend = [];
+  jsonFiles.forEach(f => {
+    try {
+      const r = JSON.parse(fs.readFileSync(path.join(outputDir,f)));
+      trend.push({ date: new Date(r.timestamp).toLocaleDateString(), violations: r.violations.length, passed: r.validationPassed });
+    } catch(e){}
+  });
+
+  // include current run in trend
+  trend.push({ date: new Date(timestamp).toLocaleDateString(), violations: violations.length, passed: validationPassed });
+
+  const fileName = `report-${Date.now()}.html`;
+  const outputPath = path.join(outputDir, fileName);
+
+  // construct HTML with table instead of article age chart
+  const html = `
+  <!DOCTYPE html>
+  <html>
+    <head>
+      <meta charset="UTF-8">
+      <title>QA Wolf Validation Report</title>
+      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+      <style>
+        body { font-family: Arial, sans-serif; background: #f5f7fa; color:#222; padding:30px; }
+        h1 { text-align:center; color:#333; }
+        .summary { background:#fff; padding:20px; border-radius:10px; margin-bottom:30px;}
+        .summary p { margin:6px 0; font-size:15px; }
+        .passed { color:#0a0; font-weight:bold; }
+        .failed { color:#c00; font-weight:bold; }
+        .violations { background:#fff; padding:20px; border-radius:10px; margin-bottom:30px; }
+        .violations ul { list-style:disc; padding-left:20px; }
+        .violations li { margin-bottom:4px; }
+        table { width:100%; border-collapse: collapse; background:#fff; border-radius:10px; overflow:hidden; }
+        th, td { padding:8px 12px; text-align:left; border-bottom:1px solid #ddd; font-size:14px; }
+        th { background:#eee; }
+        tr:hover { background:#f1f1f1; }
+        canvas { margin-top:30px; background:#fff; border-radius:10px; padding:20px;}
+      </style>
+    </head>
+    <body>
+      <h1>QA Wolf – Hacker News Validation Report</h1>
+      <div class="summary">
+        <p><b>Run Date:</b> ${dateLabel}</p>
+        <p><b>Total Articles:</b> ${totalArticles}</p>
+        <p><b>Status:</b> ${validationPassed ? '<span class="passed">PASSED ✔</span>' : '<span class="failed">FAILED ✖</span>'}</p>
+        ${violations.length>0?`<p><b>Violations:</b> ${violations.length}</p>`:''}
+        <p><b>Test Duration (sec):</b> ${runDurationSec}</p>
+        <p><b>Node.js Version:</b> ${nodeVersion}</p>
+        <p><b>Browser Mode:</b> ${browserModeText}</p>
+        <p><b>Operating System:</b> ${platformText}</p>
+      </div>
+
+      ${violations.length>0?`<div class="violations"><h3>Detected Sorting Violations</h3><ul>${violations.map(v=>`<li>${v.issue}</li>`).join('')}</ul></div>`:''}
+
+      <h3>Collected Articles</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Timestamp</th>
+            <th>Page</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${articles.map(a => `<tr><td>${a.index}</td><td>${a.timestamp}</td><td>${a.page}</td></tr>`).join('')}
+        </tbody>
+      </table>
+
+      <canvas id="chartTrend" width="800" height="300"></canvas>
+
+      <script>
+        const ctxTrend=document.getElementById('chartTrend');
+        new Chart(ctxTrend,{ 
+          type:'line', 
+          data:{ 
+            labels:${JSON.stringify(trend.map(t=>t.date))}, 
+            datasets:[
+              { label:'Violations', data:${JSON.stringify(trend.map(t=>t.violations))}, borderColor:'red', backgroundColor:'rgba(255,0,0,0.2)'},
+              { label:'Passed (1=yes,0=no)', data:${JSON.stringify(trend.map(t=>t.passed?1:0))}, borderColor:'green', backgroundColor:'rgba(0,255,0,0.2)'}
+            ] 
+          }, 
+          options:{ scales:{ y:{ beginAtZero:true } }, plugins:{ legend:{ display:true } } } 
+        });
+      </script>
+    </body>
+  </html>
+  `;
+
+  fs.writeFileSync(outputPath, html,'utf-8');
+  console.log(`Report generated: ${outputPath}`);
+}
