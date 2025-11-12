@@ -1,0 +1,109 @@
+
+  <!DOCTYPE html>
+  <html>
+    <head>
+      <meta charset="UTF-8">
+      <title>QA Wolf Validation Report</title>
+      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+      <style>
+        body { font-family: Arial, sans-serif; background: #f5f7fa; color:#222; padding:30px; }
+        h1 { text-align:center; color:#333; }
+        
+        .full-report {
+          display: flex;
+          gap: 20px; /* space between the two divs */
+          flex-wrap: wrap; /* optional: allows stacking on smaller screens */
+        }
+        
+        .full-report > div {
+          flex: 1; /* each child takes equal available space */
+          min-width: 300px; /* prevents them from getting too narrow */
+        }
+        .summary { 
+          background: #fff; 
+          padding: 20px; 
+          border-radius: 10px; 
+          margin-bottom: 30px;
+        }
+
+        .summary p { 
+          margin: 6px 0; 
+          font-size: 15px; 
+        }
+        /* Run summary container: one column, 3 rows */
+        .run-summary-container {
+          display: flex;
+          flex-direction: column; /* stack items vertically */
+          gap: 20px; /* space between rows */
+          margin-bottom: 30px;
+        }
+        .passed { color:#0a0; font-weight:bold; }
+        .failed { color:#c00; font-weight:bold; }
+        .violations { background:#fff; padding:20px; border-radius:10px; margin-bottom:30px; }
+        .violations ul { list-style:disc; padding-left:20px; }
+        .violations li { margin-bottom:4px; }
+        table { width:100%; border-collapse: collapse; background:#fff; border-radius:10px; overflow:hidden; }
+        th, td { padding:8px 12px; text-align:left; border-bottom:1px solid #ddd; font-size:14px; }
+        th { background:#eee; }
+        tr:hover { background:#f1f1f1; }
+        canvas { margin-top:30px; background:#fff; border-radius:10px; padding:20px;}
+      </style>
+    </head>
+    <body>
+      <h1>QA Wolf – Hacker News Validation Report</h1>
+      <div class="summary">
+        <p><b>Run Date:</b> 11/12/2025, 3:29:15 PM</p>
+        <p><b>Number of Runs:</b> 3</p>
+        <p><b>Total Articles per Run:</b> 100</p>
+      </div>
+      <div class="full-report">
+        <div class="collected-articles">
+          <h3>Collected Articles from Last Run</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Timestamp</th>
+                <th>Page</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>1</td><td>0 minutes ago</td><td>1</td></tr><tr><td>2</td><td>1 minute ago</td><td>1</td></tr><tr><td>3</td><td>4 minutes ago</td><td>1</td></tr><tr><td>4</td><td>5 minutes ago</td><td>1</td></tr><tr><td>5</td><td>5 minutes ago</td><td>1</td></tr><tr><td>6</td><td>5 minutes ago</td><td>1</td></tr><tr><td>7</td><td>7 minutes ago</td><td>1</td></tr><tr><td>8</td><td>8 minutes ago</td><td>1</td></tr><tr><td>9</td><td>9 minutes ago</td><td>1</td></tr><tr><td>10</td><td>9 minutes ago</td><td>1</td></tr><tr><td>11</td><td>10 minutes ago</td><td>1</td></tr><tr><td>12</td><td>10 minutes ago</td><td>1</td></tr><tr><td>13</td><td>10 minutes ago</td><td>1</td></tr><tr><td>14</td><td>11 minutes ago</td><td>1</td></tr><tr><td>15</td><td>11 minutes ago</td><td>1</td></tr><tr><td>16</td><td>11 minutes ago</td><td>1</td></tr><tr><td>17</td><td>11 minutes ago</td><td>1</td></tr><tr><td>18</td><td>11 minutes ago</td><td>1</td></tr><tr><td>19</td><td>11 minutes ago</td><td>1</td></tr><tr><td>20</td><td>13 minutes ago</td><td>1</td></tr><tr><td>21</td><td>16 minutes ago</td><td>1</td></tr><tr><td>22</td><td>16 minutes ago</td><td>1</td></tr><tr><td>23</td><td>17 minutes ago</td><td>1</td></tr><tr><td>24</td><td>17 minutes ago</td><td>1</td></tr><tr><td>25</td><td>19 minutes ago</td><td>1</td></tr><tr><td>26</td><td>21 minutes ago</td><td>1</td></tr><tr><td>27</td><td>25 minutes ago</td><td>1</td></tr><tr><td>28</td><td>25 minutes ago</td><td>1</td></tr><tr><td>29</td><td>25 minutes ago</td><td>1</td></tr><tr><td>30</td><td>26 minutes ago</td><td>1</td></tr><tr><td>31</td><td>27 minutes ago</td><td>2</td></tr><tr><td>32</td><td>28 minutes ago</td><td>2</td></tr><tr><td>33</td><td>28 minutes ago</td><td>2</td></tr><tr><td>34</td><td>30 minutes ago</td><td>2</td></tr><tr><td>35</td><td>31 minutes ago</td><td>2</td></tr><tr><td>36</td><td>34 minutes ago</td><td>2</td></tr><tr><td>37</td><td>37 minutes ago</td><td>2</td></tr><tr><td>38</td><td>38 minutes ago</td><td>2</td></tr><tr><td>39</td><td>39 minutes ago</td><td>2</td></tr><tr><td>40</td><td>40 minutes ago</td><td>2</td></tr><tr><td>41</td><td>44 minutes ago</td><td>2</td></tr><tr><td>42</td><td>46 minutes ago</td><td>2</td></tr><tr><td>43</td><td>47 minutes ago</td><td>2</td></tr><tr><td>44</td><td>48 minutes ago</td><td>2</td></tr><tr><td>45</td><td>50 minutes ago</td><td>2</td></tr><tr><td>46</td><td>52 minutes ago</td><td>2</td></tr><tr><td>47</td><td>53 minutes ago</td><td>2</td></tr><tr><td>48</td><td>53 minutes ago</td><td>2</td></tr><tr><td>49</td><td>53 minutes ago</td><td>2</td></tr><tr><td>50</td><td>53 minutes ago</td><td>2</td></tr><tr><td>51</td><td>55 minutes ago</td><td>2</td></tr><tr><td>52</td><td>56 minutes ago</td><td>2</td></tr><tr><td>53</td><td>57 minutes ago</td><td>2</td></tr><tr><td>54</td><td>1 hour ago</td><td>2</td></tr><tr><td>55</td><td>1 hour ago</td><td>2</td></tr><tr><td>56</td><td>1 hour ago</td><td>2</td></tr><tr><td>57</td><td>1 hour ago</td><td>2</td></tr><tr><td>58</td><td>1 hour ago</td><td>2</td></tr><tr><td>59</td><td>1 hour ago</td><td>2</td></tr><tr><td>60</td><td>1 hour ago</td><td>2</td></tr><tr><td>61</td><td>1 hour ago</td><td>3</td></tr><tr><td>62</td><td>1 hour ago</td><td>3</td></tr><tr><td>63</td><td>1 hour ago</td><td>3</td></tr><tr><td>64</td><td>1 hour ago</td><td>3</td></tr><tr><td>65</td><td>1 hour ago</td><td>3</td></tr><tr><td>66</td><td>1 hour ago</td><td>3</td></tr><tr><td>67</td><td>1 hour ago</td><td>3</td></tr><tr><td>68</td><td>1 hour ago</td><td>3</td></tr><tr><td>69</td><td>1 hour ago</td><td>3</td></tr><tr><td>70</td><td>1 hour ago</td><td>3</td></tr><tr><td>71</td><td>1 hour ago</td><td>3</td></tr><tr><td>72</td><td>1 hour ago</td><td>3</td></tr><tr><td>73</td><td>1 hour ago</td><td>3</td></tr><tr><td>74</td><td>1 hour ago</td><td>3</td></tr><tr><td>75</td><td>1 hour ago</td><td>3</td></tr><tr><td>76</td><td>1 hour ago</td><td>3</td></tr><tr><td>77</td><td>1 hour ago</td><td>3</td></tr><tr><td>78</td><td>1 hour ago</td><td>3</td></tr><tr><td>79</td><td>1 hour ago</td><td>3</td></tr><tr><td>80</td><td>1 hour ago</td><td>3</td></tr><tr><td>81</td><td>1 hour ago</td><td>3</td></tr><tr><td>82</td><td>1 hour ago</td><td>3</td></tr><tr><td>83</td><td>1 hour ago</td><td>3</td></tr><tr><td>84</td><td>1 hour ago</td><td>3</td></tr><tr><td>85</td><td>1 hour ago</td><td>3</td></tr><tr><td>86</td><td>1 hour ago</td><td>3</td></tr><tr><td>87</td><td>1 hour ago</td><td>3</td></tr><tr><td>88</td><td>1 hour ago</td><td>3</td></tr><tr><td>89</td><td>1 hour ago</td><td>3</td></tr><tr><td>90</td><td>1 hour ago</td><td>3</td></tr><tr><td>91</td><td>1 hour ago</td><td>4</td></tr><tr><td>92</td><td>1 hour ago</td><td>4</td></tr><tr><td>93</td><td>1 hour ago</td><td>4</td></tr><tr><td>94</td><td>1 hour ago</td><td>4</td></tr><tr><td>95</td><td>1 hour ago</td><td>4</td></tr><tr><td>96</td><td>1 hour ago</td><td>4</td></tr><tr><td>97</td><td>1 hour ago</td><td>4</td></tr><tr><td>98</td><td>1 hour ago</td><td>4</td></tr><tr><td>99</td><td>1 hour ago</td><td>4</td></tr><tr><td>100</td><td>1 hour ago</td><td>4</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="run-summary-container">
+          
+            <div class="summary">
+              <p><b>Run #1 Status:</b> <span class="passed">PASSED ✔</span></p>
+              
+              <p><b>Run Duration (sec):</b> 7.47</p>
+              <p><b>Node.js Version:</b> v18.20.2</p>
+              <p><b>Browser Mode:</b> Visible</b></p>
+              <p><b>Platform:</b> darwin arm64</p>
+            </div>
+          
+            <div class="summary">
+              <p><b>Run #2 Status:</b> <span class="passed">PASSED ✔</span></p>
+              
+              <p><b>Run Duration (sec):</b> 7.09</p>
+              <p><b>Node.js Version:</b> v18.20.2</p>
+              <p><b>Browser Mode:</b> Visible</b></p>
+              <p><b>Platform:</b> darwin arm64</p>
+            </div>
+          
+            <div class="summary">
+              <p><b>Run #3 Status:</b> <span class="passed">PASSED ✔</span></p>
+              
+              <p><b>Run Duration (sec):</b> 6.99</p>
+              <p><b>Node.js Version:</b> v18.20.2</p>
+              <p><b>Browser Mode:</b> Visible</b></p>
+              <p><b>Platform:</b> darwin arm64</p>
+            </div>
+          
+        </div>
+        
+      </div>
+    </body>
+  </html>
+  
