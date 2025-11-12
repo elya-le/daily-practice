@@ -91,3 +91,30 @@ qa_wolf_take_home/
 - socket.io enables live communication between Node.js and browser
 - planning for test history now avoids rework later
 - I had used Socket.io before when building a realtime messaging and wanted to bring that skill back here — it felt like a good fit for real-time test updates
+
+### step 5: adding detailed HTML report
+
+**goal:** create a clear, professional report so stakeholders can understand test results without reading console logs
+
+**what I did:**
+- wrote `generateHTMLReport()` to read `validation-results.json` and produce styled HTML
+- included:
+  - run date, Node.js version, OS, browser mode
+  - pass/fail status with color coding
+  - detected sorting violations in a list
+  - table of collected articles
+- saved reports to `test-history/` with timestamped filenames
+
+**why this matters:**
+- turns raw JSON into an easy-to-read document
+- makes results accessible to non-technical stakeholders
+- keeps a historical archive of test runs for trend analysis
+
+**technology research:**
+- HTML + CSS for structured layout
+- Node.js `fs` module for reading/writing files
+
+**learning:**
+- visual reporting improves stakeholder communication
+- historical reports help track trends over time
+- separating test logic and report generation keeps code clean

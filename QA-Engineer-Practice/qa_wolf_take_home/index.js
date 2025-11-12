@@ -334,8 +334,35 @@ function generateHTMLReport(allRuns) {
       <style>
         body { font-family: Arial, sans-serif; background: #f5f7fa; color:#222; padding:30px; }
         h1 { text-align:center; color:#333; }
-        .summary { background:#fff; padding:20px; border-radius:10px; margin-bottom:30px;}
-        .summary p { margin:6px 0; font-size:15px; }
+        
+        .full-report {
+          display: flex;
+          gap: 20px; /* space between the two divs */
+          flex-wrap: wrap; /* optional: allows stacking on smaller screens */
+        }
+        
+        .full-report > div {
+          flex: 1; /* each child takes equal available space */
+          min-width: 300px; /* prevents them from getting too narrow */
+        }
+        .summary { 
+          background: #fff; 
+          padding: 20px; 
+          border-radius: 10px; 
+          margin-bottom: 30px;
+        }
+
+        .summary p { 
+          margin: 6px 0; 
+          font-size: 15px; 
+        }
+        /* Run summary container: one column, 3 rows */
+        .run-summary-container {
+          display: flex;
+          flex-direction: column; /* stack items vertically */
+          gap: 20px; /* space between rows */
+          margin-bottom: 30px;
+        }
         .passed { color:#0a0; font-weight:bold; }
         .failed { color:#c00; font-weight:bold; }
         .violations { background:#fff; padding:20px; border-radius:10px; margin-bottom:30px; }
@@ -355,34 +382,36 @@ function generateHTMLReport(allRuns) {
         <p><b>Number of Runs:</b> ${allRuns.length}</p>
         <p><b>Total Articles per Run:</b> ${latestRun.totalArticles}</p>
       </div>
-
-      ${allRuns.map(run => `
-        <div class="summary">
-          <p><b>Run #${run.runNumber} Status:</b> ${run.validationPassed ? '<span class="passed">PASSED ✔</span>' : '<span class="failed">FAILED ✖</span>'}</p>
-          ${run.violations.length>0?`<p><b>Violations:</b> ${run.violations.length}</p>`:''}
-          <p><b>Run Duration (sec):</b> ${run.runDurationSec}</p>
-          <p><b>Node.js Version:</b> ${run.nodeVersion}</p>
-          <p><b>Browser Mode:</b> ${run.headlessMode ? 'Headless' : 'Visible'}</b></p>
-          <p><b>Platform:</b> ${run.platform}</p>
+      <div class="full-report">
+        <div class="collected-articles">
+          <h3>Collected Articles from Last Run</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Timestamp</th>
+                <th>Page</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${latestRun.articles.map(a => `<tr><td>${a.index}</td><td>${a.timestamp}</td><td>${a.page}</td></tr>`).join('')}
+            </tbody>
+          </table>
         </div>
-      `).join('')}
-
-      <h3>Collected Articles from Last Run</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Timestamp</th>
-            <th>Page</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${latestRun.articles.map(a => `<tr><td>${a.index}</td><td>${a.timestamp}</td><td>${a.page}</td></tr>`).join('')}
-        </tbody>
-      </table>
-
-      <canvas id="chartTrend" width="800" height="300"></canvas>
-
+        <div class="run-summary-container">
+          ${allRuns.map(run => `
+            <div class="summary">
+              <p><b>Run #${run.runNumber} Status:</b> ${run.validationPassed ? '<span class="passed">PASSED ✔</span>' : '<span class="failed">FAILED ✖</span>'}</p>
+              ${run.violations.length>0?`<p><b>Violations:</b> ${run.violations.length}</p>`:''}
+              <p><b>Run Duration (sec):</b> ${run.runDurationSec}</p>
+              <p><b>Node.js Version:</b> ${run.nodeVersion}</p>
+              <p><b>Browser Mode:</b> ${run.headlessMode ? 'Headless' : 'Visible'}</b></p>
+              <p><b>Platform:</b> ${run.platform}</p>
+            </div>
+          `).join('')}
+        </div>
+        
+      </div>
     </body>
   </html>
   `;
