@@ -1,182 +1,182 @@
 {
-  "timestamp": "2025-11-11T23:31:05.191Z",
+  "timestamp": "2025-11-12T01:34:26.404Z",
   "totalArticles": 100,
   "validationPassed": true,
   "violations": [],
   "articles": [
     {
       "index": 1,
-      "timestamp": "0 minutes ago",
+      "timestamp": "3 minutes ago",
       "page": 1
     },
     {
       "index": 2,
-      "timestamp": "1 minute ago",
+      "timestamp": "6 minutes ago",
       "page": 1
     },
     {
       "index": 3,
-      "timestamp": "2 minutes ago",
+      "timestamp": "8 minutes ago",
       "page": 1
     },
     {
       "index": 4,
-      "timestamp": "12 minutes ago",
+      "timestamp": "8 minutes ago",
       "page": 1
     },
     {
       "index": 5,
-      "timestamp": "14 minutes ago",
+      "timestamp": "9 minutes ago",
       "page": 1
     },
     {
       "index": 6,
-      "timestamp": "15 minutes ago",
+      "timestamp": "11 minutes ago",
       "page": 1
     },
     {
       "index": 7,
-      "timestamp": "23 minutes ago",
+      "timestamp": "12 minutes ago",
       "page": 1
     },
     {
       "index": 8,
-      "timestamp": "23 minutes ago",
+      "timestamp": "18 minutes ago",
       "page": 1
     },
     {
       "index": 9,
-      "timestamp": "23 minutes ago",
+      "timestamp": "19 minutes ago",
       "page": 1
     },
     {
       "index": 10,
-      "timestamp": "24 minutes ago",
+      "timestamp": "20 minutes ago",
       "page": 1
     },
     {
       "index": 11,
-      "timestamp": "27 minutes ago",
+      "timestamp": "22 minutes ago",
       "page": 1
     },
     {
       "index": 12,
-      "timestamp": "30 minutes ago",
+      "timestamp": "25 minutes ago",
       "page": 1
     },
     {
       "index": 13,
-      "timestamp": "30 minutes ago",
+      "timestamp": "26 minutes ago",
       "page": 1
     },
     {
       "index": 14,
-      "timestamp": "31 minutes ago",
+      "timestamp": "26 minutes ago",
       "page": 1
     },
     {
       "index": 15,
-      "timestamp": "35 minutes ago",
+      "timestamp": "27 minutes ago",
       "page": 1
     },
     {
       "index": 16,
-      "timestamp": "38 minutes ago",
+      "timestamp": "31 minutes ago",
       "page": 1
     },
     {
       "index": 17,
-      "timestamp": "38 minutes ago",
+      "timestamp": "32 minutes ago",
       "page": 1
     },
     {
       "index": 18,
-      "timestamp": "38 minutes ago",
+      "timestamp": "34 minutes ago",
       "page": 1
     },
     {
       "index": 19,
-      "timestamp": "39 minutes ago",
+      "timestamp": "35 minutes ago",
       "page": 1
     },
     {
       "index": 20,
-      "timestamp": "42 minutes ago",
+      "timestamp": "35 minutes ago",
       "page": 1
     },
     {
       "index": 21,
-      "timestamp": "44 minutes ago",
+      "timestamp": "37 minutes ago",
       "page": 1
     },
     {
       "index": 22,
-      "timestamp": "48 minutes ago",
+      "timestamp": "38 minutes ago",
       "page": 1
     },
     {
       "index": 23,
-      "timestamp": "49 minutes ago",
+      "timestamp": "38 minutes ago",
       "page": 1
     },
     {
       "index": 24,
-      "timestamp": "49 minutes ago",
+      "timestamp": "39 minutes ago",
       "page": 1
     },
     {
       "index": 25,
-      "timestamp": "50 minutes ago",
+      "timestamp": "40 minutes ago",
       "page": 1
     },
     {
       "index": 26,
-      "timestamp": "51 minutes ago",
+      "timestamp": "40 minutes ago",
       "page": 1
     },
     {
       "index": 27,
-      "timestamp": "56 minutes ago",
+      "timestamp": "43 minutes ago",
       "page": 1
     },
     {
       "index": 28,
-      "timestamp": "57 minutes ago",
+      "timestamp": "43 minutes ago",
       "page": 1
     },
     {
       "index": 29,
-      "timestamp": "57 minutes ago",
+      "timestamp": "47 minutes ago",
       "page": 1
     },
     {
       "index": 30,
-      "timestamp": "58 minutes ago",
+      "timestamp": "48 minutes ago",
       "page": 1
     },
     {
       "index": 31,
-      "timestamp": "1 hour ago",
+      "timestamp": "50 minutes ago",
       "page": 2
     },
     {
       "index": 32,
-      "timestamp": "1 hour ago",
+      "timestamp": "53 minutes ago",
       "page": 2
     },
     {
       "index": 33,
-      "timestamp": "1 hour ago",
+      "timestamp": "54 minutes ago",
       "page": 2
     },
     {
       "index": 34,
-      "timestamp": "1 hour ago",
+      "timestamp": "59 minutes ago",
       "page": 2
     },
     {
       "index": 35,
-      "timestamp": "1 hour ago",
+      "timestamp": "59 minutes ago",
       "page": 2
     },
     {
@@ -336,72 +336,72 @@
     },
     {
       "index": 67,
-      "timestamp": "1 hour ago",
+      "timestamp": "2 hours ago",
       "page": 3
     },
     {
       "index": 68,
-      "timestamp": "1 hour ago",
+      "timestamp": "2 hours ago",
       "page": 3
     },
     {
       "index": 69,
-      "timestamp": "1 hour ago",
+      "timestamp": "2 hours ago",
       "page": 3
     },
     {
       "index": 70,
-      "timestamp": "1 hour ago",
+      "timestamp": "2 hours ago",
       "page": 3
     },
     {
       "index": 71,
-      "timestamp": "1 hour ago",
+      "timestamp": "2 hours ago",
       "page": 3
     },
     {
       "index": 72,
-      "timestamp": "1 hour ago",
+      "timestamp": "2 hours ago",
       "page": 3
     },
     {
       "index": 73,
-      "timestamp": "1 hour ago",
+      "timestamp": "2 hours ago",
       "page": 3
     },
     {
       "index": 74,
-      "timestamp": "1 hour ago",
+      "timestamp": "2 hours ago",
       "page": 3
     },
     {
       "index": 75,
-      "timestamp": "1 hour ago",
+      "timestamp": "2 hours ago",
       "page": 3
     },
     {
       "index": 76,
-      "timestamp": "1 hour ago",
+      "timestamp": "2 hours ago",
       "page": 3
     },
     {
       "index": 77,
-      "timestamp": "1 hour ago",
+      "timestamp": "2 hours ago",
       "page": 3
     },
     {
       "index": 78,
-      "timestamp": "1 hour ago",
+      "timestamp": "2 hours ago",
       "page": 3
     },
     {
       "index": 79,
-      "timestamp": "1 hour ago",
+      "timestamp": "2 hours ago",
       "page": 3
     },
     {
       "index": 80,
-      "timestamp": "1 hour ago",
+      "timestamp": "2 hours ago",
       "page": 3
     },
     {
@@ -481,27 +481,27 @@
     },
     {
       "index": 96,
-      "timestamp": "2 hours ago",
+      "timestamp": "3 hours ago",
       "page": 4
     },
     {
       "index": 97,
-      "timestamp": "2 hours ago",
+      "timestamp": "3 hours ago",
       "page": 4
     },
     {
       "index": 98,
-      "timestamp": "2 hours ago",
+      "timestamp": "3 hours ago",
       "page": 4
     },
     {
       "index": 99,
-      "timestamp": "2 hours ago",
+      "timestamp": "3 hours ago",
       "page": 4
     },
     {
       "index": 100,
-      "timestamp": "2 hours ago",
+      "timestamp": "3 hours ago",
       "page": 4
     }
   ]

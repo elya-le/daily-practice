@@ -36,91 +36,57 @@ let dashboardData = {
   violations: []                  // store sorting violations
 };
 
-// serve styled dashboard page with live updates
+// helper to log errors professionally
+function logError(type, step, page, message) {
+  const errObj = {
+    timestamp: new Date().toISOString(),
+    type,
+    step,
+    page,
+    message
+  };
+  dashboardData.errors.push(errObj);
+  fs.appendFileSync('error-log.json', JSON.stringify(errObj) + '\n');
+}
+
+// server styled dashboard page with live updates
 app.get('/', (req, res) => {
   const progressPercent = Math.floor((dashboardData.articlesCollected / dashboardData.totalArticles) * 100);
 
-  // check if there are any errors collected in the dashboard
   let validationHtml = '';
   if (dashboardData.errors.length > 0) {
-    // if there are errors, display them in red
-    validationHtml = `<p class="errors">Errors: ${dashboardData.errors.join(', ')}</p>`;
+    // display structured errors in red
+    const errorList = dashboardData.errors.map(e => `[${e.type}][Page ${e.page}][${e.step}] ${e.message}`).join('<br>');
+    validationHtml = `<p class="errors">${errorList}</p>`;
   } else if (dashboardData.articlesCollected === dashboardData.totalArticles) {
-    // if all target articles have been collected
     if (dashboardData.validationStatus === 'Passed') {
-      // if validation passed, display 'Passed' and details in black
       validationHtml = `<p>Validation Status: <span class="passed">Passed</span><span class="passed-details"> - The most recent 100 articles are ordered from newest to oldest.</span></p>`;
     } else {
-      // if validation failed, extract the number of issues and display in readable format
       validationHtml = `<p>Validation Status: Failed — ${dashboardData.validationStatus.replace('Failed with ', '')} sorting issue(s) detected</p>`;
-
-      // display each violation like terminal
-      if (dashboardData.violations && dashboardData.violations.length > 0) {
+      if (dashboardData.violations.length > 0) {
         const violationList = dashboardData.violations.map(v => `- ${v.issue}`).join('<br>');
         validationHtml += `<p style="margin-top:5px;">${violationList}</p>`;
       }
     }
   } else {
-    // if articles are still being collected or validation not complete, display current status
     validationHtml = `<p>Validation Status: ${dashboardData.validationStatus}</p>`;
   }
 
-  // dashboard html with complete styling
   res.send(`
     <html>
       <head>
         <title>Hacker News Sorting Validation Dashboard</title>
         <style>
-          body { 
-            font-family: arial, sans-serif; 
-            background: #0D0F24; 
-            padding: 20px; 
-          }
-          h1 { 
-            color: #333; 
-            text-align: center;     
-          }
+          body { font-family: arial, sans-serif; background: #0D0F24; padding: 20px; }
+          h1 { color: #333; text-align: center; }
           p { font-size: 16px; margin: 5px 0; }
-          .dashboard { 
-            background: #fff; 
-            padding: 20px; 
-            border-radius: 10px;  
-            width: 640px; 
-          }
-          .progress-bar-container { 
-            background: #eee; 
-            border-radius: 5px; 
-            width: 100%; 
-            height: 30px; 
-            margin: 10px 0; 
-          }
-          .progress-bar { 
-            background: #00F2C8; 
-            height: 100%; 
-            width: ${progressPercent}%; 
-            border-radius: 5px; 
-            text-align: center;
-            padding-left: 2px;
-            color: white; 
-            line-height: 30px; 
-          }
-          .error-container { 
-            min-height: 45px;     
-            margin-top: 10px;
-          }
-          .errors { 
-            color: red; 
-            font-weight: bold; 
-            margin: 0; 
-          }
-          .passed {
-            color: black;
-            font-weight: bold;
-          }
-          .passed-details {
-            color: #333;
-            font-weight: normal;
-          }
+          .dashboard { background: #fff; padding: 20px; border-radius: 10px; width: 640px; }
+          .progress-bar-container { background: #eee; border-radius: 5px; width: 100%; height: 30px; margin: 10px 0; }
+          .progress-bar { background: #00F2C8; height: 100%; width: ${progressPercent}%; border-radius: 5px; text-align: center; padding-left: 2px; color: white; line-height: 30px; }
+          .error-container { min-height: 45px; margin-top: 10px; }
+          .errors { color: red; font-weight: bold; margin: 0; }
+          .passed { color: black; font-weight: bold; }
+          .passed-details { color: #333; font-weight: normal; }
         </style>
         <meta http-equiv="refresh" content="2">
       </head>
@@ -155,9 +121,39 @@ app.post('/api/update', express.json(), (req, res) => {
 
 // start the dashboard server
 app.listen(PORT, () => {
-  console.log(`dashboard running at http://localhost:${PORT}`);
-  console.log('the dashboard will auto-refresh every 2 seconds');
+  console.log(`Dashboard running at http://localhost:${PORT}`);
+  console.log('The dashboard will auto-refresh every 2 seconds');
 });
+
+// parse timestamp strings to minutes
+function parseTimeToMinutes(timeText) {
+  if (!timeText) return 0;
+  const match = timeText.match(/(\d+)\s+(minute|hour|day)s?\s+ago/);
+  if (!match) return 0;
+  const value = parseInt(match[1]);
+  const unit = match[2];
+  if (unit === 'minute') return value;
+  if (unit === 'hour') return value * 60;
+  if (unit === 'day') return value * 24 * 60;
+  return 0;
+}
+
+// validate sorting
+function validateSorting(allArticles) {
+  const violations = [];
+  let isValid = true;
+  for (let i = 1; i < allArticles.length; i++) {
+    const currentMinutes = parseTimeToMinutes(allArticles[i].timestamp);
+    const previousMinutes = parseTimeToMinutes(allArticles[i - 1].timestamp);
+    if (currentMinutes < previousMinutes) {
+      violations.push({
+        issue: `Article #${i + 1} (${allArticles[i].timestamp}) is newer than Article #${i} (${allArticles[i - 1].timestamp})`
+      });
+      isValid = false;
+    }
+  }
+  return { isValid, violations };
+}
 
 // helper function to parse time strings to minutes
 function parseTimeToMinutes(timeText) {
