@@ -73,7 +73,7 @@ function logError(type, step, page, message) {
   console.error(`[ERROR] ${type} at ${step} (page ${page}): ${message}`);
 }
 
-// serve styled dashboard page with live updates
+// server styled dashboard page with live updates
 app.get('/', (req, res) => {
   const progressPercent = Math.floor((dashboardData.articlesCollected / dashboardData.totalArticles) * 100);
   let validationHtml = '';
@@ -118,7 +118,7 @@ app.get('/', (req, res) => {
       </head>
       <body>
         <div class="dashboard">
-          <h1>QA Wolf - Article Date Validator</h1>
+          <h1>QA Wolf - Article Date Validator${dashboardData.currentRun ? ` - Run #${dashboardData.currentRun}` : ''}</h1>
           <div class="progress-container">
             <div class="progress-details">
               <div class="page-count">Current Page: ${dashboardData.currentPage}</div>
@@ -134,6 +134,7 @@ app.get('/', (req, res) => {
     </html>
   `);
 });
+
 
 // api endpoints
 app.get('/api/status', (req, res) => { res.json(dashboardData); });
@@ -276,17 +277,18 @@ async function sortHackerNewsArticles() {
 (async () => {
   const allRuns = [];
   for (let runNumber = 1; runNumber <= CONFIG.RUNS; runNumber++) {
+    dashboardData.currentRun = runNumber; // -----> this is new code
     console.log(`\n=== STARTING RUN ${runNumber} ===\n`);
     const runResult = await sortHackerNewsArticles();
     if (runResult) allRuns.push({ runNumber, ...runResult });
   }
 
-  // Save single JSON with all runs
+  // save single JSON with all runs
   const resultsFile = 'validation-results.json';
   fs.writeFileSync(resultsFile, JSON.stringify(allRuns, null, 2));
   console.log(`All ${CONFIG.RUNS} runs saved to ${resultsFile}`);
 
-  // Generate combined report
+  // generate combined report
   generateHTMLReport(allRuns);
 })();
 
@@ -456,7 +458,7 @@ function generateHTMLReport(allRuns) {
         </style>
       </head>
       <body>
-        <h1>QA Wolf – Hacker News Chronological Sorting Validation Report</h1>
+        <h1>QA Wolf – Chronological Sorting Report</h1>
         <div class="full-report">
           <div class="run-summary-container">
             <div class="summary">
