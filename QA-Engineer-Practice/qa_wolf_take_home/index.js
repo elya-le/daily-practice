@@ -479,7 +479,7 @@ function generateHTMLReport(allRuns) {
             `).join('')}
           </div>
           <div class="collected-articles">
-            <h3>Collected Articles from Last Run</h3>
+            <h3>Collected Articles from Lattes Run</h3>
             <div class="article-headers">
               <span class="index">#</span>
               <span class="timestamp">Time</span>

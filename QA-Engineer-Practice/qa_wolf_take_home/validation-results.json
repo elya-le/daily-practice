@@ -1,7 +1,7 @@
 [
   {
     "runNumber": 1,
-    "timestamp": "2025-11-13T03:49:32.489Z",
+    "timestamp": "2025-11-13T03:58:50.304Z",
     "totalArticles": 100,
     "validationPassed": true,
     "violations": [],
@@ -13,12 +13,12 @@
       },
       {
         "index": 2,
-        "timestamp": "0 minutes ago",
+        "timestamp": "4 minutes ago",
         "page": 1
       },
       {
         "index": 3,
-        "timestamp": "4 minutes ago",
+        "timestamp": "6 minutes ago",
         "page": 1
       },
       {
@@ -28,7 +28,7 @@
       },
       {
         "index": 5,
-        "timestamp": "7 minutes ago",
+        "timestamp": "8 minutes ago",
         "page": 1
       },
       {
@@ -38,17 +38,17 @@
       },
       {
         "index": 7,
-        "timestamp": "9 minutes ago",
+        "timestamp": "12 minutes ago",
         "page": 1
       },
       {
         "index": 8,
-        "timestamp": "10 minutes ago",
+        "timestamp": "15 minutes ago",
         "page": 1
       },
       {
         "index": 9,
-        "timestamp": "14 minutes ago",
+        "timestamp": "15 minutes ago",
         "page": 1
       },
       {
@@ -58,87 +58,87 @@
       },
       {
         "index": 11,
-        "timestamp": "16 minutes ago",
-        "page": 1
-      },
-      {
-        "index": 12,
         "timestamp": "17 minutes ago",
         "page": 1
       },
       {
+        "index": 12,
+        "timestamp": "18 minutes ago",
+        "page": 1
+      },
+      {
         "index": 13,
-        "timestamp": "29 minutes ago",
+        "timestamp": "23 minutes ago",
         "page": 1
       },
       {
         "index": 14,
-        "timestamp": "29 minutes ago",
+        "timestamp": "24 minutes ago",
         "page": 1
       },
       {
         "index": 15,
-        "timestamp": "30 minutes ago",
+        "timestamp": "24 minutes ago",
         "page": 1
       },
       {
         "index": 16,
-        "timestamp": "33 minutes ago",
+        "timestamp": "25 minutes ago",
         "page": 1
       },
       {
         "index": 17,
-        "timestamp": "39 minutes ago",
+        "timestamp": "37 minutes ago",
         "page": 1
       },
       {
         "index": 18,
-        "timestamp": "47 minutes ago",
+        "timestamp": "37 minutes ago",
         "page": 1
       },
       {
         "index": 19,
-        "timestamp": "47 minutes ago",
+        "timestamp": "38 minutes ago",
         "page": 1
       },
       {
         "index": 20,
-        "timestamp": "49 minutes ago",
+        "timestamp": "41 minutes ago",
         "page": 1
       },
       {
         "index": 21,
-        "timestamp": "50 minutes ago",
+        "timestamp": "47 minutes ago",
         "page": 1
       },
       {
         "index": 22,
-        "timestamp": "50 minutes ago",
+        "timestamp": "55 minutes ago",
         "page": 1
       },
       {
         "index": 23,
-        "timestamp": "52 minutes ago",
+        "timestamp": "55 minutes ago",
         "page": 1
       },
       {
         "index": 24,
-        "timestamp": "56 minutes ago",
+        "timestamp": "58 minutes ago",
         "page": 1
       },
       {
         "index": 25,
-        "timestamp": "56 minutes ago",
+        "timestamp": "58 minutes ago",
         "page": 1
       },
       {
         "index": 26,
-        "timestamp": "57 minutes ago",
+        "timestamp": "59 minutes ago",
         "page": 1
       },
       {
         "index": 27,
-        "timestamp": "58 minutes ago",
+        "timestamp": "1 hour ago",
         "page": 1
       },
       {
@@ -273,7 +273,7 @@
       },
       {
         "index": 54,
-        "timestamp": "2 hours ago",
+        "timestamp": "1 hour ago",
         "page": 2
       },
       {
@@ -507,14 +507,14 @@
         "page": 4
       }
     ],
-    "runDurationSec": "6.78",
+    "runDurationSec": "6.97",
     "nodeVersion": "v18.20.2",
     "platform": "darwin arm64",
     "headlessMode": false
   },
   {
     "runNumber": 2,
-    "timestamp": "2025-11-13T03:49:39.571Z",
+    "timestamp": "2025-11-13T03:58:57.569Z",
     "totalArticles": 100,
     "validationPassed": true,
     "violations": [],
@@ -526,12 +526,12 @@
       },
       {
         "index": 2,
-        "timestamp": "0 minutes ago",
+        "timestamp": "4 minutes ago",
         "page": 1
       },
       {
         "index": 3,
-        "timestamp": "4 minutes ago",
+        "timestamp": "6 minutes ago",
         "page": 1
       },
       {
@@ -541,7 +541,7 @@
       },
       {
         "index": 5,
-        "timestamp": "7 minutes ago",
+        "timestamp": "8 minutes ago",
         "page": 1
       },
       {
@@ -551,17 +551,17 @@
       },
       {
         "index": 7,
-        "timestamp": "9 minutes ago",
+        "timestamp": "12 minutes ago",
         "page": 1
       },
       {
         "index": 8,
-        "timestamp": "10 minutes ago",
+        "timestamp": "15 minutes ago",
         "page": 1
       },
       {
         "index": 9,
-        "timestamp": "14 minutes ago",
+        "timestamp": "15 minutes ago",
         "page": 1
       },
       {
@@ -571,87 +571,87 @@
       },
       {
         "index": 11,
-        "timestamp": "16 minutes ago",
-        "page": 1
-      },
-      {
-        "index": 12,
         "timestamp": "17 minutes ago",
         "page": 1
       },
       {
+        "index": 12,
+        "timestamp": "18 minutes ago",
+        "page": 1
+      },
+      {
         "index": 13,
-        "timestamp": "29 minutes ago",
+        "timestamp": "23 minutes ago",
         "page": 1
       },
       {
         "index": 14,
-        "timestamp": "29 minutes ago",
+        "timestamp": "24 minutes ago",
         "page": 1
       },
       {
         "index": 15,
-        "timestamp": "30 minutes ago",
+        "timestamp": "24 minutes ago",
         "page": 1
       },
       {
         "index": 16,
-        "timestamp": "33 minutes ago",
+        "timestamp": "25 minutes ago",
         "page": 1
       },
       {
         "index": 17,
-        "timestamp": "39 minutes ago",
+        "timestamp": "37 minutes ago",
         "page": 1
       },
       {
         "index": 18,
-        "timestamp": "47 minutes ago",
+        "timestamp": "37 minutes ago",
         "page": 1
       },
       {
         "index": 19,
-        "timestamp": "47 minutes ago",
+        "timestamp": "38 minutes ago",
         "page": 1
       },
       {
         "index": 20,
-        "timestamp": "49 minutes ago",
+        "timestamp": "41 minutes ago",
         "page": 1
       },
       {
         "index": 21,
-        "timestamp": "50 minutes ago",
+        "timestamp": "47 minutes ago",
         "page": 1
       },
       {
         "index": 22,
-        "timestamp": "50 minutes ago",
+        "timestamp": "55 minutes ago",
         "page": 1
       },
       {
         "index": 23,
-        "timestamp": "52 minutes ago",
+        "timestamp": "55 minutes ago",
         "page": 1
       },
       {
         "index": 24,
-        "timestamp": "56 minutes ago",
+        "timestamp": "58 minutes ago",
         "page": 1
       },
       {
         "index": 25,
-        "timestamp": "56 minutes ago",
+        "timestamp": "58 minutes ago",
         "page": 1
       },
       {
         "index": 26,
-        "timestamp": "57 minutes ago",
+        "timestamp": "59 minutes ago",
         "page": 1
       },
       {
         "index": 27,
-        "timestamp": "58 minutes ago",
+        "timestamp": "1 hour ago",
         "page": 1
       },
       {
@@ -786,7 +786,7 @@
       },
       {
         "index": 54,
-        "timestamp": "2 hours ago",
+        "timestamp": "1 hour ago",
         "page": 2
       },
       {
@@ -1020,14 +1020,14 @@
         "page": 4
       }
     ],
-    "runDurationSec": "6.96",
+    "runDurationSec": "7.13",
     "nodeVersion": "v18.20.2",
     "platform": "darwin arm64",
     "headlessMode": false
   },
   {
     "runNumber": 3,
-    "timestamp": "2025-11-13T03:49:46.808Z",
+    "timestamp": "2025-11-13T03:59:04.667Z",
     "totalArticles": 100,
     "validationPassed": true,
     "violations": [],
@@ -1039,12 +1039,12 @@
       },
       {
         "index": 2,
-        "timestamp": "0 minutes ago",
+        "timestamp": "4 minutes ago",
         "page": 1
       },
       {
         "index": 3,
-        "timestamp": "4 minutes ago",
+        "timestamp": "6 minutes ago",
         "page": 1
       },
       {
@@ -1054,7 +1054,7 @@
       },
       {
         "index": 5,
-        "timestamp": "7 minutes ago",
+        "timestamp": "8 minutes ago",
         "page": 1
       },
       {
@@ -1064,17 +1064,17 @@
       },
       {
         "index": 7,
-        "timestamp": "9 minutes ago",
+        "timestamp": "12 minutes ago",
         "page": 1
       },
       {
         "index": 8,
-        "timestamp": "10 minutes ago",
+        "timestamp": "15 minutes ago",
         "page": 1
       },
       {
         "index": 9,
-        "timestamp": "14 minutes ago",
+        "timestamp": "15 minutes ago",
         "page": 1
       },
       {
@@ -1084,87 +1084,87 @@
       },
       {
         "index": 11,
-        "timestamp": "16 minutes ago",
-        "page": 1
-      },
-      {
-        "index": 12,
         "timestamp": "17 minutes ago",
         "page": 1
       },
       {
+        "index": 12,
+        "timestamp": "18 minutes ago",
+        "page": 1
+      },
+      {
         "index": 13,
-        "timestamp": "29 minutes ago",
+        "timestamp": "23 minutes ago",
         "page": 1
       },
       {
         "index": 14,
-        "timestamp": "29 minutes ago",
+        "timestamp": "24 minutes ago",
         "page": 1
       },
       {
         "index": 15,
-        "timestamp": "30 minutes ago",
+        "timestamp": "24 minutes ago",
         "page": 1
       },
       {
         "index": 16,
-        "timestamp": "33 minutes ago",
+        "timestamp": "25 minutes ago",
         "page": 1
       },
       {
         "index": 17,
-        "timestamp": "39 minutes ago",
+        "timestamp": "37 minutes ago",
         "page": 1
       },
       {
         "index": 18,
-        "timestamp": "47 minutes ago",
+        "timestamp": "37 minutes ago",
         "page": 1
       },
       {
         "index": 19,
-        "timestamp": "47 minutes ago",
+        "timestamp": "38 minutes ago",
         "page": 1
       },
       {
         "index": 20,
-        "timestamp": "49 minutes ago",
+        "timestamp": "41 minutes ago",
         "page": 1
       },
       {
         "index": 21,
-        "timestamp": "50 minutes ago",
+        "timestamp": "47 minutes ago",
         "page": 1
       },
       {
         "index": 22,
-        "timestamp": "50 minutes ago",
+        "timestamp": "55 minutes ago",
         "page": 1
       },
       {
         "index": 23,
-        "timestamp": "52 minutes ago",
+        "timestamp": "55 minutes ago",
         "page": 1
       },
       {
         "index": 24,
-        "timestamp": "56 minutes ago",
+        "timestamp": "58 minutes ago",
         "page": 1
       },
       {
         "index": 25,
-        "timestamp": "56 minutes ago",
+        "timestamp": "58 minutes ago",
         "page": 1
       },
       {
         "index": 26,
-        "timestamp": "57 minutes ago",
+        "timestamp": "59 minutes ago",
         "page": 1
       },
       {
         "index": 27,
-        "timestamp": "58 minutes ago",
+        "timestamp": "1 hour ago",
         "page": 1
       },
       {
@@ -1299,7 +1299,7 @@
       },
       {
         "index": 54,
-        "timestamp": "2 hours ago",
+        "timestamp": "1 hour ago",
         "page": 2
       },
       {
@@ -1533,7 +1533,7 @@
         "page": 4
       }
     ],
-    "runDurationSec": "7.08",
+    "runDurationSec": "6.97",
     "nodeVersion": "v18.20.2",
     "platform": "darwin arm64",
     "headlessMode": false
