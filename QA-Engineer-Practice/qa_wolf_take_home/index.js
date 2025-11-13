@@ -325,97 +325,200 @@ function generateHTMLReport(allRuns) {
   const outputPath = path.join(outputDir, fileName);
 
   const html = `
-  <!DOCTYPE html>
-  <html>
-    <head>
-      <meta charset="UTF-8">
-      <title>QA Wolf Validation Report</title>
-      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-      <style>
-        body { font-family: Arial, sans-serif; background: #f5f7fa; color:#222; padding:30px; }
-        h1 { text-align:center; color:#333; }
-        
-        .full-report {
-          display: flex;
-          gap: 20px; /* space between the two divs */
-          flex-wrap: wrap; /* optional: allows stacking on smaller screens */
-        }
-        
-        .full-report > div {
-          flex: 1; /* each child takes equal available space */
-          min-width: 300px; /* prevents them from getting too narrow */
-        }
-        .summary { 
-          background: #fff; 
-          padding: 20px; 
-          border-radius: 10px; 
-          margin-bottom: 30px;
-        }
-
-        .summary p { 
-          margin: 6px 0; 
-          font-size: 15px; 
-        }
-        /* Run summary container: one column, 3 rows */
-        .run-summary-container {
-          display: flex;
-          flex-direction: column; /* stack items vertically */
-          gap: 20px; /* space between rows */
-          margin-bottom: 30px;
-        }
-        .passed { color:#0a0; font-weight:bold; }
-        .failed { color:#c00; font-weight:bold; }
-        .violations { background:#fff; padding:20px; border-radius:10px; margin-bottom:30px; }
-        .violations ul { list-style:disc; padding-left:20px; }
-        .violations li { margin-bottom:4px; }
-        table { width:100%; border-collapse: collapse; background:#fff; border-radius:10px; overflow:hidden; }
-        th, td { padding:8px 12px; text-align:left; border-bottom:1px solid #ddd; font-size:14px; }
-        th { background:#eee; }
-        tr:hover { background:#f1f1f1; }
-        canvas { margin-top:30px; background:#fff; border-radius:10px; padding:20px;}
-      </style>
-    </head>
-    <body>
-      <h1>QA Wolf – Hacker News Validation Report</h1>
-      <div class="summary">
-        <p><b>Run Date:</b> ${dateLabel}</p>
-        <p><b>Number of Runs:</b> ${allRuns.length}</p>
-        <p><b>Total Articles per Run:</b> ${latestRun.totalArticles}</p>
-      </div>
-      <div class="full-report">
-        <div class="collected-articles">
-          <h3>Collected Articles from Last Run</h3>
-          <table>
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Timestamp</th>
-                <th>Page</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${latestRun.articles.map(a => `<tr><td>${a.index}</td><td>${a.timestamp}</td><td>${a.page}</td></tr>`).join('')}
-            </tbody>
-          </table>
-        </div>
-        <div class="run-summary-container">
-          ${allRuns.map(run => `
+    <html>
+      <head>
+        <meta charset="UTF-8">
+        <title>QA Wolf Validation Report</title>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <style>
+          body { font-family: Arial, sans-serif; background: #f5f7fa; color:#222; padding:30px; }
+          h1 { text-align: left; color:#333; padding-left:14px; }
+          .full-report {
+            display: flex;
+            gap: 20px; /* space between columns */
+            flex-wrap: wrap; /* wrap on small screens */
+          }
+          .full-report > div {
+            flex: 1; /* each child takes equal space */
+            min-width: 300px; /* prevent shrinking too small */
+          }
+          .summary { 
+            background: #fff; 
+            padding: 20px; 
+            border-radius: 10px; 
+            margin-bottom: 30px;
+          }
+          .individual-run-summary {
+            background: #fff; 
+            padding: 15px; 
+            margin-top: 3px;
+            border-radius: 10px; 
+          }
+          .individual-run-summary p {
+            margin: 6px 0;      
+            font-size: 15px;     /* optional: slightly smaller text */
+          }
+          .summary p { 
+            margin: 6px 0; 
+            font-size: 15px; 
+          }
+          .run-summary-container {
+            display: flex;
+            flex-direction: column; /* stack vertically */
+            gap: 5px; 
+            max-width: 300px; 
+            margin-bottom: 30px;
+          }
+          .run-summary-container .summary {
+            padding: 12px 15px; 
+            margin-bottom: 0; 
+            border-radius: 8px; 
+            font-size: 14px;
+          }
+          .run-summary-container .summary p {
+            margin: 4px 0; 
+          }
+          table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            background: #fff; 
+            border-radius: 8px; 
+            overflow: hidden; 
+            font-size: 10px; 
+          }
+          th, td { 
+            padding: 2px 2px; 
+            text-align: left; 
+            border-bottom: 1px solid #ddd; 
+          }
+          th { 
+            background: #f0f0f0; 
+            font-weight: bold; 
+          }
+          tr:hover { 
+            background: #f9f9f9; 
+          }
+          canvas { 
+            margin-top: 20px; 
+            background: #fff; 
+            border-radius: 8px; 
+            padding: 16px; 
+          }
+          .collected-articles h3 {
+            font-size: 16px;
+            margin: 0 0 6px 0; 
+            padding: 0;
+          }
+          .collected-articles {
+            background: #fff;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            max-width: 700px;
+          }
+          .article-headers {
+            gap: 20px;
+          }
+          .article-headers span {
+            padding-right: 34px; 
+            font-size: 13px;
+            font-weight: medium;
+            white-space: nowrap;
+          }
+          .articles-columns {
+            column-count: 4;      /* split articles into 4 vertical columns */
+            column-gap: 40px;     /* spacing between columns */
+          }
+          .article-row {
+            break-inside: avoid;  /* prevent row from splitting across columns */
+            padding: 4px 0;       
+            border-bottom: 1px solid #ddd; 
+            font-size: 12px;      
+            display: flex;        
+            justify-content: space-between; 
+            max-width: 180px;
+          }
+          .article-row span {
+            display: inline-block;
+            width: 33%;           
+            white-space: nowrap;
+          }
+          .index {
+          max-width: 18px;
+          }
+          .page {
+          max-width: 12px;}
+          .passed { color:#0a0; font-weight:bold; }
+          .failed { color:#c00; font-weight:bold; }
+          .violations { background:#fff; padding:20px; border-radius:10px; margin-bottom:30px; }
+          .violations ul { list-style:disc; padding-left:20px; }
+          .violations li { margin-bottom:4px; }
+        </style>
+      </head>
+      <body>
+        <h1>QA Wolf – Hacker News Chronological Sorting Validation Report</h1>
+        <div class="full-report">
+          <div class="run-summary-container">
             <div class="summary">
-              <p><b>Run #${run.runNumber} Status:</b> ${run.validationPassed ? '<span class="passed">PASSED ✔</span>' : '<span class="failed">FAILED ✖</span>'}</p>
-              ${run.violations.length>0?`<p><b>Violations:</b> ${run.violations.length}</p>`:''}
-              <p><b>Run Duration (sec):</b> ${run.runDurationSec}</p>
-              <p><b>Node.js Version:</b> ${run.nodeVersion}</p>
-              <p><b>Browser Mode:</b> ${run.headlessMode ? 'Headless' : 'Visible'}</b></p>
-              <p><b>Platform:</b> ${run.platform}</p>
+              <p><b>Run Date:</b> ${dateLabel}</p>
+              <p><b>Number of Runs:</b> ${allRuns.length}</p>
+              <p><b>Total Articles per Run:</b> ${latestRun.totalArticles}</p>
             </div>
-          `).join('')}
+            ${allRuns.map(run => `
+              <div class="individual-run-summary">
+                <p><b>Run #${run.runNumber}</b></p>
+                <p><b>Status:</b> ${run.validationPassed ? '<span class="passed">PASSED ✔</span>' : '<span class="failed">FAILED ✖</span>'}</p>
+                ${run.violations.length>0?`<p><b>Violations:</b> ${run.violations.length}</p>`:''}
+                <p><b>Run Duration (sec):</b> ${run.runDurationSec}</p>
+                <p><b>Node.js Version:</b> ${run.nodeVersion}</p>
+                <p><b>Browser Mode:</b> ${run.headlessMode ? 'Headless' : 'Visible'}</b></p>
+                <p><b>Platform:</b> ${run.platform}</p>
+              </div>
+            `).join('')}
+          </div>
+          <div class="collected-articles">
+            <h3>Collected Articles from Last Run</h3>
+            <div class="article-headers">
+              <span class="index">#</span>
+              <span class="timestamp">Time</span>
+              <span class="page">Page</span>
+            </div>
+
+            <div class="articles-columns">
+              ${latestRun.articles.map(a => `
+                <div class="article-row">
+                  <span class="index">${a.index}</span>
+                  <span class="timestamp">
+                    ${a.timestamp
+                      .replace(/\bhours\b/g,'hrs')
+                      .replace(/\bhour\b/g,'hr')
+                      .replace(/\bminutes\b/g,'min')
+                      .replace(/\bminute\b/g,'min')} 
+                  </span>
+                  <span class="page">${a.page}</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+              
         </div>
-        
-      </div>
-    </body>
-  </html>
+      </body>
+    </html>
   `;
 
-  fs.writeFileSync(outputPath, html,'utf-8');
+  fs.writeFileSync(outputPath, html, 'utf-8');
   console.log(`Report generated: ${outputPath}`);
+
+  // --- Open the report automatically ---
+  const platform = process.platform;
+  let command;
+  if (platform === 'darwin') command = `open "${outputPath}"`;        // macOS
+  else if (platform === 'win32') command = `start "" "${outputPath}"`; // Windows
+  else command = `xdg-open "${outputPath}"`;                           // Linux
+
+  require('child_process').exec(command, (error) => {
+    if (error) console.error('Failed to open report automatically:', error.message);
+    else console.log('Report opened in browser.');
+    process.exit(0); // clean exit from Node
+  });
 }
