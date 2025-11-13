@@ -118,7 +118,8 @@ function validateSorting(allArticles) {
     const previousMinutes = parseTimeToMinutes(allArticles[i - 1].timestamp);
 
     // Detect out-of-order articles
-    if (currentMinutes + TIME_TOLERANCE < previousMinutes) {
+    // This IS a violation - previous is older than current
+    if (previousMinutes > currentMinutes + TIME_TOLERANCE) {
       violations.push({
         issue: `Article #${i + 1} (${allArticles[i].timestamp}) is newer than Article #${i} (${allArticles[i - 1].timestamp})`
       });
@@ -337,34 +338,6 @@ function generateHTMLReport(allRuns) {
   // Ensure the output directory exists; create it if not
   if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir);
 
-  // --- Load Historical Trend Data ---
-  // Gather previous JSON reports to display trends over time
-  const jsonFiles = fs.readdirSync(outputDir).filter(f => f.endsWith('.json'));
-  const trend = [];
-  jsonFiles.forEach(f => {
-    try {
-      const r = JSON.parse(fs.readFileSync(path.join(outputDir, f)));
-      r.forEach(run => {
-        trend.push({
-          date: new Date(run.timestamp).toLocaleDateString(),
-          violations: run.violations.length,
-          passed: run.validationPassed
-        });
-      });
-    } catch (e) {
-      // Ignore malformed or unreadable files
-    }
-  });
-
-  // Include current runs in the trend data
-  allRuns.forEach(run => {
-    trend.push({
-      date: new Date(run.timestamp).toLocaleDateString(),
-      violations: run.violations.length,
-      passed: run.validationPassed
-    });
-  });
-
   // --- Prepare Latest Run Data for Display ---
   const latestRun = allRuns[allRuns.length - 1];
   const dateLabel = new Date(latestRun.timestamp).toLocaleString();
@@ -392,7 +365,6 @@ function generateHTMLReport(allRuns) {
 <head>
 <meta charset="UTF-8">
 <title>QA Wolf Validation Report</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
   /* Global body and heading styles */
   body { font-family: Arial, sans-serif; background: #f5f7fa; color:#222; padding:30px; }

@@ -8,8 +8,6 @@ const CONFIG = {
   PAGE_LOAD_TIMEOUT: 2000,
   NAVIGATION_TIMEOUT: 15000,
   BROWSER_TIMEOUT: 30000,
-  HEADLESS: false,
-  EXPORT_DATA: true
 };
 
 async function sortHackerNewsArticles() {
