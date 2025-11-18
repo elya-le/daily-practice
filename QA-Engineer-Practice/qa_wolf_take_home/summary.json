@@ -1,0 +1,16 @@
+{
+  "runTimestamp": "2025-11-14T00:14:01.501Z",
+  "totalArticlesChecked": 100,
+  "newestArticle": {
+    "id": "45922372",
+    "age": "0 minutes ago",
+    "timestamp": 1763079237867
+  },
+  "oldestArticle": {
+    "id": "45920926",
+    "age": "2 hours ago",
+    "timestamp": 1763072041498
+  },
+  "violationsCount": 81,
+  "pageCount": 4
+}

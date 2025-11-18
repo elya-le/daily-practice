@@ -1,0 +1,911 @@
+
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Hacker News Sorting Validation</title>
+    <style>
+      body { border: 1px solid red; }
+      h1 { border: 1px solid red; }
+      .report { border: 1px solid red; }
+      .summary { border: 1px solid red; }
+      .metric { border: 1px solid red; }
+      .metric p { border: 1px solid red; }
+      .metric b { border: 1px solid red; }
+      .passed { border: 1px solid red; }
+      .failed { border: 1px solid red; }
+      .confidence { border: 1px solid red; }
+      .violations { border: 1px solid red; }
+      .violations h3 { border: 1px solid red; }
+      .violation-item { border: 1px solid red; }
+      table { border: 1px solid red; }
+      th { border: 1px solid red; }
+      td { border: 1px solid red; }
+      tr:hover { border: 1px solid red; }
+      .timestamp-column { border: 1px solid red; }
+    </style>
+  </head>
+  <body>
+    <h1>Hacker News Sorting Validator Report</h1>
+    
+    <div class="report">
+      <h2>Validation Status</h2>
+      <div class="summary">
+        <div class="metric">
+          <b>Result</b>
+          <p class="passed">
+            PASSED ✔
+          </p>
+          <b>Confidence Score</b>
+          <p class="confidence">100.0%</p>
+          <b>Articles Validated</b>
+          <p>100</p>
+          <b>Attempts Required</b>
+          <p>1</p>
+          <b>Collection Time</b>
+          <p>5.0s</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="report">
+      <h2>Data Quality Metrics</h2>
+      <div class="summary">
+        <div class="metric">
+          <b>Valid Timestamps</b>
+          <p>100 / 100</p>
+        </div>
+        <div class="metric">
+          <b>Failed Extractions</b>
+          <p class="">0</p>
+        </div>
+        <div class="metric">
+          <b>Out-of-Order Articles</b>
+          <p class="">0</p>
+        </div>
+      </div>
+    </div>
+
+    
+
+    
+      <div class="report">
+        <h2>Timestamp Precision Analysis</h2>
+        <p><b>Found 18 article pair(s) within 60-second window</b> — these are high-risk for false-positive violations due to HN's minute-precision timestamps.</p>
+        
+          <div style="border: 1px solid red;">
+            <b>Article #2 vs Article #3</b> (0 minute(s) apart)
+            <p>3 minutes ago vs 3 minutes ago</p>
+            <p><b>HIGH - Both in minute-precision range</b></p>
+          </div>
+        
+          <div style="border: 1px solid red;">
+            <b>Article #4 vs Article #5</b> (1 minute(s) apart)
+            <p>5 minutes ago vs 6 minutes ago</p>
+            <p><b>HIGH - Both in minute-precision range</b></p>
+          </div>
+        
+          <div style="border: 1px solid red;">
+            <b>Article #5 vs Article #6</b> (1 minute(s) apart)
+            <p>6 minutes ago vs 7 minutes ago</p>
+            <p><b>HIGH - Both in minute-precision range</b></p>
+          </div>
+        
+          <div style="border: 1px solid red;">
+            <b>Article #8 vs Article #9</b> (1 minute(s) apart)
+            <p>13 minutes ago vs 14 minutes ago</p>
+            <p><b>HIGH - Both in minute-precision range</b></p>
+          </div>
+        
+          <div style="border: 1px solid red;">
+            <b>Article #11 vs Article #12</b> (1 minute(s) apart)
+            <p>20 minutes ago vs 21 minutes ago</p>
+            <p><b>HIGH - Both in minute-precision range</b></p>
+          </div>
+        
+          <div style="border: 1px solid red;">
+            <b>Article #13 vs Article #14</b> (1 minute(s) apart)
+            <p>23 minutes ago vs 24 minutes ago</p>
+            <p><b>HIGH - Both in minute-precision range</b></p>
+          </div>
+        
+          <div style="border: 1px solid red;">
+            <b>Article #15 vs Article #16</b> (1 minute(s) apart)
+            <p>29 minutes ago vs 30 minutes ago</p>
+            <p><b>HIGH - Both in minute-precision range</b></p>
+          </div>
+        
+          <div style="border: 1px solid red;">
+            <b>Article #16 vs Article #17</b> (0 minute(s) apart)
+            <p>30 minutes ago vs 30 minutes ago</p>
+            <p><b>HIGH - Both in minute-precision range</b></p>
+          </div>
+        
+          <div style="border: 1px solid red;">
+            <b>Article #21 vs Article #22</b> (1 minute(s) apart)
+            <p>41 minutes ago vs 42 minutes ago</p>
+            <p><b>HIGH - Both in minute-precision range</b></p>
+          </div>
+        
+          <div style="border: 1px solid red;">
+            <b>Article #22 vs Article #23</b> (0 minute(s) apart)
+            <p>42 minutes ago vs 42 minutes ago</p>
+            <p><b>HIGH - Both in minute-precision range</b></p>
+          </div>
+        
+          <div style="border: 1px solid red;">
+            <b>Article #23 vs Article #24</b> (1 minute(s) apart)
+            <p>42 minutes ago vs 43 minutes ago</p>
+            <p><b>HIGH - Both in minute-precision range</b></p>
+          </div>
+        
+          <div style="border: 1px solid red;">
+            <b>Article #24 vs Article #25</b> (1 minute(s) apart)
+            <p>43 minutes ago vs 44 minutes ago</p>
+            <p><b>HIGH - Both in minute-precision range</b></p>
+          </div>
+        
+          <div style="border: 1px solid red;">
+            <b>Article #25 vs Article #26</b> (0 minute(s) apart)
+            <p>44 minutes ago vs 44 minutes ago</p>
+            <p><b>HIGH - Both in minute-precision range</b></p>
+          </div>
+        
+          <div style="border: 1px solid red;">
+            <b>Article #26 vs Article #27</b> (1 minute(s) apart)
+            <p>44 minutes ago vs 45 minutes ago</p>
+            <p><b>HIGH - Both in minute-precision range</b></p>
+          </div>
+        
+          <div style="border: 1px solid red;">
+            <b>Article #27 vs Article #28</b> (1 minute(s) apart)
+            <p>45 minutes ago vs 46 minutes ago</p>
+            <p><b>HIGH - Both in minute-precision range</b></p>
+          </div>
+        
+          <div style="border: 1px solid red;">
+            <b>Article #28 vs Article #29</b> (0 minute(s) apart)
+            <p>46 minutes ago vs 46 minutes ago</p>
+            <p><b>HIGH - Both in minute-precision range</b></p>
+          </div>
+        
+          <div style="border: 1px solid red;">
+            <b>Article #29 vs Article #30</b> (1 minute(s) apart)
+            <p>46 minutes ago vs 47 minutes ago</p>
+            <p><b>HIGH - Both in minute-precision range</b></p>
+          </div>
+        
+          <div style="border: 1px solid red;">
+            <b>Article #32 vs Article #33</b> (1 minute(s) apart)
+            <p>52 minutes ago vs 53 minutes ago</p>
+            <p><b>HIGH - Both in minute-precision range</b></p>
+          </div>
+        
+        <p><b>Why this matters:</b> HN timestamps show "X minutes ago" precision. Articles posted within the same minute may appear out-of-order due to timestamp quantization, not actual sorting issues. Confidence score excludes 26 high-risk articles from denominator.</p>
+      </div>
+    
+
+    <div class="report">
+      <h2>Collected Articles</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Timestamp</th>
+            <th>Confidence</th>
+            <th>Page</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+            <tr>
+              <td>1</td>
+              <td class="timestamp-column">1 minute ago</td>
+              <td>SUCCESS</td>
+              <td>1</td>
+            </tr>
+          
+            <tr>
+              <td>2</td>
+              <td class="timestamp-column">3 minutes ago</td>
+              <td>SUCCESS</td>
+              <td>1</td>
+            </tr>
+          
+            <tr>
+              <td>3</td>
+              <td class="timestamp-column">3 minutes ago</td>
+              <td>SUCCESS</td>
+              <td>1</td>
+            </tr>
+          
+            <tr>
+              <td>4</td>
+              <td class="timestamp-column">5 minutes ago</td>
+              <td>SUCCESS</td>
+              <td>1</td>
+            </tr>
+          
+            <tr>
+              <td>5</td>
+              <td class="timestamp-column">6 minutes ago</td>
+              <td>SUCCESS</td>
+              <td>1</td>
+            </tr>
+          
+            <tr>
+              <td>6</td>
+              <td class="timestamp-column">7 minutes ago</td>
+              <td>SUCCESS</td>
+              <td>1</td>
+            </tr>
+          
+            <tr>
+              <td>7</td>
+              <td class="timestamp-column">10 minutes ago</td>
+              <td>SUCCESS</td>
+              <td>1</td>
+            </tr>
+          
+            <tr>
+              <td>8</td>
+              <td class="timestamp-column">13 minutes ago</td>
+              <td>SUCCESS</td>
+              <td>1</td>
+            </tr>
+          
+            <tr>
+              <td>9</td>
+              <td class="timestamp-column">14 minutes ago</td>
+              <td>SUCCESS</td>
+              <td>1</td>
+            </tr>
+          
+            <tr>
+              <td>10</td>
+              <td class="timestamp-column">16 minutes ago</td>
+              <td>SUCCESS</td>
+              <td>1</td>
+            </tr>
+          
+            <tr>
+              <td>11</td>
+              <td class="timestamp-column">20 minutes ago</td>
+              <td>SUCCESS</td>
+              <td>1</td>
+            </tr>
+          
+            <tr>
+              <td>12</td>
+              <td class="timestamp-column">21 minutes ago</td>
+              <td>SUCCESS</td>
+              <td>1</td>
+            </tr>
+          
+            <tr>
+              <td>13</td>
+              <td class="timestamp-column">23 minutes ago</td>
+              <td>SUCCESS</td>
+              <td>1</td>
+            </tr>
+          
+            <tr>
+              <td>14</td>
+              <td class="timestamp-column">24 minutes ago</td>
+              <td>SUCCESS</td>
+              <td>1</td>
+            </tr>
+          
+            <tr>
+              <td>15</td>
+              <td class="timestamp-column">29 minutes ago</td>
+              <td>SUCCESS</td>
+              <td>1</td>
+            </tr>
+          
+            <tr>
+              <td>16</td>
+              <td class="timestamp-column">30 minutes ago</td>
+              <td>SUCCESS</td>
+              <td>1</td>
+            </tr>
+          
+            <tr>
+              <td>17</td>
+              <td class="timestamp-column">30 minutes ago</td>
+              <td>SUCCESS</td>
+              <td>1</td>
+            </tr>
+          
+            <tr>
+              <td>18</td>
+              <td class="timestamp-column">32 minutes ago</td>
+              <td>SUCCESS</td>
+              <td>1</td>
+            </tr>
+          
+            <tr>
+              <td>19</td>
+              <td class="timestamp-column">34 minutes ago</td>
+              <td>SUCCESS</td>
+              <td>1</td>
+            </tr>
+          
+            <tr>
+              <td>20</td>
+              <td class="timestamp-column">38 minutes ago</td>
+              <td>SUCCESS</td>
+              <td>1</td>
+            </tr>
+          
+            <tr>
+              <td>21</td>
+              <td class="timestamp-column">41 minutes ago</td>
+              <td>SUCCESS</td>
+              <td>1</td>
+            </tr>
+          
+            <tr>
+              <td>22</td>
+              <td class="timestamp-column">42 minutes ago</td>
+              <td>SUCCESS</td>
+              <td>1</td>
+            </tr>
+          
+            <tr>
+              <td>23</td>
+              <td class="timestamp-column">42 minutes ago</td>
+              <td>SUCCESS</td>
+              <td>1</td>
+            </tr>
+          
+            <tr>
+              <td>24</td>
+              <td class="timestamp-column">43 minutes ago</td>
+              <td>SUCCESS</td>
+              <td>1</td>
+            </tr>
+          
+            <tr>
+              <td>25</td>
+              <td class="timestamp-column">44 minutes ago</td>
+              <td>SUCCESS</td>
+              <td>1</td>
+            </tr>
+          
+            <tr>
+              <td>26</td>
+              <td class="timestamp-column">44 minutes ago</td>
+              <td>SUCCESS</td>
+              <td>1</td>
+            </tr>
+          
+            <tr>
+              <td>27</td>
+              <td class="timestamp-column">45 minutes ago</td>
+              <td>SUCCESS</td>
+              <td>1</td>
+            </tr>
+          
+            <tr>
+              <td>28</td>
+              <td class="timestamp-column">46 minutes ago</td>
+              <td>SUCCESS</td>
+              <td>1</td>
+            </tr>
+          
+            <tr>
+              <td>29</td>
+              <td class="timestamp-column">46 minutes ago</td>
+              <td>SUCCESS</td>
+              <td>1</td>
+            </tr>
+          
+            <tr>
+              <td>30</td>
+              <td class="timestamp-column">47 minutes ago</td>
+              <td>SUCCESS</td>
+              <td>1</td>
+            </tr>
+          
+            <tr>
+              <td>31</td>
+              <td class="timestamp-column">49 minutes ago</td>
+              <td>SUCCESS</td>
+              <td>2</td>
+            </tr>
+          
+            <tr>
+              <td>32</td>
+              <td class="timestamp-column">52 minutes ago</td>
+              <td>SUCCESS</td>
+              <td>2</td>
+            </tr>
+          
+            <tr>
+              <td>33</td>
+              <td class="timestamp-column">53 minutes ago</td>
+              <td>SUCCESS</td>
+              <td>2</td>
+            </tr>
+          
+            <tr>
+              <td>34</td>
+              <td class="timestamp-column">55 minutes ago</td>
+              <td>SUCCESS</td>
+              <td>2</td>
+            </tr>
+          
+            <tr>
+              <td>35</td>
+              <td class="timestamp-column">1 hour ago</td>
+              <td>SUCCESS</td>
+              <td>2</td>
+            </tr>
+          
+            <tr>
+              <td>36</td>
+              <td class="timestamp-column">1 hour ago</td>
+              <td>SUCCESS</td>
+              <td>2</td>
+            </tr>
+          
+            <tr>
+              <td>37</td>
+              <td class="timestamp-column">1 hour ago</td>
+              <td>SUCCESS</td>
+              <td>2</td>
+            </tr>
+          
+            <tr>
+              <td>38</td>
+              <td class="timestamp-column">1 hour ago</td>
+              <td>SUCCESS</td>
+              <td>2</td>
+            </tr>
+          
+            <tr>
+              <td>39</td>
+              <td class="timestamp-column">1 hour ago</td>
+              <td>SUCCESS</td>
+              <td>2</td>
+            </tr>
+          
+            <tr>
+              <td>40</td>
+              <td class="timestamp-column">1 hour ago</td>
+              <td>SUCCESS</td>
+              <td>2</td>
+            </tr>
+          
+            <tr>
+              <td>41</td>
+              <td class="timestamp-column">1 hour ago</td>
+              <td>SUCCESS</td>
+              <td>2</td>
+            </tr>
+          
+            <tr>
+              <td>42</td>
+              <td class="timestamp-column">1 hour ago</td>
+              <td>SUCCESS</td>
+              <td>2</td>
+            </tr>
+          
+            <tr>
+              <td>43</td>
+              <td class="timestamp-column">1 hour ago</td>
+              <td>SUCCESS</td>
+              <td>2</td>
+            </tr>
+          
+            <tr>
+              <td>44</td>
+              <td class="timestamp-column">1 hour ago</td>
+              <td>SUCCESS</td>
+              <td>2</td>
+            </tr>
+          
+            <tr>
+              <td>45</td>
+              <td class="timestamp-column">1 hour ago</td>
+              <td>SUCCESS</td>
+              <td>2</td>
+            </tr>
+          
+            <tr>
+              <td>46</td>
+              <td class="timestamp-column">1 hour ago</td>
+              <td>SUCCESS</td>
+              <td>2</td>
+            </tr>
+          
+            <tr>
+              <td>47</td>
+              <td class="timestamp-column">1 hour ago</td>
+              <td>SUCCESS</td>
+              <td>2</td>
+            </tr>
+          
+            <tr>
+              <td>48</td>
+              <td class="timestamp-column">1 hour ago</td>
+              <td>SUCCESS</td>
+              <td>2</td>
+            </tr>
+          
+            <tr>
+              <td>49</td>
+              <td class="timestamp-column">1 hour ago</td>
+              <td>SUCCESS</td>
+              <td>2</td>
+            </tr>
+          
+            <tr>
+              <td>50</td>
+              <td class="timestamp-column">1 hour ago</td>
+              <td>SUCCESS</td>
+              <td>2</td>
+            </tr>
+          
+            <tr>
+              <td>51</td>
+              <td class="timestamp-column">1 hour ago</td>
+              <td>SUCCESS</td>
+              <td>2</td>
+            </tr>
+          
+            <tr>
+              <td>52</td>
+              <td class="timestamp-column">1 hour ago</td>
+              <td>SUCCESS</td>
+              <td>2</td>
+            </tr>
+          
+            <tr>
+              <td>53</td>
+              <td class="timestamp-column">1 hour ago</td>
+              <td>SUCCESS</td>
+              <td>2</td>
+            </tr>
+          
+            <tr>
+              <td>54</td>
+              <td class="timestamp-column">1 hour ago</td>
+              <td>SUCCESS</td>
+              <td>2</td>
+            </tr>
+          
+            <tr>
+              <td>55</td>
+              <td class="timestamp-column">1 hour ago</td>
+              <td>SUCCESS</td>
+              <td>2</td>
+            </tr>
+          
+            <tr>
+              <td>56</td>
+              <td class="timestamp-column">2 hours ago</td>
+              <td>SUCCESS</td>
+              <td>2</td>
+            </tr>
+          
+            <tr>
+              <td>57</td>
+              <td class="timestamp-column">2 hours ago</td>
+              <td>SUCCESS</td>
+              <td>2</td>
+            </tr>
+          
+            <tr>
+              <td>58</td>
+              <td class="timestamp-column">2 hours ago</td>
+              <td>SUCCESS</td>
+              <td>2</td>
+            </tr>
+          
+            <tr>
+              <td>59</td>
+              <td class="timestamp-column">2 hours ago</td>
+              <td>SUCCESS</td>
+              <td>2</td>
+            </tr>
+          
+            <tr>
+              <td>60</td>
+              <td class="timestamp-column">2 hours ago</td>
+              <td>SUCCESS</td>
+              <td>2</td>
+            </tr>
+          
+            <tr>
+              <td>61</td>
+              <td class="timestamp-column">2 hours ago</td>
+              <td>SUCCESS</td>
+              <td>3</td>
+            </tr>
+          
+            <tr>
+              <td>62</td>
+              <td class="timestamp-column">2 hours ago</td>
+              <td>SUCCESS</td>
+              <td>3</td>
+            </tr>
+          
+            <tr>
+              <td>63</td>
+              <td class="timestamp-column">2 hours ago</td>
+              <td>SUCCESS</td>
+              <td>3</td>
+            </tr>
+          
+            <tr>
+              <td>64</td>
+              <td class="timestamp-column">2 hours ago</td>
+              <td>SUCCESS</td>
+              <td>3</td>
+            </tr>
+          
+            <tr>
+              <td>65</td>
+              <td class="timestamp-column">2 hours ago</td>
+              <td>SUCCESS</td>
+              <td>3</td>
+            </tr>
+          
+            <tr>
+              <td>66</td>
+              <td class="timestamp-column">2 hours ago</td>
+              <td>SUCCESS</td>
+              <td>3</td>
+            </tr>
+          
+            <tr>
+              <td>67</td>
+              <td class="timestamp-column">2 hours ago</td>
+              <td>SUCCESS</td>
+              <td>3</td>
+            </tr>
+          
+            <tr>
+              <td>68</td>
+              <td class="timestamp-column">2 hours ago</td>
+              <td>SUCCESS</td>
+              <td>3</td>
+            </tr>
+          
+            <tr>
+              <td>69</td>
+              <td class="timestamp-column">2 hours ago</td>
+              <td>SUCCESS</td>
+              <td>3</td>
+            </tr>
+          
+            <tr>
+              <td>70</td>
+              <td class="timestamp-column">2 hours ago</td>
+              <td>SUCCESS</td>
+              <td>3</td>
+            </tr>
+          
+            <tr>
+              <td>71</td>
+              <td class="timestamp-column">2 hours ago</td>
+              <td>SUCCESS</td>
+              <td>3</td>
+            </tr>
+          
+            <tr>
+              <td>72</td>
+              <td class="timestamp-column">2 hours ago</td>
+              <td>SUCCESS</td>
+              <td>3</td>
+            </tr>
+          
+            <tr>
+              <td>73</td>
+              <td class="timestamp-column">2 hours ago</td>
+              <td>SUCCESS</td>
+              <td>3</td>
+            </tr>
+          
+            <tr>
+              <td>74</td>
+              <td class="timestamp-column">2 hours ago</td>
+              <td>SUCCESS</td>
+              <td>3</td>
+            </tr>
+          
+            <tr>
+              <td>75</td>
+              <td class="timestamp-column">2 hours ago</td>
+              <td>SUCCESS</td>
+              <td>3</td>
+            </tr>
+          
+            <tr>
+              <td>76</td>
+              <td class="timestamp-column">2 hours ago</td>
+              <td>SUCCESS</td>
+              <td>3</td>
+            </tr>
+          
+            <tr>
+              <td>77</td>
+              <td class="timestamp-column">2 hours ago</td>
+              <td>SUCCESS</td>
+              <td>3</td>
+            </tr>
+          
+            <tr>
+              <td>78</td>
+              <td class="timestamp-column">2 hours ago</td>
+              <td>SUCCESS</td>
+              <td>3</td>
+            </tr>
+          
+            <tr>
+              <td>79</td>
+              <td class="timestamp-column">2 hours ago</td>
+              <td>SUCCESS</td>
+              <td>3</td>
+            </tr>
+          
+            <tr>
+              <td>80</td>
+              <td class="timestamp-column">2 hours ago</td>
+              <td>SUCCESS</td>
+              <td>3</td>
+            </tr>
+          
+            <tr>
+              <td>81</td>
+              <td class="timestamp-column">2 hours ago</td>
+              <td>SUCCESS</td>
+              <td>3</td>
+            </tr>
+          
+            <tr>
+              <td>82</td>
+              <td class="timestamp-column">2 hours ago</td>
+              <td>SUCCESS</td>
+              <td>3</td>
+            </tr>
+          
+            <tr>
+              <td>83</td>
+              <td class="timestamp-column">2 hours ago</td>
+              <td>SUCCESS</td>
+              <td>3</td>
+            </tr>
+          
+            <tr>
+              <td>84</td>
+              <td class="timestamp-column">2 hours ago</td>
+              <td>SUCCESS</td>
+              <td>3</td>
+            </tr>
+          
+            <tr>
+              <td>85</td>
+              <td class="timestamp-column">2 hours ago</td>
+              <td>SUCCESS</td>
+              <td>3</td>
+            </tr>
+          
+            <tr>
+              <td>86</td>
+              <td class="timestamp-column">2 hours ago</td>
+              <td>SUCCESS</td>
+              <td>3</td>
+            </tr>
+          
+            <tr>
+              <td>87</td>
+              <td class="timestamp-column">2 hours ago</td>
+              <td>SUCCESS</td>
+              <td>3</td>
+            </tr>
+          
+            <tr>
+              <td>88</td>
+              <td class="timestamp-column">2 hours ago</td>
+              <td>SUCCESS</td>
+              <td>3</td>
+            </tr>
+          
+            <tr>
+              <td>89</td>
+              <td class="timestamp-column">2 hours ago</td>
+              <td>SUCCESS</td>
+              <td>3</td>
+            </tr>
+          
+            <tr>
+              <td>90</td>
+              <td class="timestamp-column">2 hours ago</td>
+              <td>SUCCESS</td>
+              <td>3</td>
+            </tr>
+          
+            <tr>
+              <td>91</td>
+              <td class="timestamp-column">2 hours ago</td>
+              <td>SUCCESS</td>
+              <td>4</td>
+            </tr>
+          
+            <tr>
+              <td>92</td>
+              <td class="timestamp-column">2 hours ago</td>
+              <td>SUCCESS</td>
+              <td>4</td>
+            </tr>
+          
+            <tr>
+              <td>93</td>
+              <td class="timestamp-column">2 hours ago</td>
+              <td>SUCCESS</td>
+              <td>4</td>
+            </tr>
+          
+            <tr>
+              <td>94</td>
+              <td class="timestamp-column">2 hours ago</td>
+              <td>SUCCESS</td>
+              <td>4</td>
+            </tr>
+          
+            <tr>
+              <td>95</td>
+              <td class="timestamp-column">2 hours ago</td>
+              <td>SUCCESS</td>
+              <td>4</td>
+            </tr>
+          
+            <tr>
+              <td>96</td>
+              <td class="timestamp-column">2 hours ago</td>
+              <td>SUCCESS</td>
+              <td>4</td>
+            </tr>
+          
+            <tr>
+              <td>97</td>
+              <td class="timestamp-column">2 hours ago</td>
+              <td>SUCCESS</td>
+              <td>4</td>
+            </tr>
+          
+            <tr>
+              <td>98</td>
+              <td class="timestamp-column">2 hours ago</td>
+              <td>SUCCESS</td>
+              <td>4</td>
+            </tr>
+          
+            <tr>
+              <td>99</td>
+              <td class="timestamp-column">2 hours ago</td>
+              <td>SUCCESS</td>
+              <td>4</td>
+            </tr>
+          
+            <tr>
+              <td>100</td>
+              <td class="timestamp-column">2 hours ago</td>
+              <td>SUCCESS</td>
+              <td>4</td>
+            </tr>
+          
+        </tbody>
+      </table>
+    </div>
+
+    <div class="report" style="border: 1px solid red;">
+      <p><b>Validation Timestamp:</b> 2025-11-14T01:05:20.367Z</p>
+      <p><b>Platform:</b> darwin arm64</p>
+      <p><b>Node.js:</b> v18.20.2</p>
+      <p><b>Browser Mode:</b> Visible</p>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,560 @@
+
+  <html>
+    <head>
+      <title>Hacker News QA Report</title>
+      <style>
+        body { font-family: Arial; margin: 20px; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ccc; padding: 8px; }
+        th { background: #f4f4f4; cursor: pointer; }
+        .error { color: red; }
+        .success { color: green; }
+      </style>
+    </head>
+    <body>
+      <h1>Hacker News QA Report</h1>
+      <p>Run Timestamp: 2025-11-14T00:14:01.501Z</p>
+      <p>Total Articles Checked: 100</p>
+      <p>Violations Count: <span class="error">81</span></p>
+      <h2>Newest Article</h2>
+      <p>ID: 45922372 | Age: 0 minutes ago</p>
+      <h2>Oldest Article</h2>
+      <p>ID: 45920926 | Age: 2 hours ago</p>
+      <h2>Articles Table</h2>
+      <table id="articlesTable">
+        <thead>
+          <tr>
+            <th onclick="sortTable(0)">ID</th>
+            <th onclick="sortTable(1)">Age</th>
+            <th onclick="sortTable(2)">Timestamp</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+        <td>45922372</td>
+        <td>0 minutes ago</td>
+        <td>1763079237867</td>
+      </tr>
+<tr>
+        <td>45922356</td>
+        <td>3 minutes ago</td>
+        <td>1763079057870</td>
+      </tr>
+<tr>
+        <td>45922313</td>
+        <td>8 minutes ago</td>
+        <td>1763078757873</td>
+      </tr>
+<tr>
+        <td>45922309</td>
+        <td>8 minutes ago</td>
+        <td>1763078757875</td>
+      </tr>
+<tr>
+        <td>45922283</td>
+        <td>14 minutes ago</td>
+        <td>1763078397876</td>
+      </tr>
+<tr>
+        <td>45922274</td>
+        <td>15 minutes ago</td>
+        <td>1763078337878</td>
+      </tr>
+<tr>
+        <td>45922253</td>
+        <td>18 minutes ago</td>
+        <td>1763078157880</td>
+      </tr>
+<tr>
+        <td>45922238</td>
+        <td>21 minutes ago</td>
+        <td>1763077977881</td>
+      </tr>
+<tr>
+        <td>45922223</td>
+        <td>22 minutes ago</td>
+        <td>1763077917883</td>
+      </tr>
+<tr>
+        <td>45922219</td>
+        <td>23 minutes ago</td>
+        <td>1763077857885</td>
+      </tr>
+<tr>
+        <td>45922201</td>
+        <td>25 minutes ago</td>
+        <td>1763077737887</td>
+      </tr>
+<tr>
+        <td>45922192</td>
+        <td>27 minutes ago</td>
+        <td>1763077617889</td>
+      </tr>
+<tr>
+        <td>45922179</td>
+        <td>29 minutes ago</td>
+        <td>1763077497890</td>
+      </tr>
+<tr>
+        <td>45922162</td>
+        <td>32 minutes ago</td>
+        <td>1763077317894</td>
+      </tr>
+<tr>
+        <td>45922130</td>
+        <td>36 minutes ago</td>
+        <td>1763077077896</td>
+      </tr>
+<tr>
+        <td>45922053</td>
+        <td>47 minutes ago</td>
+        <td>1763076417898</td>
+      </tr>
+<tr>
+        <td>45922036</td>
+        <td>49 minutes ago</td>
+        <td>1763076297900</td>
+      </tr>
+<tr>
+        <td>45921983</td>
+        <td>58 minutes ago</td>
+        <td>1763075757901</td>
+      </tr>
+<tr>
+        <td>45921962</td>
+        <td>1 hour ago</td>
+        <td>1763075637902</td>
+      </tr>
+<tr>
+        <td>45921945</td>
+        <td>1 hour ago</td>
+        <td>1763075637904</td>
+      </tr>
+<tr>
+        <td>45921942</td>
+        <td>1 hour ago</td>
+        <td>1763075637906</td>
+      </tr>
+<tr>
+        <td>45921934</td>
+        <td>1 hour ago</td>
+        <td>1763075637908</td>
+      </tr>
+<tr>
+        <td>45921928</td>
+        <td>1 hour ago</td>
+        <td>1763075637909</td>
+      </tr>
+<tr>
+        <td>45921896</td>
+        <td>1 hour ago</td>
+        <td>1763075637910</td>
+      </tr>
+<tr>
+        <td>45921887</td>
+        <td>1 hour ago</td>
+        <td>1763075637912</td>
+      </tr>
+<tr>
+        <td>45921883</td>
+        <td>1 hour ago</td>
+        <td>1763075637913</td>
+      </tr>
+<tr>
+        <td>45921865</td>
+        <td>1 hour ago</td>
+        <td>1763075637914</td>
+      </tr>
+<tr>
+        <td>45921861</td>
+        <td>1 hour ago</td>
+        <td>1763075637915</td>
+      </tr>
+<tr>
+        <td>45921841</td>
+        <td>1 hour ago</td>
+        <td>1763075637916</td>
+      </tr>
+<tr>
+        <td>45921837</td>
+        <td>1 hour ago</td>
+        <td>1763075637918</td>
+      </tr>
+<tr>
+        <td>45921836</td>
+        <td>1 hour ago</td>
+        <td>1763075639077</td>
+      </tr>
+<tr>
+        <td>45921832</td>
+        <td>1 hour ago</td>
+        <td>1763075639079</td>
+      </tr>
+<tr>
+        <td>45921819</td>
+        <td>1 hour ago</td>
+        <td>1763075639081</td>
+      </tr>
+<tr>
+        <td>45921816</td>
+        <td>1 hour ago</td>
+        <td>1763075639083</td>
+      </tr>
+<tr>
+        <td>45921811</td>
+        <td>1 hour ago</td>
+        <td>1763075639085</td>
+      </tr>
+<tr>
+        <td>45921802</td>
+        <td>1 hour ago</td>
+        <td>1763075639087</td>
+      </tr>
+<tr>
+        <td>45921751</td>
+        <td>1 hour ago</td>
+        <td>1763075639089</td>
+      </tr>
+<tr>
+        <td>45921743</td>
+        <td>1 hour ago</td>
+        <td>1763075639091</td>
+      </tr>
+<tr>
+        <td>45921742</td>
+        <td>1 hour ago</td>
+        <td>1763075639093</td>
+      </tr>
+<tr>
+        <td>45921733</td>
+        <td>1 hour ago</td>
+        <td>1763075639095</td>
+      </tr>
+<tr>
+        <td>45921721</td>
+        <td>1 hour ago</td>
+        <td>1763075639097</td>
+      </tr>
+<tr>
+        <td>45921718</td>
+        <td>1 hour ago</td>
+        <td>1763075639099</td>
+      </tr>
+<tr>
+        <td>45921703</td>
+        <td>1 hour ago</td>
+        <td>1763075639100</td>
+      </tr>
+<tr>
+        <td>45921696</td>
+        <td>1 hour ago</td>
+        <td>1763075639102</td>
+      </tr>
+<tr>
+        <td>45921686</td>
+        <td>1 hour ago</td>
+        <td>1763075639103</td>
+      </tr>
+<tr>
+        <td>45921680</td>
+        <td>1 hour ago</td>
+        <td>1763075639105</td>
+      </tr>
+<tr>
+        <td>45921671</td>
+        <td>1 hour ago</td>
+        <td>1763075639106</td>
+      </tr>
+<tr>
+        <td>45921663</td>
+        <td>1 hour ago</td>
+        <td>1763075639108</td>
+      </tr>
+<tr>
+        <td>45921651</td>
+        <td>1 hour ago</td>
+        <td>1763075639109</td>
+      </tr>
+<tr>
+        <td>45921637</td>
+        <td>1 hour ago</td>
+        <td>1763075639111</td>
+      </tr>
+<tr>
+        <td>45921621</td>
+        <td>1 hour ago</td>
+        <td>1763075639113</td>
+      </tr>
+<tr>
+        <td>45921598</td>
+        <td>1 hour ago</td>
+        <td>1763075639114</td>
+      </tr>
+<tr>
+        <td>45921565</td>
+        <td>1 hour ago</td>
+        <td>1763075639116</td>
+      </tr>
+<tr>
+        <td>45921548</td>
+        <td>1 hour ago</td>
+        <td>1763075639117</td>
+      </tr>
+<tr>
+        <td>45921546</td>
+        <td>1 hour ago</td>
+        <td>1763075639119</td>
+      </tr>
+<tr>
+        <td>45921498</td>
+        <td>1 hour ago</td>
+        <td>1763075639120</td>
+      </tr>
+<tr>
+        <td>45921469</td>
+        <td>1 hour ago</td>
+        <td>1763075639122</td>
+      </tr>
+<tr>
+        <td>45921455</td>
+        <td>1 hour ago</td>
+        <td>1763075639123</td>
+      </tr>
+<tr>
+        <td>45921453</td>
+        <td>1 hour ago</td>
+        <td>1763075639125</td>
+      </tr>
+<tr>
+        <td>45921439</td>
+        <td>1 hour ago</td>
+        <td>1763075639126</td>
+      </tr>
+<tr>
+        <td>45921431</td>
+        <td>1 hour ago</td>
+        <td>1763075640299</td>
+      </tr>
+<tr>
+        <td>45921373</td>
+        <td>1 hour ago</td>
+        <td>1763075640301</td>
+      </tr>
+<tr>
+        <td>45921334</td>
+        <td>1 hour ago</td>
+        <td>1763075640304</td>
+      </tr>
+<tr>
+        <td>45921329</td>
+        <td>2 hours ago</td>
+        <td>1763072040307</td>
+      </tr>
+<tr>
+        <td>45921303</td>
+        <td>2 hours ago</td>
+        <td>1763072040309</td>
+      </tr>
+<tr>
+        <td>45921296</td>
+        <td>2 hours ago</td>
+        <td>1763072040311</td>
+      </tr>
+<tr>
+        <td>45921275</td>
+        <td>2 hours ago</td>
+        <td>1763072040313</td>
+      </tr>
+<tr>
+        <td>45921274</td>
+        <td>2 hours ago</td>
+        <td>1763072040315</td>
+      </tr>
+<tr>
+        <td>45921267</td>
+        <td>2 hours ago</td>
+        <td>1763072040317</td>
+      </tr>
+<tr>
+        <td>45921263</td>
+        <td>2 hours ago</td>
+        <td>1763072040318</td>
+      </tr>
+<tr>
+        <td>45921260</td>
+        <td>2 hours ago</td>
+        <td>1763072040320</td>
+      </tr>
+<tr>
+        <td>45921255</td>
+        <td>2 hours ago</td>
+        <td>1763072040322</td>
+      </tr>
+<tr>
+        <td>45921228</td>
+        <td>2 hours ago</td>
+        <td>1763072040323</td>
+      </tr>
+<tr>
+        <td>45921209</td>
+        <td>2 hours ago</td>
+        <td>1763072040325</td>
+      </tr>
+<tr>
+        <td>45921171</td>
+        <td>2 hours ago</td>
+        <td>1763072040327</td>
+      </tr>
+<tr>
+        <td>45921160</td>
+        <td>2 hours ago</td>
+        <td>1763072040329</td>
+      </tr>
+<tr>
+        <td>45921159</td>
+        <td>2 hours ago</td>
+        <td>1763072040330</td>
+      </tr>
+<tr>
+        <td>45921145</td>
+        <td>2 hours ago</td>
+        <td>1763072040332</td>
+      </tr>
+<tr>
+        <td>45921139</td>
+        <td>2 hours ago</td>
+        <td>1763072040334</td>
+      </tr>
+<tr>
+        <td>45921129</td>
+        <td>2 hours ago</td>
+        <td>1763072040336</td>
+      </tr>
+<tr>
+        <td>45921102</td>
+        <td>2 hours ago</td>
+        <td>1763072040337</td>
+      </tr>
+<tr>
+        <td>45921086</td>
+        <td>2 hours ago</td>
+        <td>1763072040339</td>
+      </tr>
+<tr>
+        <td>45921070</td>
+        <td>2 hours ago</td>
+        <td>1763072040340</td>
+      </tr>
+<tr>
+        <td>45921068</td>
+        <td>2 hours ago</td>
+        <td>1763072040342</td>
+      </tr>
+<tr>
+        <td>45921065</td>
+        <td>2 hours ago</td>
+        <td>1763072040344</td>
+      </tr>
+<tr>
+        <td>45921052</td>
+        <td>2 hours ago</td>
+        <td>1763072040345</td>
+      </tr>
+<tr>
+        <td>45921051</td>
+        <td>2 hours ago</td>
+        <td>1763072040346</td>
+      </tr>
+<tr>
+        <td>45921042</td>
+        <td>2 hours ago</td>
+        <td>1763072040348</td>
+      </tr>
+<tr>
+        <td>45921035</td>
+        <td>2 hours ago</td>
+        <td>1763072040349</td>
+      </tr>
+<tr>
+        <td>45921020</td>
+        <td>2 hours ago</td>
+        <td>1763072040351</td>
+      </tr>
+<tr>
+        <td>45921011</td>
+        <td>2 hours ago</td>
+        <td>1763072041480</td>
+      </tr>
+<tr>
+        <td>45920988</td>
+        <td>2 hours ago</td>
+        <td>1763072041482</td>
+      </tr>
+<tr>
+        <td>45920985</td>
+        <td>2 hours ago</td>
+        <td>1763072041484</td>
+      </tr>
+<tr>
+        <td>45920978</td>
+        <td>2 hours ago</td>
+        <td>1763072041486</td>
+      </tr>
+<tr>
+        <td>45920971</td>
+        <td>2 hours ago</td>
+        <td>1763072041488</td>
+      </tr>
+<tr>
+        <td>45920970</td>
+        <td>2 hours ago</td>
+        <td>1763072041490</td>
+      </tr>
+<tr>
+        <td>45920968</td>
+        <td>2 hours ago</td>
+        <td>1763072041492</td>
+      </tr>
+<tr>
+        <td>45920948</td>
+        <td>2 hours ago</td>
+        <td>1763072041493</td>
+      </tr>
+<tr>
+        <td>45920942</td>
+        <td>2 hours ago</td>
+        <td>1763072041495</td>
+      </tr>
+<tr>
+        <td>45920926</td>
+        <td>2 hours ago</td>
+        <td>1763072041498</td>
+      </tr>
+        </tbody>
+      </table>
+      <script>
+        function sortTable(colIndex) {
+          const table = document.getElementById("articlesTable");
+          let switching = true;
+          while (switching) {
+            switching = false;
+            const rows = table.rows;
+            for (let i = 1; i < rows.length - 1; i++) {
+              let shouldSwitch = false;
+              const x = rows[i].getElementsByTagName("TD")[colIndex];
+              const y = rows[i + 1].getElementsByTagName("TD")[colIndex];
+              if (x.innerText.toLowerCase() > y.innerText.toLowerCase()) {
+                shouldSwitch = true;
+                break;
+              }
+            }
+            if (shouldSwitch) {
+              rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+              switching = true;
+            }
+          }
+        }
+      </script>
+    </body>
+  </html>
+  

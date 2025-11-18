@@ -1,0 +1,1237 @@
+{
+  "mainRun": {
+    "timestamp": "2025-11-14T00:35:05.264Z",
+    "validationPassed": true,
+    "articles": [
+      {
+        "index": 1,
+        "timestamp": "2 minutes ago",
+        "parseResult": {
+          "minutes": 2,
+          "confidence": "high",
+          "raw": "2 minutes ago"
+        },
+        "page": 1,
+        "collectedAt": "2025-11-14T00:35:02.951Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 2,
+        "timestamp": "4 minutes ago",
+        "parseResult": {
+          "minutes": 4,
+          "confidence": "high",
+          "raw": "4 minutes ago"
+        },
+        "page": 1,
+        "collectedAt": "2025-11-14T00:35:02.955Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 3,
+        "timestamp": "8 minutes ago",
+        "parseResult": {
+          "minutes": 8,
+          "confidence": "high",
+          "raw": "8 minutes ago"
+        },
+        "page": 1,
+        "collectedAt": "2025-11-14T00:35:02.959Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 4,
+        "timestamp": "11 minutes ago",
+        "parseResult": {
+          "minutes": 11,
+          "confidence": "high",
+          "raw": "11 minutes ago"
+        },
+        "page": 1,
+        "collectedAt": "2025-11-14T00:35:02.963Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 5,
+        "timestamp": "11 minutes ago",
+        "parseResult": {
+          "minutes": 11,
+          "confidence": "high",
+          "raw": "11 minutes ago"
+        },
+        "page": 1,
+        "collectedAt": "2025-11-14T00:35:02.966Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 6,
+        "timestamp": "12 minutes ago",
+        "parseResult": {
+          "minutes": 12,
+          "confidence": "high",
+          "raw": "12 minutes ago"
+        },
+        "page": 1,
+        "collectedAt": "2025-11-14T00:35:02.968Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 7,
+        "timestamp": "13 minutes ago",
+        "parseResult": {
+          "minutes": 13,
+          "confidence": "high",
+          "raw": "13 minutes ago"
+        },
+        "page": 1,
+        "collectedAt": "2025-11-14T00:35:02.971Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 8,
+        "timestamp": "13 minutes ago",
+        "parseResult": {
+          "minutes": 13,
+          "confidence": "high",
+          "raw": "13 minutes ago"
+        },
+        "page": 1,
+        "collectedAt": "2025-11-14T00:35:02.973Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 9,
+        "timestamp": "14 minutes ago",
+        "parseResult": {
+          "minutes": 14,
+          "confidence": "high",
+          "raw": "14 minutes ago"
+        },
+        "page": 1,
+        "collectedAt": "2025-11-14T00:35:02.976Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 10,
+        "timestamp": "15 minutes ago",
+        "parseResult": {
+          "minutes": 15,
+          "confidence": "high",
+          "raw": "15 minutes ago"
+        },
+        "page": 1,
+        "collectedAt": "2025-11-14T00:35:02.978Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 11,
+        "timestamp": "16 minutes ago",
+        "parseResult": {
+          "minutes": 16,
+          "confidence": "high",
+          "raw": "16 minutes ago"
+        },
+        "page": 1,
+        "collectedAt": "2025-11-14T00:35:02.980Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 12,
+        "timestamp": "16 minutes ago",
+        "parseResult": {
+          "minutes": 16,
+          "confidence": "high",
+          "raw": "16 minutes ago"
+        },
+        "page": 1,
+        "collectedAt": "2025-11-14T00:35:02.982Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 13,
+        "timestamp": "16 minutes ago",
+        "parseResult": {
+          "minutes": 16,
+          "confidence": "high",
+          "raw": "16 minutes ago"
+        },
+        "page": 1,
+        "collectedAt": "2025-11-14T00:35:02.984Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 14,
+        "timestamp": "19 minutes ago",
+        "parseResult": {
+          "minutes": 19,
+          "confidence": "high",
+          "raw": "19 minutes ago"
+        },
+        "page": 1,
+        "collectedAt": "2025-11-14T00:35:02.985Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 15,
+        "timestamp": "21 minutes ago",
+        "parseResult": {
+          "minutes": 21,
+          "confidence": "high",
+          "raw": "21 minutes ago"
+        },
+        "page": 1,
+        "collectedAt": "2025-11-14T00:35:02.987Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 16,
+        "timestamp": "22 minutes ago",
+        "parseResult": {
+          "minutes": 22,
+          "confidence": "high",
+          "raw": "22 minutes ago"
+        },
+        "page": 1,
+        "collectedAt": "2025-11-14T00:35:02.988Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 17,
+        "timestamp": "25 minutes ago",
+        "parseResult": {
+          "minutes": 25,
+          "confidence": "high",
+          "raw": "25 minutes ago"
+        },
+        "page": 1,
+        "collectedAt": "2025-11-14T00:35:02.990Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 18,
+        "timestamp": "30 minutes ago",
+        "parseResult": {
+          "minutes": 30,
+          "confidence": "high",
+          "raw": "30 minutes ago"
+        },
+        "page": 1,
+        "collectedAt": "2025-11-14T00:35:02.992Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 19,
+        "timestamp": "31 minutes ago",
+        "parseResult": {
+          "minutes": 31,
+          "confidence": "high",
+          "raw": "31 minutes ago"
+        },
+        "page": 1,
+        "collectedAt": "2025-11-14T00:35:02.994Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 20,
+        "timestamp": "36 minutes ago",
+        "parseResult": {
+          "minutes": 36,
+          "confidence": "high",
+          "raw": "36 minutes ago"
+        },
+        "page": 1,
+        "collectedAt": "2025-11-14T00:35:02.996Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 21,
+        "timestamp": "38 minutes ago",
+        "parseResult": {
+          "minutes": 38,
+          "confidence": "high",
+          "raw": "38 minutes ago"
+        },
+        "page": 1,
+        "collectedAt": "2025-11-14T00:35:02.998Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 22,
+        "timestamp": "40 minutes ago",
+        "parseResult": {
+          "minutes": 40,
+          "confidence": "high",
+          "raw": "40 minutes ago"
+        },
+        "page": 1,
+        "collectedAt": "2025-11-14T00:35:02.999Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 23,
+        "timestamp": "43 minutes ago",
+        "parseResult": {
+          "minutes": 43,
+          "confidence": "high",
+          "raw": "43 minutes ago"
+        },
+        "page": 1,
+        "collectedAt": "2025-11-14T00:35:03.001Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 24,
+        "timestamp": "44 minutes ago",
+        "parseResult": {
+          "minutes": 44,
+          "confidence": "high",
+          "raw": "44 minutes ago"
+        },
+        "page": 1,
+        "collectedAt": "2025-11-14T00:35:03.003Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 25,
+        "timestamp": "45 minutes ago",
+        "parseResult": {
+          "minutes": 45,
+          "confidence": "high",
+          "raw": "45 minutes ago"
+        },
+        "page": 1,
+        "collectedAt": "2025-11-14T00:35:03.004Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 26,
+        "timestamp": "48 minutes ago",
+        "parseResult": {
+          "minutes": 48,
+          "confidence": "high",
+          "raw": "48 minutes ago"
+        },
+        "page": 1,
+        "collectedAt": "2025-11-14T00:35:03.006Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 27,
+        "timestamp": "49 minutes ago",
+        "parseResult": {
+          "minutes": 49,
+          "confidence": "high",
+          "raw": "49 minutes ago"
+        },
+        "page": 1,
+        "collectedAt": "2025-11-14T00:35:03.009Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 28,
+        "timestamp": "52 minutes ago",
+        "parseResult": {
+          "minutes": 52,
+          "confidence": "high",
+          "raw": "52 minutes ago"
+        },
+        "page": 1,
+        "collectedAt": "2025-11-14T00:35:03.011Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 29,
+        "timestamp": "54 minutes ago",
+        "parseResult": {
+          "minutes": 54,
+          "confidence": "high",
+          "raw": "54 minutes ago"
+        },
+        "page": 1,
+        "collectedAt": "2025-11-14T00:35:03.012Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 30,
+        "timestamp": "58 minutes ago",
+        "parseResult": {
+          "minutes": 58,
+          "confidence": "high",
+          "raw": "58 minutes ago"
+        },
+        "page": 1,
+        "collectedAt": "2025-11-14T00:35:03.014Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 31,
+        "timestamp": "1 hour ago",
+        "parseResult": {
+          "minutes": 60,
+          "confidence": "medium",
+          "raw": "1 hour ago"
+        },
+        "page": 2,
+        "collectedAt": "2025-11-14T00:35:03.736Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 32,
+        "timestamp": "1 hour ago",
+        "parseResult": {
+          "minutes": 60,
+          "confidence": "medium",
+          "raw": "1 hour ago"
+        },
+        "page": 2,
+        "collectedAt": "2025-11-14T00:35:03.739Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 33,
+        "timestamp": "1 hour ago",
+        "parseResult": {
+          "minutes": 60,
+          "confidence": "medium",
+          "raw": "1 hour ago"
+        },
+        "page": 2,
+        "collectedAt": "2025-11-14T00:35:03.742Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 34,
+        "timestamp": "1 hour ago",
+        "parseResult": {
+          "minutes": 60,
+          "confidence": "medium",
+          "raw": "1 hour ago"
+        },
+        "page": 2,
+        "collectedAt": "2025-11-14T00:35:03.745Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 35,
+        "timestamp": "1 hour ago",
+        "parseResult": {
+          "minutes": 60,
+          "confidence": "medium",
+          "raw": "1 hour ago"
+        },
+        "page": 2,
+        "collectedAt": "2025-11-14T00:35:03.747Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 36,
+        "timestamp": "1 hour ago",
+        "parseResult": {
+          "minutes": 60,
+          "confidence": "medium",
+          "raw": "1 hour ago"
+        },
+        "page": 2,
+        "collectedAt": "2025-11-14T00:35:03.750Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 37,
+        "timestamp": "1 hour ago",
+        "parseResult": {
+          "minutes": 60,
+          "confidence": "medium",
+          "raw": "1 hour ago"
+        },
+        "page": 2,
+        "collectedAt": "2025-11-14T00:35:03.752Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 38,
+        "timestamp": "1 hour ago",
+        "parseResult": {
+          "minutes": 60,
+          "confidence": "medium",
+          "raw": "1 hour ago"
+        },
+        "page": 2,
+        "collectedAt": "2025-11-14T00:35:03.754Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 39,
+        "timestamp": "1 hour ago",
+        "parseResult": {
+          "minutes": 60,
+          "confidence": "medium",
+          "raw": "1 hour ago"
+        },
+        "page": 2,
+        "collectedAt": "2025-11-14T00:35:03.757Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 40,
+        "timestamp": "1 hour ago",
+        "parseResult": {
+          "minutes": 60,
+          "confidence": "medium",
+          "raw": "1 hour ago"
+        },
+        "page": 2,
+        "collectedAt": "2025-11-14T00:35:03.759Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 41,
+        "timestamp": "1 hour ago",
+        "parseResult": {
+          "minutes": 60,
+          "confidence": "medium",
+          "raw": "1 hour ago"
+        },
+        "page": 2,
+        "collectedAt": "2025-11-14T00:35:03.761Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 42,
+        "timestamp": "1 hour ago",
+        "parseResult": {
+          "minutes": 60,
+          "confidence": "medium",
+          "raw": "1 hour ago"
+        },
+        "page": 2,
+        "collectedAt": "2025-11-14T00:35:03.763Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 43,
+        "timestamp": "1 hour ago",
+        "parseResult": {
+          "minutes": 60,
+          "confidence": "medium",
+          "raw": "1 hour ago"
+        },
+        "page": 2,
+        "collectedAt": "2025-11-14T00:35:03.765Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 44,
+        "timestamp": "1 hour ago",
+        "parseResult": {
+          "minutes": 60,
+          "confidence": "medium",
+          "raw": "1 hour ago"
+        },
+        "page": 2,
+        "collectedAt": "2025-11-14T00:35:03.767Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 45,
+        "timestamp": "1 hour ago",
+        "parseResult": {
+          "minutes": 60,
+          "confidence": "medium",
+          "raw": "1 hour ago"
+        },
+        "page": 2,
+        "collectedAt": "2025-11-14T00:35:03.769Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 46,
+        "timestamp": "1 hour ago",
+        "parseResult": {
+          "minutes": 60,
+          "confidence": "medium",
+          "raw": "1 hour ago"
+        },
+        "page": 2,
+        "collectedAt": "2025-11-14T00:35:03.771Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 47,
+        "timestamp": "1 hour ago",
+        "parseResult": {
+          "minutes": 60,
+          "confidence": "medium",
+          "raw": "1 hour ago"
+        },
+        "page": 2,
+        "collectedAt": "2025-11-14T00:35:03.773Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 48,
+        "timestamp": "1 hour ago",
+        "parseResult": {
+          "minutes": 60,
+          "confidence": "medium",
+          "raw": "1 hour ago"
+        },
+        "page": 2,
+        "collectedAt": "2025-11-14T00:35:03.775Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 49,
+        "timestamp": "1 hour ago",
+        "parseResult": {
+          "minutes": 60,
+          "confidence": "medium",
+          "raw": "1 hour ago"
+        },
+        "page": 2,
+        "collectedAt": "2025-11-14T00:35:03.776Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 50,
+        "timestamp": "1 hour ago",
+        "parseResult": {
+          "minutes": 60,
+          "confidence": "medium",
+          "raw": "1 hour ago"
+        },
+        "page": 2,
+        "collectedAt": "2025-11-14T00:35:03.778Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 51,
+        "timestamp": "1 hour ago",
+        "parseResult": {
+          "minutes": 60,
+          "confidence": "medium",
+          "raw": "1 hour ago"
+        },
+        "page": 2,
+        "collectedAt": "2025-11-14T00:35:03.780Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 52,
+        "timestamp": "1 hour ago",
+        "parseResult": {
+          "minutes": 60,
+          "confidence": "medium",
+          "raw": "1 hour ago"
+        },
+        "page": 2,
+        "collectedAt": "2025-11-14T00:35:03.782Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 53,
+        "timestamp": "1 hour ago",
+        "parseResult": {
+          "minutes": 60,
+          "confidence": "medium",
+          "raw": "1 hour ago"
+        },
+        "page": 2,
+        "collectedAt": "2025-11-14T00:35:03.783Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 54,
+        "timestamp": "1 hour ago",
+        "parseResult": {
+          "minutes": 60,
+          "confidence": "medium",
+          "raw": "1 hour ago"
+        },
+        "page": 2,
+        "collectedAt": "2025-11-14T00:35:03.785Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 55,
+        "timestamp": "1 hour ago",
+        "parseResult": {
+          "minutes": 60,
+          "confidence": "medium",
+          "raw": "1 hour ago"
+        },
+        "page": 2,
+        "collectedAt": "2025-11-14T00:35:03.786Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 56,
+        "timestamp": "1 hour ago",
+        "parseResult": {
+          "minutes": 60,
+          "confidence": "medium",
+          "raw": "1 hour ago"
+        },
+        "page": 2,
+        "collectedAt": "2025-11-14T00:35:03.788Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 57,
+        "timestamp": "1 hour ago",
+        "parseResult": {
+          "minutes": 60,
+          "confidence": "medium",
+          "raw": "1 hour ago"
+        },
+        "page": 2,
+        "collectedAt": "2025-11-14T00:35:03.789Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 58,
+        "timestamp": "1 hour ago",
+        "parseResult": {
+          "minutes": 60,
+          "confidence": "medium",
+          "raw": "1 hour ago"
+        },
+        "page": 2,
+        "collectedAt": "2025-11-14T00:35:03.791Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 59,
+        "timestamp": "1 hour ago",
+        "parseResult": {
+          "minutes": 60,
+          "confidence": "medium",
+          "raw": "1 hour ago"
+        },
+        "page": 2,
+        "collectedAt": "2025-11-14T00:35:03.793Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 60,
+        "timestamp": "1 hour ago",
+        "parseResult": {
+          "minutes": 60,
+          "confidence": "medium",
+          "raw": "1 hour ago"
+        },
+        "page": 2,
+        "collectedAt": "2025-11-14T00:35:03.794Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 61,
+        "timestamp": "1 hour ago",
+        "parseResult": {
+          "minutes": 60,
+          "confidence": "medium",
+          "raw": "1 hour ago"
+        },
+        "page": 3,
+        "collectedAt": "2025-11-14T00:35:04.479Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 62,
+        "timestamp": "1 hour ago",
+        "parseResult": {
+          "minutes": 60,
+          "confidence": "medium",
+          "raw": "1 hour ago"
+        },
+        "page": 3,
+        "collectedAt": "2025-11-14T00:35:04.482Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 63,
+        "timestamp": "1 hour ago",
+        "parseResult": {
+          "minutes": 60,
+          "confidence": "medium",
+          "raw": "1 hour ago"
+        },
+        "page": 3,
+        "collectedAt": "2025-11-14T00:35:04.485Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 64,
+        "timestamp": "1 hour ago",
+        "parseResult": {
+          "minutes": 60,
+          "confidence": "medium",
+          "raw": "1 hour ago"
+        },
+        "page": 3,
+        "collectedAt": "2025-11-14T00:35:04.487Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 65,
+        "timestamp": "1 hour ago",
+        "parseResult": {
+          "minutes": 60,
+          "confidence": "medium",
+          "raw": "1 hour ago"
+        },
+        "page": 3,
+        "collectedAt": "2025-11-14T00:35:04.490Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 66,
+        "timestamp": "1 hour ago",
+        "parseResult": {
+          "minutes": 60,
+          "confidence": "medium",
+          "raw": "1 hour ago"
+        },
+        "page": 3,
+        "collectedAt": "2025-11-14T00:35:04.492Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 67,
+        "timestamp": "1 hour ago",
+        "parseResult": {
+          "minutes": 60,
+          "confidence": "medium",
+          "raw": "1 hour ago"
+        },
+        "page": 3,
+        "collectedAt": "2025-11-14T00:35:04.495Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 68,
+        "timestamp": "2 hours ago",
+        "parseResult": {
+          "minutes": 120,
+          "confidence": "medium",
+          "raw": "2 hours ago"
+        },
+        "page": 3,
+        "collectedAt": "2025-11-14T00:35:04.497Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 69,
+        "timestamp": "2 hours ago",
+        "parseResult": {
+          "minutes": 120,
+          "confidence": "medium",
+          "raw": "2 hours ago"
+        },
+        "page": 3,
+        "collectedAt": "2025-11-14T00:35:04.499Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 70,
+        "timestamp": "2 hours ago",
+        "parseResult": {
+          "minutes": 120,
+          "confidence": "medium",
+          "raw": "2 hours ago"
+        },
+        "page": 3,
+        "collectedAt": "2025-11-14T00:35:04.501Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 71,
+        "timestamp": "2 hours ago",
+        "parseResult": {
+          "minutes": 120,
+          "confidence": "medium",
+          "raw": "2 hours ago"
+        },
+        "page": 3,
+        "collectedAt": "2025-11-14T00:35:04.503Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 72,
+        "timestamp": "2 hours ago",
+        "parseResult": {
+          "minutes": 120,
+          "confidence": "medium",
+          "raw": "2 hours ago"
+        },
+        "page": 3,
+        "collectedAt": "2025-11-14T00:35:04.504Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 73,
+        "timestamp": "2 hours ago",
+        "parseResult": {
+          "minutes": 120,
+          "confidence": "medium",
+          "raw": "2 hours ago"
+        },
+        "page": 3,
+        "collectedAt": "2025-11-14T00:35:04.506Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 74,
+        "timestamp": "2 hours ago",
+        "parseResult": {
+          "minutes": 120,
+          "confidence": "medium",
+          "raw": "2 hours ago"
+        },
+        "page": 3,
+        "collectedAt": "2025-11-14T00:35:04.508Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 75,
+        "timestamp": "2 hours ago",
+        "parseResult": {
+          "minutes": 120,
+          "confidence": "medium",
+          "raw": "2 hours ago"
+        },
+        "page": 3,
+        "collectedAt": "2025-11-14T00:35:04.509Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 76,
+        "timestamp": "2 hours ago",
+        "parseResult": {
+          "minutes": 120,
+          "confidence": "medium",
+          "raw": "2 hours ago"
+        },
+        "page": 3,
+        "collectedAt": "2025-11-14T00:35:04.511Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 77,
+        "timestamp": "2 hours ago",
+        "parseResult": {
+          "minutes": 120,
+          "confidence": "medium",
+          "raw": "2 hours ago"
+        },
+        "page": 3,
+        "collectedAt": "2025-11-14T00:35:04.513Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 78,
+        "timestamp": "2 hours ago",
+        "parseResult": {
+          "minutes": 120,
+          "confidence": "medium",
+          "raw": "2 hours ago"
+        },
+        "page": 3,
+        "collectedAt": "2025-11-14T00:35:04.515Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 79,
+        "timestamp": "2 hours ago",
+        "parseResult": {
+          "minutes": 120,
+          "confidence": "medium",
+          "raw": "2 hours ago"
+        },
+        "page": 3,
+        "collectedAt": "2025-11-14T00:35:04.517Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 80,
+        "timestamp": "2 hours ago",
+        "parseResult": {
+          "minutes": 120,
+          "confidence": "medium",
+          "raw": "2 hours ago"
+        },
+        "page": 3,
+        "collectedAt": "2025-11-14T00:35:04.518Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 81,
+        "timestamp": "2 hours ago",
+        "parseResult": {
+          "minutes": 120,
+          "confidence": "medium",
+          "raw": "2 hours ago"
+        },
+        "page": 3,
+        "collectedAt": "2025-11-14T00:35:04.520Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 82,
+        "timestamp": "2 hours ago",
+        "parseResult": {
+          "minutes": 120,
+          "confidence": "medium",
+          "raw": "2 hours ago"
+        },
+        "page": 3,
+        "collectedAt": "2025-11-14T00:35:04.521Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 83,
+        "timestamp": "2 hours ago",
+        "parseResult": {
+          "minutes": 120,
+          "confidence": "medium",
+          "raw": "2 hours ago"
+        },
+        "page": 3,
+        "collectedAt": "2025-11-14T00:35:04.523Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 84,
+        "timestamp": "2 hours ago",
+        "parseResult": {
+          "minutes": 120,
+          "confidence": "medium",
+          "raw": "2 hours ago"
+        },
+        "page": 3,
+        "collectedAt": "2025-11-14T00:35:04.524Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 85,
+        "timestamp": "2 hours ago",
+        "parseResult": {
+          "minutes": 120,
+          "confidence": "medium",
+          "raw": "2 hours ago"
+        },
+        "page": 3,
+        "collectedAt": "2025-11-14T00:35:04.526Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 86,
+        "timestamp": "2 hours ago",
+        "parseResult": {
+          "minutes": 120,
+          "confidence": "medium",
+          "raw": "2 hours ago"
+        },
+        "page": 3,
+        "collectedAt": "2025-11-14T00:35:04.527Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 87,
+        "timestamp": "2 hours ago",
+        "parseResult": {
+          "minutes": 120,
+          "confidence": "medium",
+          "raw": "2 hours ago"
+        },
+        "page": 3,
+        "collectedAt": "2025-11-14T00:35:04.529Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 88,
+        "timestamp": "2 hours ago",
+        "parseResult": {
+          "minutes": 120,
+          "confidence": "medium",
+          "raw": "2 hours ago"
+        },
+        "page": 3,
+        "collectedAt": "2025-11-14T00:35:04.530Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 89,
+        "timestamp": "2 hours ago",
+        "parseResult": {
+          "minutes": 120,
+          "confidence": "medium",
+          "raw": "2 hours ago"
+        },
+        "page": 3,
+        "collectedAt": "2025-11-14T00:35:04.532Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 90,
+        "timestamp": "2 hours ago",
+        "parseResult": {
+          "minutes": 120,
+          "confidence": "medium",
+          "raw": "2 hours ago"
+        },
+        "page": 3,
+        "collectedAt": "2025-11-14T00:35:04.534Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 91,
+        "timestamp": "2 hours ago",
+        "parseResult": {
+          "minutes": 120,
+          "confidence": "medium",
+          "raw": "2 hours ago"
+        },
+        "page": 4,
+        "collectedAt": "2025-11-14T00:35:05.241Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 92,
+        "timestamp": "2 hours ago",
+        "parseResult": {
+          "minutes": 120,
+          "confidence": "medium",
+          "raw": "2 hours ago"
+        },
+        "page": 4,
+        "collectedAt": "2025-11-14T00:35:05.244Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 93,
+        "timestamp": "2 hours ago",
+        "parseResult": {
+          "minutes": 120,
+          "confidence": "medium",
+          "raw": "2 hours ago"
+        },
+        "page": 4,
+        "collectedAt": "2025-11-14T00:35:05.247Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 94,
+        "timestamp": "2 hours ago",
+        "parseResult": {
+          "minutes": 120,
+          "confidence": "medium",
+          "raw": "2 hours ago"
+        },
+        "page": 4,
+        "collectedAt": "2025-11-14T00:35:05.250Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 95,
+        "timestamp": "2 hours ago",
+        "parseResult": {
+          "minutes": 120,
+          "confidence": "medium",
+          "raw": "2 hours ago"
+        },
+        "page": 4,
+        "collectedAt": "2025-11-14T00:35:05.252Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 96,
+        "timestamp": "2 hours ago",
+        "parseResult": {
+          "minutes": 120,
+          "confidence": "medium",
+          "raw": "2 hours ago"
+        },
+        "page": 4,
+        "collectedAt": "2025-11-14T00:35:05.254Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 97,
+        "timestamp": "2 hours ago",
+        "parseResult": {
+          "minutes": 120,
+          "confidence": "medium",
+          "raw": "2 hours ago"
+        },
+        "page": 4,
+        "collectedAt": "2025-11-14T00:35:05.257Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 98,
+        "timestamp": "2 hours ago",
+        "parseResult": {
+          "minutes": 120,
+          "confidence": "medium",
+          "raw": "2 hours ago"
+        },
+        "page": 4,
+        "collectedAt": "2025-11-14T00:35:05.259Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 99,
+        "timestamp": "2 hours ago",
+        "parseResult": {
+          "minutes": 120,
+          "confidence": "medium",
+          "raw": "2 hours ago"
+        },
+        "page": 4,
+        "collectedAt": "2025-11-14T00:35:05.262Z",
+        "strategy": "Primary: next .age"
+      },
+      {
+        "index": 100,
+        "timestamp": "2 hours ago",
+        "parseResult": {
+          "minutes": 120,
+          "confidence": "medium",
+          "raw": "2 hours ago"
+        },
+        "page": 4,
+        "collectedAt": "2025-11-14T00:35:05.264Z",
+        "strategy": "Primary: next .age"
+      }
+    ],
+    "violations": [],
+    "edgeCases": [
+      "Confidence shift at article #30: high -> medium"
+    ],
+    "confidenceScore": 100,
+    "breakdown": {
+      "total": 100,
+      "highConfidence": 30,
+      "mediumConfidence": 70,
+      "lowConfidence": 0,
+      "unparseable": 0
+    },
+    "runDurationSec": "4.51",
+    "nodeVersion": "v18.20.2",
+    "platform": "darwin arm64",
+    "headlessMode": false,
+    "executionLog": [
+      "Started validation at 2025-11-14T00:35:01.860Z",
+      "Successfully navigated to HN newest page",
+      "Page 1: Extracted 30 articles using strategy: Primary: tr .titleline",
+      "Page 2: Extracted 30 articles using strategy: Primary: tr .titleline",
+      "Page 3: Extracted 30 articles using strategy: Primary: tr .titleline",
+      "Page 4: Extracted 30 articles using strategy: Primary: tr .titleline",
+      "Validation complete: PASSED",
+      "Confidence score: 100%",
+      "Duration: 4.51s"
+    ]
+  },
+  "robustnessRuns": null,
+  "timestamp": "2025-11-14T00:35:05.393Z"
+}

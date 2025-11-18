@@ -1,0 +1,14 @@
+{
+  "name": "daily-practice",
+  "version": "1.0.0",
+  "description": "Building skills, documenting consistency, and demonstrating adaptability by mastering new technologies while maintaining strong algorithmic foundations.",
+  "main": "index.js",
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.56.1",
+    "@types/node": "^24.10.1"
+  }
+}
