@@ -1,31 +1,31 @@
 /*
+User centric approach write-up:
 Initial observations and plan draft:
-The articles are numbered 1-30 per page and there's a more button that loads the next batch. 
-This means I'll have to paginate through at least 4 pages to reach 100 articles total 
-(page 1 gets me 30, page 2 gets me 30 more, page 3 another 30, then I grab the first 10 from page 4). 
-The visible timestamps only show ranges like "1 minute ago" up to "59 minutes ago" then it jumps to 
-"1 hour ago" and "2 hours ago". To actually compare when articles are posted with precision, 
-I need to dig into the individual article link HTML where there's more granular timestamp data.
+- Articles numbered 1-30 per page 
+- More button at bottom to paginate to next 30 articles
+- Paginating 4 pages to reach 100 articles total (page 1 gets me 30, page 2 gets me 30 more, page 3 another 30, then I grab the first 10 from page 4). 
+- Visible timestamps show "1 minute ago" up to "59 minutes ago" then jumps to "1 hour ago" and "2 hours ago"
+- More granular timestamp data needed for precise sorting validation
 
-Timestamp attribute structure
-I inspected the HTML from multiple article links and confirmed the timestamp information is consistent. 
-Each one has a title attribute with both an ISO 8601 timestamp and a Unix epoch number. 
+Timestamp attribute structure:
+- confirm timestamp information structure is consistent. 
+- article timestamp attributes have ISO 8601 timestamp and a Unix epoch number. 
 Examples from my inspection:
 Article #7: span class="age" title="2025-11-14T22:24:36 1763159076"
 Article #31: span class="age" title="2025-11-14T21:36:22 1763156182"
 Article #75: span class="age" title="2025-11-14T20:39:43 1763152783"
 
-I decided to use the Unix epoch number since it's a single unique number and requires no parsing at all.
+Using Unix epoch number since it's a single unique number and requires no parsing.
 
 Extract timestamps logic:
-I originally planned to use page.locator('.age').first() to grab all age epoch attributes, 
-but after reading the Playwright docs more carefully I realized that approach was fragile because it relies 
-on CSS class selectors and ambiguous element order. The docs recommend prioritizing user-facing attributes 
-and explicit contracts like page.getByRole(). Looking at what's actually visible to users, each timestamp 
-link has a role of "link" and the visible text always contains "ago". 
-So I'm using page.getByRole('link', { name: /ago/i }) to robustly get all the timestamp links. 
-Then I create an empty array called timestamps, loop through each link, extract the title attribute,
-parse out the Unix epoch number, and push it to the array.
+I initially tried page.locator('.age').first(), which could have worked with simpler syntax,
+but the Playwright recommend user-facing attributes and explicit contracts like page.getByRole() instead.
+page.locator('.age').first() can be fragile as it relies on CSS classes and element order. 
+Since each timestamp link has role "link" with visible text "ago", 
+I'm using page.getByRole('link', { name: /ago/i }) to reliably locate them. 
+Then I loop through each link, traverse up to its parent span.age element, extract the title attribute 
+(which holds the Unix epoch), parse out the number, and push it to an array. 
+I also handle edge cases where the title is missing or the regex doesn't match, pushing null and tracking errors.
 
 Validation logic:
 Once I have all the timestamps, I compare each one to the next one in the sequence. 
@@ -131,15 +131,17 @@ async function sortHackerNewsArticles() {
       const link = timestampLinks.nth(i);
 
       // get the parent <span> element that actually has the title attribute
-      const parentSpan = await link.evaluateHandle(el => el.parentElement);
+      const parentSpan = await link.evaluateHandle(el => el.closest("span.age"));
       const attribute = await parentSpan.getAttribute("title");
 
       // debug: log what we actually fetched
-      console.log(`Link ${i} title:`, attribute);
+      console.log(`Article ${timestamps.length + 1} timestamp:`, attribute);
 
       // handle missing title edge case
       if (!attribute) {
-        console.error(`Article ${timestamps.length + 1} has no title or timestamp`);
+        console.error(`Article ${timestamps.length + 1} has NO title attribute at all`);
+        console.error(`Parent element HTML:`, await parentSpan.evaluate(el => el.outerHTML));
+        // console.error(`Article ${timestamps.length + 1} has no timestamp`);
         timestamps.push(null); // still count it toward 100 articles
         errorCount++;
         continue; // move to the next link
@@ -148,7 +150,8 @@ async function sortHackerNewsArticles() {
       // extract just the Unix epoch number (the second part after the space)
       const epochMatch = attribute.match(/(\d+)$/);
       if (!epochMatch) {
-        console.error(`Could not extract epoch from title for Article ${timestamps.length + 1}`);
+        console.error(`Article ${timestamps.length + 1} title exists but regex didn't match: "${attribute}"`);
+        // console.error(`Could not extract epoch from title for Article ${timestamps.length + 1}`);
         timestamps.push(null);
         errorCount++;
         continue;
@@ -158,13 +161,28 @@ async function sortHackerNewsArticles() {
       timestamps.push(epoch);
     }
 
-    // if we still need more articles, click the "More" button to load next page of articles
+    // If we still need more articles, click the "More" button
     if (timestamps.length < maxArticles) {
-      await page.click("a.morelink"); // click the "More" button
-      await page.waitForLoadState("domcontentloaded"); // wait for the new page content to load
+      try {
+        console.log(`\nProcessed ${timestamps.length} articles. Need ${maxArticles - timestamps.length} more. Loading next page...`);
+        
+        // DEBUG: Check if the More button exists
+        const moreButton = page.locator("a.morelink");
+        const isVisible = await moreButton.isVisible().catch(() => false);
+        console.log(`More button visible: ${isVisible}`);
+        
+        if (!isVisible) {
+          throw new Error("More button not found or not visible on the page");
+        }
+        
+        await moreButton.click();
+        await page.waitForLoadState("domcontentloaded");
+      } catch (err) {
+        // THIS IS THE FIX: Instead of breaking gracefully, throw an error
+        throw new Error(`Failed to load more articles. Only collected ${timestamps.length} out of ${maxArticles} required articles. Error: ${err.message}`);
+      }
     }
   }
-
   // convert all valid timestamps to milliseconds for comparison
   const epochList = timestamps.map(t => (t === null ? null : new Date(t * 1000).getTime()));
 
@@ -186,14 +204,14 @@ async function sortHackerNewsArticles() {
       // Reason: Hacker News rounds visible timestamps to the nearest minute
       // Edge case observed: Article #31 ("53 minutes ago") can be newer than Article #30 ("54 minutes ago")
       // Using epoch ensures precise comparison, but we treat <1 minute difference as same-minute to avoid false errors
-      console.log(`Articles ${i + 1} and ${i + 2} are in the same minute`);
+      console.log(`Pass: Articles ${i + 1} and ${i + 2} are in correct order but flagged for same minute`);
       sameMinuteCount++;
     } else { // otherwise, they are in correct order
       console.log(`Pass: Articles ${i + 1} and ${i + 2} are in correct order`);
     }
   }
 
-  // Final message once all 100 articles are validated
+  // final message once all 100 articles are validated
   console.log(`Validation complete. Total same-minute pairs: ${sameMinuteCount}, total errors: ${errorCount}`);
   console.log("First 100 Hacker News articles validated (newest → oldest)");
   await browser.close();
