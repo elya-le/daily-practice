@@ -28,12 +28,11 @@ Then I loop through each link, traverse up to its parent span.age element, extra
 I also handle edge cases where the title is missing or the regex doesn't match, pushing null and tracking errors.
 
 Validation logic:
-Once I have all the timestamps, I compare each one to the next one in the sequence. 
+100 timestamps are collected we then loop compare each one to the next one in the sequence. 
 If an article is older than the one after it, the list is out of order and that's an error. 
 If two articles were posted within one minute of each other, that's acceptable 
-but I flag them as "same-minute" pairs since the visible timestamps might round the same way. (See edge case below)
+but I flag them as "same-minute" pairs since the visible timestamps might not round the same way. (See edge case below)
 If an article is newer than the one after it, that's the correct order and everything is fine. 
-I loop through all articles and compare each to the next.
 
 Tracking results and error handling:
 While validating, I keep track of how many comparisons pass, how many fail, and I maintain a list of same-minute pairs. 
@@ -44,10 +43,10 @@ If the "More" button is missing before I've collected enough articles, I stop an
 For network timeouts or other unexpected issues, I log the error and exit
 
 Edge-case observed:
-While running the initial test, I ran into a situation where two articles appeared slightly out of order 
-just because the visible timestamps rounded to "53 minutes ago" vs "54 minutes ago". 
-But when I looked at the actual Unix epoch timestamps underneath, the posting order was correct. 
-That's why same-minute pairs get flagged separately instead of being treated as errors.
+I noticed two articles showing up slightly out of order because their visible timestamps were rounded 
+— one showed “54 minutes ago” and the next one “53 minutes ago.” 
+However, when I checked their actual Unix epoch timestamps, the posting order was correct.
+Because of this, items posted within the same minute are flagged separately instead of being treated as true ordering errors.
 
 Final reporting:
 At the end I generate a summary that shows the total number of articles I checked, 
@@ -121,18 +120,26 @@ async function sortHackerNewsArticles() {
     const timestampLinks = page.getByRole("link", { name: /ago/i });  
     const count = await timestampLinks.count();
 
+    console.log(`Page loaded. Found ${count} article timestamps.`);
+
     // If no timestamps are found, something went wrong (e.g., end of pagination), prevent infinite loop
     if (count === 0) { 
-      throw new Error("Unable to load more articles. Pagination ended early.");
+      throw new Error("Unable to load more articles. No timestamps found on page.");
     }
+
+    // Calculate how many more articles we need from THIS page
+    const remainingNeeded = maxArticles - timestamps.length;
+    const articlesToFetchThisPage = Math.min(count, remainingNeeded);
+
+    console.log(`Extracting ${articlesToFetchThisPage} articles from this page. Total so far: ${timestamps.length}/${maxArticles}`);
 
     // loop through the timestamp links on this page
     for (let i = 0; i < count && timestamps.length < maxArticles; i++) {
       const link = timestampLinks.nth(i);
 
-      // get the parent <span> element that actually has the title attribute
-      const parentSpan = await link.evaluateHandle(el => el.closest("span.age"));
-      const attribute = await parentSpan.getAttribute("title");
+      // Using Playwright recommended locator to get the title timestamp for the article
+      const parentSpan = link.locator('..'); // parent <span>
+      const attribute = await parentSpan.getAttribute('title');
 
       // debug: log what we actually fetched
       console.log(`Article ${timestamps.length + 1} timestamp:`, attribute);
@@ -141,7 +148,6 @@ async function sortHackerNewsArticles() {
       if (!attribute) {
         console.error(`Article ${timestamps.length + 1} has NO title attribute at all`);
         console.error(`Parent element HTML:`, await parentSpan.evaluate(el => el.outerHTML));
-        // console.error(`Article ${timestamps.length + 1} has no timestamp`);
         timestamps.push(null); // still count it toward 100 articles
         errorCount++;
         continue; // move to the next link
@@ -151,7 +157,6 @@ async function sortHackerNewsArticles() {
       const epochMatch = attribute.match(/(\d+)$/);
       if (!epochMatch) {
         console.error(`Article ${timestamps.length + 1} title exists but regex didn't match: "${attribute}"`);
-        // console.error(`Could not extract epoch from title for Article ${timestamps.length + 1}`);
         timestamps.push(null);
         errorCount++;
         continue;
@@ -178,11 +183,11 @@ async function sortHackerNewsArticles() {
         await moreButton.click();
         await page.waitForLoadState("domcontentloaded");
       } catch (err) {
-        // THIS IS THE FIX: Instead of breaking gracefully, throw an error
         throw new Error(`Failed to load more articles. Only collected ${timestamps.length} out of ${maxArticles} required articles. Error: ${err.message}`);
       }
     }
   }
+
   // convert all valid timestamps to milliseconds for comparison
   const epochList = timestamps.map(t => (t === null ? null : new Date(t * 1000).getTime()));
 
@@ -201,9 +206,6 @@ async function sortHackerNewsArticles() {
       console.error(`Articles ${i + 1} and ${i + 2} are out of order`);
       errorCount++;
     } else if (Math.abs(current - next) < 60_000) { // if two articles were posted within 1 minute of each other
-      // Reason: Hacker News rounds visible timestamps to the nearest minute
-      // Edge case observed: Article #31 ("53 minutes ago") can be newer than Article #30 ("54 minutes ago")
-      // Using epoch ensures precise comparison, but we treat <1 minute difference as same-minute to avoid false errors
       console.log(`Pass: Articles ${i + 1} and ${i + 2} are in correct order but flagged for same minute`);
       sameMinuteCount++;
     } else { // otherwise, they are in correct order
