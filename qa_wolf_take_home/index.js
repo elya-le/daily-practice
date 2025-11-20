@@ -96,7 +96,9 @@ the console reporting format so it's easier to read through the results.
 
 
 
+
 const { chromium } = require("playwright");
+const { expect } = require("@playwright/test");
 
 async function sortHackerNewsArticles() {
   // launch browser
@@ -106,6 +108,10 @@ async function sortHackerNewsArticles() {
 
   // go to Hacker News
   await page.goto("https://news.ycombinator.com/newest");
+
+  // wait for first article to be visible before counting
+  // This ensures the page is fully rendered, not just DOM-loaded
+  await expect(page.getByRole("link", { name: /ago/i }).first()).toBeVisible();
 
   const maxArticles = 100; // set max number of articles to validate
   const timestamps = [];  // empty array to hold timestamps or null for failed articles
@@ -122,7 +128,7 @@ async function sortHackerNewsArticles() {
 
     console.log(`Page loaded. Found ${count} article timestamps.`);
 
-    // If no timestamps are found, something went wrong (e.g., end of pagination), prevent infinite loop
+    // if no timestamps are found, something went wrong (e.g., end of pagination), prevent infinite loop
     if (count === 0) { 
       throw new Error("Unable to load more articles. No timestamps found on page.");
     }
@@ -133,13 +139,14 @@ async function sortHackerNewsArticles() {
 
     console.log(`Extracting ${articlesToFetchThisPage} articles from this page. Total so far: ${timestamps.length}/${maxArticles}`);
 
-    // loop through the timestamp links on this page
-    for (let i = 0; i < count && timestamps.length < maxArticles; i++) {
-      const link = timestampLinks.nth(i);
+    // Batch extraction of title attributes
+    const attributes = await timestampLinks.evaluateAll(links =>
+      links.map(link => link.parentElement?.getAttribute('title') || null)
+    );
 
-      // Using Playwright recommended locator to get the title timestamp for the article
-      const parentSpan = link.locator('..'); // parent <span>
-      const attribute = await parentSpan.getAttribute('title');
+    // loop through the attributes array
+    for (let i = 0; i < attributes.length && timestamps.length < maxArticles; i++) {
+      const attribute = attributes[i];
 
       // debug: log what we actually fetched
       console.log(`Article ${timestamps.length + 1} timestamp:`, attribute);
@@ -147,7 +154,7 @@ async function sortHackerNewsArticles() {
       // handle missing title edge case
       if (!attribute) {
         console.error(`Article ${timestamps.length + 1} has NO title attribute at all`);
-        console.error(`Parent element HTML:`, await parentSpan.evaluate(el => el.outerHTML));
+        // no need to evaluate parentSpan in browser anymore since we already fetched attributes
         timestamps.push(null); // still count it toward 100 articles
         errorCount++;
         continue; // move to the next link
@@ -166,22 +173,20 @@ async function sortHackerNewsArticles() {
       timestamps.push(epoch);
     }
 
-    // If we still need more articles, click the "More" button
+    // if we still need more articles, click the "More" button
     if (timestamps.length < maxArticles) {
       try {
         console.log(`\nProcessed ${timestamps.length} articles. Need ${maxArticles - timestamps.length} more. Loading next page...`);
         
-        // DEBUG: Check if the More button exists
-        const moreButton = page.locator("a.morelink");
-        const isVisible = await moreButton.isVisible().catch(() => false);
-        console.log(`More button visible: ${isVisible}`);
-        
-        if (!isVisible) {
-          throw new Error("More button not found or not visible on the page");
-        }
+        // strict mode requires exact text match to avoid matching article titles like "Shuffle: Making Random Feel More Human"
+        const moreButton = page.getByRole("link", { name: "More", exact: true });
+        await expect(moreButton).toBeVisible(); 
         
         await moreButton.click();
-        await page.waitForLoadState("domcontentloaded");
+        
+        // wait for new articles to appear after clicking
+        await expect(page.getByRole("link", { name: /ago/i }).first()).toBeVisible();
+        
       } catch (err) {
         throw new Error(`Failed to load more articles. Only collected ${timestamps.length} out of ${maxArticles} required articles. Error: ${err.message}`);
       }
@@ -232,3 +237,41 @@ async function sortHackerNewsArticles() {
 
 
 
+
+
+
+
+
+
+
+    // // loop through the timestamp links on this page
+    // for (let i = 0; i < count && timestamps.length < maxArticles; i++) {
+    //   const link = timestampLinks.nth(i);
+    //   // Using Playwright recommended locator to get the title timestamp for the article
+    //   const parentSpan = link.locator('..'); // parent <span>
+    //   const attribute = await parentSpan.getAttribute('title');
+
+    //   // debug: log what we actually fetched
+    //   console.log(`Article ${timestamps.length + 1} timestamp:`, attribute);
+
+    //   // handle missing title edge case
+    //   if (!attribute) {
+    //     console.error(`Article ${timestamps.length + 1} has NO title attribute at all`);
+    //     console.error(`Parent element HTML:`, await parentSpan.evaluate(el => el.outerHTML));
+    //     timestamps.push(null); // still count it toward 100 articles
+    //     errorCount++;
+    //     continue; // move to the next link
+    //   }
+
+    //   // extract just the Unix epoch number (the second part after the space)
+    //   const epochMatch = attribute.match(/(\d+)$/);
+    //   if (!epochMatch) {
+    //     console.error(`Article ${timestamps.length + 1} title exists but regex didn't match: "${attribute}"`);
+    //     timestamps.push(null);
+    //     errorCount++;
+    //     continue;
+    //   }
+
+    //   const epoch = parseInt(epochMatch[1], 10);
+    //   timestamps.push(epoch);
+    // }
