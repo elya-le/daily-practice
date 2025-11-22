@@ -1,102 +1,3 @@
-/*
-User centric approach write-up:
-Initial observations and plan draft:
-- Articles numbered 1-30 per page 
-- More button at bottom to paginate to next 30 articles
-- Paginating 4 pages to reach 100 articles total (page 1 gets me 30, page 2 gets me 30 more, page 3 another 30, then I grab the first 10 from page 4). 
-- Visible timestamps show "1 minute ago" up to "59 minutes ago" then jumps to "1 hour ago" and "2 hours ago"
-- More granular timestamp data needed for precise sorting validation
-
-Timestamp attribute structure:
-- confirm timestamp information structure is consistent. 
-- article timestamp attributes have ISO 8601 timestamp and a Unix epoch number. 
-Examples from my inspection:
-Article #7: span class="age" title="2025-11-14T22:24:36 1763159076"
-Article #31: span class="age" title="2025-11-14T21:36:22 1763156182"
-Article #75: span class="age" title="2025-11-14T20:39:43 1763152783"
-
-Using Unix epoch number since it's a single unique number and requires no parsing.
-
-Extract timestamps logic:
-I initially tried page.locator('.age').first(), which could have worked with simpler syntax,
-but the Playwright recommend user-facing attributes and explicit contracts like page.getByRole() instead.
-page.locator('.age').first() can be fragile as it relies on CSS classes and element order. 
-Since each timestamp link has role "link" with visible text "ago", 
-I'm using page.getByRole('link', { name: /ago/i }) to reliably locate them. 
-Then I loop through each link, traverse up to its parent span.age element, extract the title attribute 
-(which holds the Unix epoch), parse out the number, and push it to an array. 
-I also handle edge cases where the title is missing or the regex doesn't match, pushing null and tracking errors.
-
-Validation logic:
-100 timestamps are collected we then loop compare each one to the next one in the sequence. 
-If an article is older than the one after it, the list is out of order and that's an error. 
-If two articles were posted within one minute of each other, that's acceptable 
-but I flag them as "same-minute" pairs since the visible timestamps might not round the same way. (See edge case below)
-If an article is newer than the one after it, that's the correct order and everything is fine. 
-
-Tracking results and error handling:
-While validating, I keep track of how many comparisons pass, how many fail, and I maintain a list of same-minute pairs. 
-If no timestamps are found on a page, I stop and report an error
-If I can't extract a timestamp from any article, I stop and report
-If an out-of-order article is found, that gets reported as an error
-If the "More" button is missing before I've collected enough articles, I stop and report that too
-For network timeouts or other unexpected issues, I log the error and exit
-
-Edge-case observed:
-I noticed two articles showing up slightly out of order because their visible timestamps were rounded 
-— one showed “54 minutes ago” and the next one “53 minutes ago.” 
-However, when I checked their actual Unix epoch timestamps, the posting order was correct.
-Because of this, items posted within the same minute are flagged separately instead of being treated as true ordering errors.
-
-Final reporting:
-At the end I generate a summary that shows the total number of articles I checked, 
-the number of same-minute pairs I flagged, how many errors I encountered, and the overall pass or fail result.
-
-Additional considerations:
-I'm not worried about duplicate articles since the site is dynamic and I just need to validate sorting order. 
-Network timeouts could happen but for this assignment I'll just log the error and exit if that occurs.
-
-Future next step improvements I am going to make next:
-Beyond this assignment, I want to generate an HTML report with all the results laid out nicely. 
-I also need to review my error handling to make sure I've covered all possible failure points, 
-and then draft retry logic where it makes sense. Finally, I should clean up and standardize 
-the console reporting format so it's easier to read through the results.
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 const { chromium } = require("playwright");
 const { expect } = require("@playwright/test");
 
@@ -110,8 +11,8 @@ async function sortHackerNewsArticles() {
   await page.goto("https://news.ycombinator.com/newest");
 
   // wait for first article to be visible before counting
-  // This ensures the page is fully rendered, not just DOM-loaded
-  await expect(page.getByRole("link", { name: /ago/i }).first()).toBeVisible();
+  // this ensures the page is fully rendered, not just DOM-loaded
+  await expect(page.locator("span.age").first()).toBeVisible(); // <- this line has been updated
 
   const maxArticles = 100; // set max number of articles to validate
   const timestamps = [];  // empty array to hold timestamps or null for failed articles
@@ -122,11 +23,11 @@ async function sortHackerNewsArticles() {
 
   // loop until we have 100 articles
   while (timestamps.length < maxArticles) { 
-    // find all the user-facing timestamp links (text like "7 minutes ago")
-    const timestampLinks = page.getByRole("link", { name: /ago/i });  
-    const count = await timestampLinks.count();
+    
+    const ageSpans = page.locator("span.age");              // <- this line has been updated
+    const count = await ageSpans.count();                   // <- this line has been updated
 
-    console.log(`Page loaded. Found ${count} article timestamps.`);
+    console.log(`Page loaded. Found ${count} timestamps.`);
 
     // if no timestamps are found, something went wrong (e.g., end of pagination), prevent infinite loop
     if (count === 0) { 
@@ -140,9 +41,11 @@ async function sortHackerNewsArticles() {
     console.log(`Extracting ${articlesToFetchThisPage} articles from this page. Total so far: ${timestamps.length}/${maxArticles}`);
 
     // Batch extraction of title attributes
-    const attributes = await timestampLinks.evaluateAll(links =>
-      links.map(link => link.parentElement?.getAttribute('title') || null)
+    // extract title attributes directly from <span class="age">
+    const attributes = await ageSpans.evaluateAll(spans =>    // <- this line has been updated
+      spans.map(span => span.getAttribute('title') || null)
     );
+
 
     // loop through the attributes array
     for (let i = 0; i < attributes.length && timestamps.length < maxArticles; i++) {
@@ -240,38 +143,3 @@ async function sortHackerNewsArticles() {
 
 
 
-
-
-
-
-    // // loop through the timestamp links on this page
-    // for (let i = 0; i < count && timestamps.length < maxArticles; i++) {
-    //   const link = timestampLinks.nth(i);
-    //   // Using Playwright recommended locator to get the title timestamp for the article
-    //   const parentSpan = link.locator('..'); // parent <span>
-    //   const attribute = await parentSpan.getAttribute('title');
-
-    //   // debug: log what we actually fetched
-    //   console.log(`Article ${timestamps.length + 1} timestamp:`, attribute);
-
-    //   // handle missing title edge case
-    //   if (!attribute) {
-    //     console.error(`Article ${timestamps.length + 1} has NO title attribute at all`);
-    //     console.error(`Parent element HTML:`, await parentSpan.evaluate(el => el.outerHTML));
-    //     timestamps.push(null); // still count it toward 100 articles
-    //     errorCount++;
-    //     continue; // move to the next link
-    //   }
-
-    //   // extract just the Unix epoch number (the second part after the space)
-    //   const epochMatch = attribute.match(/(\d+)$/);
-    //   if (!epochMatch) {
-    //     console.error(`Article ${timestamps.length + 1} title exists but regex didn't match: "${attribute}"`);
-    //     timestamps.push(null);
-    //     errorCount++;
-    //     continue;
-    //   }
-
-    //   const epoch = parseInt(epochMatch[1], 10);
-    //   timestamps.push(epoch);
-    // }
