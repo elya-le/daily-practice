@@ -1,5 +1,5 @@
 // @ts-check
-import { test, expect } from '@playwright/test';
+const { test, expect } = require('@playwright/test');
 
 test('validate Hacker News articles are sorted newest to oldest', async ({ page }) => {
   await page.goto('https://news.ycombinator.com/newest');
@@ -73,7 +73,8 @@ test('validate Hacker News articles are sorted newest to oldest', async ({ page 
         // Wait for new articles to appear after clicking
         await expect(page.getByRole('link', { name: /ago/i }).first()).toBeVisible();
       } catch (err) {
-        throw new Error(`Failed to load more articles. Only collected ${timestamps.length} out of ${maxArticles} required articles. Error: ${err.message}`);
+        const errorMessage = err instanceof Error ? err.message : String(err);
+        throw new Error(`Failed to load more articles. Only collected ${timestamps.length} out of ${maxArticles} required articles. Error: ${errorMessage}`);
       }
     }
   }
@@ -110,7 +111,6 @@ test('validate Hacker News articles are sorted newest to oldest', async ({ page 
 
   expect(errorCount).toBe(0);
 });
-
 
 
 
