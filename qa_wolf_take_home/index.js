@@ -1,4 +1,3 @@
-
 const { chromium } = require("playwright");
 const { expect } = require("@playwright/test");
 
@@ -17,31 +16,30 @@ async function sortHackerNewsArticles() {
 
   const maxArticles = 100; // set max number of articles to validate
   const timestamps = [];  // empty array to hold timestamps or null for failed articles
+  let pageNumber = 1;    // track which page we're on for summary logging
 
-  // counters for summary report
+  // other counters for summary report
   let sameMinuteCount = 0;       // number of article pairs in the same minute
   let errorCount = 0;            // number of timestamp extraction errors
 
   // loop until we have 100 articles
   while (timestamps.length < maxArticles) { 
     
-    const ageSpans = page.locator("span.age");              
-    const count = await ageSpans.count();                  
-
-    console.log(`Found ${count} timestamps on page`);
+    const ageSpans = page.locator("span.age");  // get all timestamp age elements from the page            
+    const count = await ageSpans.count();  // count how many timestamp elements on the page
+    console.log(`${count} timestamps loaded on page ${pageNumber}`);
 
     // if no timestamps are found, something went wrong (e.g., end of pagination), prevent infinite loop
     if (count === 0) { 
       throw new Error("Unable to load more articles. No timestamps found on page.");
     }
 
-    // Calculate how many more articles we need from THIS page
+    // calculate how many more articles we need from THIS page
     const remainingNeeded = maxArticles - timestamps.length;
     const articlesToFetchThisPage = Math.min(count, remainingNeeded);
 
-    if (timestamps.length > 0) {
-      console.log(`Extracting ${articlesToFetchThisPage}/${count} articles from this page (${timestamps.length}/${maxArticles} total)`);
-    }
+    const totalLog = timestamps.length + articlesToFetchThisPage < maxArticles ? '' : ` (${timestamps.length + articlesToFetchThisPage}/${maxArticles} total)`;
+    console.log(`Extracting ${articlesToFetchThisPage} articles from page ${pageNumber}${totalLog}`);
 
     // Batch extraction of title attributes
     // extract title attributes directly from <span class="age">
@@ -79,7 +77,7 @@ async function sortHackerNewsArticles() {
     // if we still need more articles, click the "More" button
     if (timestamps.length < maxArticles) {
       try {
-        console.log(`Loading next page (${maxArticles - timestamps.length} articles remaining)...`);
+        console.log(`Loading next page...`);
         
         // strict mode requires exact text match to avoid matching article titles like "Shuffle: Making Random Feel More Human"
         const moreButton = page.getByRole("link", { name: "More", exact: true });
@@ -89,6 +87,8 @@ async function sortHackerNewsArticles() {
         
         // wait for new articles to appear after clicking
         await expect(page.getByRole("link", { name: /ago/i }).first()).toBeVisible();
+        
+        pageNumber++;
         
       } catch (err) {
         throw new Error(`Failed to load more articles. Collected ${timestamps.length}/${maxArticles}. ${err.message}`);
